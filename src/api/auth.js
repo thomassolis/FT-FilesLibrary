@@ -1,12 +1,34 @@
 // usuarios.js
 import axios from './axios'; // Importa tu instancia de axios
-// Función para obtener todos los usuarios
-export const obtenerUsuarios = async () => {
+
+
+//1. LOGIN
+        // ENVIAR CORREO Y CONTRASEÑA AL BACKEND
+export const enviarLogin = async (data) => {
     try {
-        const response = await axios.get('/usuarios'); // Realiza la solicitud GET
-        return response.data; // Devuelve los datos de la respuesta
+        const response = await axios.post('/login', {
+            Email: data.Email,
+            Password: data.Password
+        });
+        //console.log('response.data', response.data)
+        return response.data;
     } catch (error) {
-        console.error('Error al obtener los usuarios:', error); // Manejo de errores
-        throw error; // Lanza el error para manejarlo donde se llame
+        console.error('Error during API call:', error);
+        alert('Algo ha salido mal con el servidor');
+        return null; // Retornamos null para manejar mejor los errores
     }
-};
+}
+
+
+
+//2. VERIFICACION DE 2 PASOS
+        // ENVIAR CÓDIGO A BACKEND
+export const enviarVerificacion2pasos = async (data) => {
+    
+        const response = await axios.post('/authentication', {
+            authentication: data.authentication
+        });
+        console.log(response.data);
+        return response.data;
+
+}

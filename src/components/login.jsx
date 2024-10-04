@@ -7,31 +7,22 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { enviarLogin } from "../api/auth";
 import { AuthContext } from "../context/authProvider";
+import logo from '../images/MLC logo.png'
+import CountDown from "./countDown.jsx";
 
 function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate();
     
     const [userData, setUserData] = useState(null);
-    const [errorMessage, setErrorMessage] = useState(null);
 
-    //Inicialmente deshabilitado
-    const [inputsDisabled, setInputsDisabled] = useState(false); // Por defecto, inputs habilitados
+    //Verificación si el usuario está logeado para enviar al contexto
+    const {setIsAuthenticated, isAuthenticated, isDisabled, setIsDisabled} = useContext(AuthContext);
 
-    //Estado que hará los input deshabilitados
-  
+    const [timeBan, setTimeBan] = useState()
 
-    //Variables que vienen del contexto
-    // const {isBan} = useContext(counterContext)
 
-    // useEffect(()=>{
-    //     if(isBan){
-    //         alert("ups fuiste baneado!!!!!")
-    //     }
-    // },[isBan])
-
-    const {setIsAuthenticated, isAuthenticated} = useContext(AuthContext);
-
+    const [showCountDown, setShowCountDown] = useState(false);
     // Este useEffect se ejecuta cada vez que userData cambia
     useEffect(() => {
         if (userData) {
@@ -40,11 +31,24 @@ function Login() {
         }
     }, [userData]); // Se ejecuta cuando `userData` cambia
 
+
+    const isBan = () =>{    
+        setIsDisabled(true);
+
+        //Mostrando el tiempo de baneo en pantalla
+        console.log('Tiempo de baneo desde función: ',timeBan)
+
+        // <CountDown seconds={timeBan}/>
+
+        setShowCountDown(true);
+       
+    }
+
     const onSubmit = async (data) => {
         console.log('data', data);
+        
         try {
             const response = await enviarLogin(data); // Pasamos 'data' a enviarLogin
-            
             if (!response) {
                 throw new Error('Response is undefined or null');
             }
@@ -54,13 +58,31 @@ function Login() {
             if (response.success) {
                 setUserData(response.Data);  // Aquí actualizas el estado
                 setIsAuthenticated(true);
-            } else {
-                setErrorMessage(response.data.message);
-                toast.error(response.message);
             }
         } catch (error) {
             //conexion se interrumpio front <-> back(error 400 a 500)
-            toast.error(response.message);
+            console.log(error.response);
+            const errorCode = error.response.status;
+            switch(errorCode){
+                case 429:
+                    alert(error.response.data.message);  
+                    console.log('time: ', error.response.data.segundosBan.seconds);
+                    setTimeBan(error.response.data.segundosBan.seconds);
+                    console.log('tiempo de baneo ',timeBan);
+                   
+                    isBan();        
+                    break;
+                case 401:
+                    alert(error.response.data.message);
+                    break;
+                case 500:
+                    alert(error.response.data.message);
+                    break;
+                default:
+                    alert('Ha ocurrido un error');
+            }
+
+
         }
     };
 
@@ -85,13 +107,10 @@ function Login() {
                                 minLength: {
                                     value: 3,
                                     message: "El usuario debe tener más caracteres para ser aceptado"
-                                },
-                                maxLength: {
-                                    value: 30,
-                                    message: "El usuario debe tener menos caracteres para ser aceptado"
                                 }
                             })}
-                            placeholder="email"                    
+                            placeholder="email"
+                            disabled = {isDisabled}                    
                         />
                         {errors.email && <span>{errors.email.message}</span>}
 
@@ -106,26 +125,33 @@ function Login() {
                                 minLength: {
                                     value: 3,
                                     message: "La contraseña debe tener más caracteres para ser aceptada"
-                                },
-                                maxLength: {
-                                    value: 12,
-                                    message: "La contraseña debe tener menos caracteres para ser aceptada"
                                 }
+                              
                             })} 
-                            placeholder="contraseña"                                                 
+                            placeholder="contraseña"   
+                            disabled = {isDisabled}
                         />
                         {errors.password && <span>{errors.password.message}</span>}
 
+                        {/* {timeBan && <h1>Tiempo de baneo restante: {timeBan} segundos</h1> } */}
+
                         <button type="submit">Login</button>
                     </form>
+
+                    {   //Mostrar la cuenta regresiva si es true
+                        showCountDown && <CountDown seconds={timeBan}/>
+                    }
+            
                     
 
                     <div className="login">
-
+                            <img src={logo} alt="logo" />
                     </div>
                 </div>
             </div>
+
         </section>
+        
     );
 }
 

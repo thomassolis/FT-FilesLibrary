@@ -7,9 +7,10 @@ export const AuthProvider = ({ children }) => {
     const [userName, setUserName] = useState(null);
     const [banTime, setBanTime] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
 
     return (
-        <AuthContext.Provider value={{userRole, setUserRole, userName, setUserName, banTime, setBanTime, isAuthenticated, setIsAuthenticated }}>
+        <AuthContext.Provider value={{userRole, setUserRole, userName, setUserName, banTime, setBanTime, isAuthenticated, setIsAuthenticated, isDisabled, setIsDisabled }}>
             {children}
         </AuthContext.Provider>
     );

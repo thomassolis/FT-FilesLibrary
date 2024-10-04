@@ -7,42 +7,48 @@ import Authentication from "./components/authentication";
 import Home from "./components/home";
 import AuthProvider from "./context/authProvider";
 import ProtectedRoute from "./components/protectedRoute";
+import NotFound from "./components/notFound";
+import CompleteHistory from "./components/history/completeHistory";
+import { PermissionsProvider } from "./context/permissions/permissionsProvider";
+import { FoldersFilesProvider } from "./context/Folders-Files/Folders_Files";
 
 function App() {
-  const [data,setData] = useState();
-
-  const getData = async()=>{
-    const response = await axios.get("http://localhost:5000/getData");
-    setData(response.data);
-  }
-
-  useEffect(()=>{
-    getData();
-  },[]);
-
+  
   return (
-    <AuthProvider>
-  <BrowserRouter>
-    <Routes>
-      {/* Ruta pública que no requiere autenticación */}
+    //Proveedor de datos del usuario
+    <AuthProvider> 
+      {/*Proveedor de permisos que tienen los usuarios dentro de los archivos */}      
+      <PermissionsProvider>
+        {/* PROVEEDOR DE DATOS DEL FOLDER Y ARCHIVOS */}
+        <FoldersFilesProvider>
+          <BrowserRouter>
+                <Routes>
+                  {/* Ruta pública que no requiere autenticación */}
 
-      <Route path="/" element={<Login />} />
+                    <Route path="/" element={<Login />} />
 
-      {/* Ruta de autenticación accesible solo si se ha iniciado sesión */}
-      <Route element={<ProtectedRoute redirectTo="/" />}>
-        <Route path="/authentication" element={<Authentication />} />
-      </Route>
+                    {/* Ruta de autenticación accesible solo si se ha iniciado sesión */}
+                    <Route element={<ProtectedRoute redirectTo="/" />}>
+                      <Route path="/authentication" element={<Authentication />} />
+                    </Route>
 
-      {/* Rutas protegidas que requieren un rol */}
-      <Route element={<ProtectedRoute allowedRoles={['ADM', 'GER', 'USER']} redirectTo="/" />}>
-        <Route path="/home" element={<Home />} />
-        
-      </Route>
-      <Route path="*" element={<Login />} />
-      
-    </Routes>
-  </BrowserRouter>
-</AuthProvider>
+                    {/* Rutas protegidas que requieren un rol */}
+                    <Route element={<ProtectedRoute allowedRoles={['ADM', 'GER', 'USER']} redirectTo="/" />}>
+                      <Route path="/home" element={<Home />} />        
+                    </Route>
+
+                  <Route>
+                    <Route path="/completeHistory" element={<CompleteHistory/>} />
+                  </Route>
+
+                    <Route path="*" element={<NotFound />} />
+                  
+                </Routes>
+            </BrowserRouter>
+        </FoldersFilesProvider>          
+      </PermissionsProvider>
+  
+    </AuthProvider>
 
   )
 }

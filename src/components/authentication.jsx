@@ -5,6 +5,7 @@ import { useState, useEffect, useContext } from "react";
 import { enviarVerificacion2pasos } from "../api/auth"; 
 import React from 'react';
 import { AuthContext } from "../context/authProvider";
+import Home from "./home";
 
 function Authentication() {
     // const {setIsBan} = AuthContext()
@@ -20,28 +21,43 @@ function Authentication() {
 
     //ir a home al pasar la verificación
     useEffect(() => {
+                
         if (shouldNavigateHome) {
-            navigate('/home');
+            const rol = userRole;
+            navigate('/home'); //Va hacia la url con el rol
         }
     }, [shouldNavigateHome]);
 
+    const isBan = () =>{    
+        setIsDisabled(true);
 
+        //Mostrando el tiempo de baneo en pantalla
+        console.log('Tiempo de baneo desde función: ',timeBan)
+
+        // <CountDown seconds={timeBan}/>
+
+        setShowCountDown(true);
+       
+    }
 
     //Función que manejará el input en caso de un error 219
     const userBan = () => {
         setIsDisabled(true);
         const fieldName = "authentication";
         const value = getValues(fieldName); // Obtener el valor del input por su nombre
-
+        console.log('fieldName: ',fieldName);
+        console.log('value: ',value);
         
     };
+
+    
 
     //Funcion al enviar el formulario
     const onSubmit = async (data) => {
         try {
             const response = await enviarVerificacion2pasos(data);
             
-            if (response && response.success) {                    
+            if (response && response.success && response.status==200) {                    
                 console.log(response);
                 setShouldNavigateHome(true);                
                 setUserRole(response.Data.userRol);
@@ -59,10 +75,11 @@ function Authentication() {
                 switch (statusCode) {
                     case 429:
                         alert(error.response.data.message);                    
-
                         userBan();
-                        // setIsBan(true)
+                        setTimeBan(error.response.data.segundosBan.seconds);
 
+                        isBan(); 
+                        // setIsBan(true)
                         break;
                     case 401:
                         alert(error.response.data.message);
@@ -70,8 +87,16 @@ function Authentication() {
                     case 500:
                         alert(error.response.data.message);
                         break;
+                    case 200:
+                        alert("Todo bien")
+                        break;
+                    case 404:
+                        alert("Error 404")
+                        break;
                     default:
                         alert('Ha ocurrido un error');
+                        alert(error.response.data.message);
+                        setShouldNavigateHome(true)
                 }
             } else {
                 console.error('Error en la conexión o sin respuesta del servidor:', error);

@@ -69,7 +69,7 @@ button:hover{
 }
 .login{
 	height: 460px;
-	background: #a1a300;
+	background: white; /*#a1a300 */
 	border-radius: 60% / 10%;
 	transform: translateY(90px);
 	transition: .8s ease-in-out;
@@ -99,4 +99,9 @@ span{
 	width: 80px;
 	height: 50px;
 	margin-top: 10px;
+}
+
+img{
+	width: 100px;
+	margin-left: 130px;
 }

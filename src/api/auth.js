@@ -78,3 +78,25 @@ export const sendFilesFromAdmin = async (data) => {
     }
   };
   
+  //5. HALANDO LOS DATOS DE LA RUTA PARA IMPRIMIRLOS EN EL HISTORIAL
+  export const getHistoryData = async (data) =>{
+    try{
+        const response = await axios.get('auth/get/historial');        
+        return response.data
+    }catch(e){
+        console.error(e)
+    }
+  }
+
+  export const postRequestDataForSeeFile = async (data)=>{
+    try{
+        const response = await axios.post('auth/post/historialdata',{
+            userName: data.userName,
+            textAreaValue: data.textAreaValue,
+            fileId: data.fileId,
+            fileName: data.fileName
+        });
+    }catch(e){
+        console.log(e);
+    }
+  }

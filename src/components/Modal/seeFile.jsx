@@ -15,7 +15,7 @@ function SeeFile({closeModal, fileId, fileName}){
     }
     
     
-    const sendRequest = async(e) =>{
+    const sendRequest = async(e) =>{ //FUNCIONAA
         e.preventDefault();
         const data = {
             userName: userName,
@@ -25,18 +25,11 @@ function SeeFile({closeModal, fileId, fileName}){
         }        
 
         socket.emit('message', data);
-        // try{
-        //     const response = await sendFilesData({fileId, fileName, textAreaValue});
-        //     console.log('respuesta', response);
-        //     // console.log('response desde seeFile:', response)
-        // }catch(error){
-        //     console.log('error')
-        // }
-
         alert("Su solicitud se ha enviado con éxito, en caso de que se apruebe podrá ver el archivo en su correo electrónico.")
 
         closeModal();
     }
+
 
     
     // useEffect(()=>{

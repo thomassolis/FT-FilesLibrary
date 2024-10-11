@@ -2,89 +2,111 @@ import '../../src/Styles/homeStyle.css';
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/authProvider';
 import { getFilesData } from '../api/auth';
-import Files from './files/files';
 import FilesContainer from './files/filesContainer';
 import SidebarContainer from './SideBar/sideBarContainer';
 import History from './history/history';
 import { PermissionsContext } from '../context/permissions/permissionsProvider';
-import {FoldersFilesContext} from '../context/Folders-Files/Folders_Files';
+import { FoldersFilesContext } from '../context/Folders-Files/Folders_Files';
+import NewFileForm from './Modal/newFileForm';
+
 
 
 function Home() {
-    const { userRole, userName, banTime } = useContext(AuthContext);
-    const [fileData, setFileData] = useState([]); //Estado que contiene el nombre de los archivos ingresados
-    const [foalderData, setFoalderData] = useState([]); //Estado que contiene el nombre de las carpetas
+    const { userRole } = useContext(AuthContext);
+    const [foalderData, setFoalderData] = useState([]); // Estado que contiene el nombre de las carpetas
+    const {filesData, setFilesData, selectedFolder, setSelectedFolder} = useContext(FoldersFilesContext);
 
-    const {requestSeeFile, setRequestSeeFile} = useContext(PermissionsContext);
 
-    const {foldersId, setFoldersId, foldersName, setFoldersName,filesId,setFilesId, filesName, setFilesName} = useContext(FoldersFilesContext); //VIERNES: CONTEXTO EL CUAL GUARDARÁ LA INFO DE LOS ARCHIVOS Y FOLDERS PARA AL ENVIARLOS QUE VAYAN CON NOMBRE Y
+    const { requestSeeFile, setRequestSeeFile } = useContext(PermissionsContext);
 
-    //console.log('requestSeeFile ', requestSeeFile)
-    console.log('userRole:', userRole);
+    const [adminForm, setAdminForm] = useState(false);
+   
+
+    const { foldersId, setFoldersId, foldersName, setFoldersName, filesId, setFilesId, filesName, setFilesName } = useContext(FoldersFilesContext);
+
+    // Efect para cargar los archivos desde el backend
     useEffect(() => {
         const fetchFiles = async () => {
             try {
-                const response = await getFilesData(); // Llama a tu función asíncrona                
-                console.log('response de prueba desde HOME: ',response)
+                const response = await getFilesData(); // Llama a tu función asíncrona para obtener los archivos
+                setFilesData(response); // Establece toda la data de carpetas
+                console.log('response ', response)
 
-                setFoldersName(response);
-                console.log('foldersName', foldersName);
-                
-                
+                const foalders = Object.keys(response); // Obtiene los nombres de las carpetas
+                setFoalderData(foalders); // Almacena los nombres de las carpetas
+                console.log('foalderData: ', foalders);
 
-
-                // Verifica si 'files' es un arreglo y establece el estado
-                if (response && Array.isArray(response.avisos.files)) {
-                    setFileData(response.avisos.files); // Establece fileData con response.files      
-                    console.log('ENTRE AL IF');
-
-                    const foalders = Object.keys(response); //obtiene los valores de un objeto y los coloca en un arreglo
-                    setFoalderData(foalders);
-                    console.log('foalderData: ',foalders)
-                } else {
-                    console.error("No se encontraron archivos en la respuesta o no es un arreglo.");
-                    setFileData([]); // Maneja el estado de error
-                }
             } catch (error) {
-                console.error("ERROR:", error); // Imprime el error para diagnóstico
-                setFileData([]); // Maneja el estado de error
+                console.error("ERROR:", error);
+                setFilesData({});
+                setFoalderData([]);
             }
         };
 
-        fetchFiles(); // Llama a la función para cargar los archivos al montar el componente
+        fetchFiles(); // Carga los archivos al montar el componente
     }, []);
+    console.log('Mi rol desde HOME es: ', userRole);
 
-    //DEFINIENDO QUE TAREAS TENDRÁN LOS USUARIOS DEPENDIENDO DEL ROL
+    //eFFECT PARA DEFINIR QUE LA PRIMERA CARPETA ESTÉ SIEMPRE ABIERTA
     useEffect(()=>{
-        if(userRole == 'OPE'){
-            setRequestSeeFile(true); //Tarea de enviar solicitud de vista de archivo
+        if(filesData){
+            setSelectedFolder(Object.keys(filesData)[0]);
         }
-    })
+    },[filesData])
+
+    // Definir tareas según el rol del usuario
+    useEffect(() => {
+        if (userRole === 'OPE') {
+            setRequestSeeFile(true); // Tarea de enviar solicitud de vista de archivo
+        }
+    }, [userRole, setRequestSeeFile]);
+
+
+    function newFile(){
+        setAdminForm(true);        
+    }
+    function closeAdminForm(){
+        setAdminForm(false);        
+    }
+
+
+    // const receiveRequestOPE = (data)=>{
+    //     setRequestDataOPE((state) => [...state, data])
+    // }
+        
 
     return (
-            <section style={{display:'flex', flexDirection:'column'}}>
-                <div style={{backgroundColor:'rgba(172, 207, 217, 1)', display:'flex', width:'100%'}}>
-                    <SidebarContainer foalderData={foalderData} />
+        <section style={{ display: 'flex', flexDirection: 'column' }}>
+            <iconify-icon style={{position:'absolute', top:'110px',right:'190px', fontSize:'30px', cursor:'pointer' }} onClick={newFile} icon="solar:add-circle-bold"></iconify-icon>
+            <div style={{ backgroundColor: 'rgba(172, 207, 217, 1)', display: 'flex', width: '100%'}}>
+                <SidebarContainer foalderData={foalderData} filesData = {filesData}/>
 
-                    
-                    <div style={{marginLeft:'360px'}}>
-                        <ul>
-                            <FilesContainer fileData={fileData}/>
-                        </ul>
-                    </div>
-                </div>
-                {
-                    requestSeeFile && userRole === "OPE"                    
-                } 
-                {
-                    userRole === "ADM" && <History/>               
-                }
+            
+            <div style={{ marginLeft: '360px' }}>
+                    {selectedFolder && filesData[selectedFolder].files?(
+                        <FilesContainer fileData={filesData[selectedFolder].files} />
+                ):(
+                    <div style={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', marginLeft:'240px', marginTop:'200px', paddingBottom:'250px'}}>
+                        <h1>Esta carpeta no cuenta con archivos</h1>
+                        <iconify-icon style={{fontSize:'130px'}} icon="noto-v1:sad-but-relieved-face"></iconify-icon>  
+                        
+                    </div>                                          
+                )}
+
+            </div>                
+
+            {adminForm && <NewFileForm onClose={closeAdminForm}/>}
 
                 
-            </section>            
-   
+            </div>
 
+            {requestSeeFile && userRole === "OPE"}
 
+            {userRole === "ADM" && <History />}
+            {userRole === "GER" && <History />}
+            
+            
+        </section>
     );
 }
 

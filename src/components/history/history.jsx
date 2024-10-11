@@ -1,12 +1,16 @@
 import { useState } from "react";
 import SmallHistory from "./smallHistory";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/authProvider";
+import { useContext } from "react";
 
 function History(){
     const navigate = useNavigate();
 
     const [changeSize, setChangeSize] = useState(false)
     const [expand, setExpand] = useState(false);
+
+    const {userRole} = useContext(AuthContext);
 
     function toggleExpand(){
         setChangeSize(!changeSize);
@@ -40,9 +44,13 @@ function History(){
                     <iconify-icon onClick={toggleExpand} style={{cursor:'pointer', transform: changeSize ? 'translateY(-2px)' : 'translateY(0)', transition: 'transform 0.5s ease'}} icon="ep:arrow-up-bold"></iconify-icon>
                 </div>
                 {/* onClick={expandHistory} */}
-                <div>
-                    <iconify-icon   iconify-icon style={{marginRight:'140px', cursor:'pointer', transform: changeSize ? 'translateY(0px)' : 'translateY(0)',        transition: 'transform 0.5s ease', color:'black'}} onClick={expandHistory} icon="lucide:expand"></iconify-icon>
-                </div>       
+
+                {userRole === 'ADM' &&
+                    <div>
+                        <iconify-icon   iconify-icon style={{marginRight:'140px', cursor:'pointer', transform: changeSize ? 'translateY(0px)' : 'translateY(0)',        transition: 'transform 0.5s ease', color:'black'}} onClick={expandHistory} icon="lucide:expand"></iconify-icon>
+                    </div>     
+                }
+  
             </div>
     
 

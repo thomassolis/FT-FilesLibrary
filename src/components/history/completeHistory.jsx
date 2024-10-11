@@ -1,10 +1,12 @@
 import '../../Styles/completeHistoryStyle.css'
+import logo from '../../images/MLC logo.png'
 
 function CompleteHistory(){
     return(
         <section>
             <div style={{backgroundColor:'rgba(255, 237, 0, 1)', width:'100%', height:'5vw', position:'fixed', alignItems:'center', display:'flex'}}>
                 <h1 style={{marginLeft:'20px'}}>Historial de solicitudes</h1>
+                <img src = {logo} alt="" />
             </div>
 
             <div style={{paddingTop:'58px'}}>

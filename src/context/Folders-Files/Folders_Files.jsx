@@ -3,14 +3,11 @@ import React, {useState, createContext} from 'react'
 export const FoldersFilesContext = createContext();
 
 export const FoldersFilesProvider = ({children}) =>{
-    const [foldersId, setFoldersId] = useState(null);
-    const [foldersName, setFoldersName] = useState([]);
-
-    const [filesId, setFilesId] = useState(null);
-    const [filesName, setFilesName] = useState(null);
+    const [selectedFolder, setSelectedFolder] = useState(null);
+    const [filesData, setFilesData] = useState({})
 
     return(
-        <FoldersFilesContext.Provider value={{foldersId, setFoldersId, foldersName, setFoldersName, setFoldersName,filesId,setFilesId, filesName, setFilesName}}>
+        <FoldersFilesContext.Provider value={{selectedFolder, setSelectedFolder, filesData, setFilesData}}>
             {children}
         </FoldersFilesContext.Provider>
     )

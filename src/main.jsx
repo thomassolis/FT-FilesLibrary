@@ -1,8 +1,9 @@
 import { StrictMode } from 'react'// 
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
-// // import { worker } from './mocks/browser';
-// worker.start();
+import '../src/Styles/index.css';
+import './Styles/loginStyle.css'
+import './Styles/authenticationStyle.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

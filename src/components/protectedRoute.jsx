@@ -23,7 +23,7 @@ const ProtectedRoute = ({ allowedRoles, redirectTo = "/"}) => {
     // }
 
     // Si el usuario está autorizado
-    return <Outlet />;
+    return <Outlet/>;
 };
 
 export default ProtectedRoute;

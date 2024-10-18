@@ -1,4 +1,3 @@
-import '../../src/Styles/homeStyle.css';
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/authProvider';
 import { getFilesData } from '../api/auth';
@@ -8,105 +7,112 @@ import History from './history/history';
 import { PermissionsContext } from '../context/permissions/permissionsProvider';
 import { FoldersFilesContext } from '../context/Folders-Files/Folders_Files';
 import NewFileForm from './Modal/newFileForm';
-
-
+import { useParams } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import Files from './files/files';
 
 function Home() {
     const { userRole } = useContext(AuthContext);
-    const [foalderData, setFoalderData] = useState([]); // Estado que contiene el nombre de las carpetas
-    const {filesData, setFilesData, selectedFolder, setSelectedFolder} = useContext(FoldersFilesContext);
-
-
+    const [foalderData, setFoalderData] = useState([]);
+    const { filesData, setFilesData, selectedFolder, setSelectedFolder } = useContext(FoldersFilesContext);
     const { requestSeeFile, setRequestSeeFile } = useContext(PermissionsContext);
-
     const [adminForm, setAdminForm] = useState(false);
-   
+    const { subfolder } = useParams(); // Obtener el parámetro de la URL
 
-    const { foldersId, setFoldersId, foldersName, setFoldersName, filesId, setFilesId, filesName, setFilesName } = useContext(FoldersFilesContext);
+    const [selectedSubFolder, setSelectedSubFolder] = useState(null); // Nuevo estado para la subcarpeta seleccionada
+    const navigate = useNavigate();
+    // Función para actualizar la subcarpeta seleccionada
+    function handleSelectSubFolder(folderName) {
+        setSelectedSubFolder(folderName);
+    }
 
-    // Efect para cargar los archivos desde el backend
     useEffect(() => {
         const fetchFiles = async () => {
             try {
-                const response = await getFilesData(); // Llama a tu función asíncrona para obtener los archivos
-                setFilesData(response); // Establece toda la data de carpetas
-                console.log('response ', response)
-
-                const foalders = Object.keys(response); // Obtiene los nombres de las carpetas
-                setFoalderData(foalders); // Almacena los nombres de las carpetas
-                console.log('foalderData: ', foalders);
-
+                const response = await getFilesData();
+                setFilesData(response);
+                console.log('filesData[selectedFolder][subfolder]: ', filesData[selectedFolder]?.[subfolder]);
+                // console.log('soy nuevo',filesData[selectedFolder].files)
+                const foalders = Object.keys(response);
+                setFoalderData(foalders);
             } catch (error) {
-                console.error("ERROR:", error);
                 setFilesData({});
                 setFoalderData([]);
             }
         };
-
-        fetchFiles(); // Carga los archivos al montar el componente
+        fetchFiles();
     }, []);
-    console.log('Mi rol desde HOME es: ', userRole);
 
-    //eFFECT PARA DEFINIR QUE LA PRIMERA CARPETA ESTÉ SIEMPRE ABIERTA
-    useEffect(()=>{
-        if(filesData){
+    useEffect(() => {
+        if (filesData) {
             setSelectedFolder(Object.keys(filesData)[0]);
         }
-    },[filesData])
+    }, [filesData]);
 
-    // Definir tareas según el rol del usuario
     useEffect(() => {
         if (userRole === 'OPE') {
-            setRequestSeeFile(true); // Tarea de enviar solicitud de vista de archivo
+            setRequestSeeFile(true);
         }
     }, [userRole, setRequestSeeFile]);
 
-
-    function newFile(){
-        setAdminForm(true);        
-    }
-    function closeAdminForm(){
-        setAdminForm(false);        
+    function newFile() {
+        setAdminForm(true);
     }
 
-
-    // const receiveRequestOPE = (data)=>{
-    //     setRequestDataOPE((state) => [...state, data])
-    // }
-        
+    function closeAdminForm() {
+        setAdminForm(false);
+    }
 
     return (
-        <section style={{ display: 'flex', flexDirection: 'column' }}>
-            <iconify-icon style={{position:'absolute', top:'110px',right:'190px', fontSize:'30px', cursor:'pointer' }} onClick={newFile} icon="solar:add-circle-bold"></iconify-icon>
-            <div style={{ backgroundColor: 'rgba(172, 207, 217, 1)', display: 'flex', width: '100%'}}>
-                <SidebarContainer foalderData={foalderData} filesData = {filesData}/>
+        <section id='soyyo' className='bg-customBlue flex min-h-screen'>
+    <SidebarContainer foalderData={foalderData} filesData={filesData} onSelect={handleSelectSubFolder} />
 
-            
-            <div style={{ marginLeft: '360px' }}>
-                    {selectedFolder && filesData[selectedFolder].files?(
-                        <FilesContainer fileData={filesData[selectedFolder].files} />
-                ):(
-                    <div style={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', marginLeft:'240px', marginTop:'200px', paddingBottom:'250px'}}>
-                        <h1>Esta carpeta no cuenta con archivos</h1>
-                        <iconify-icon style={{fontSize:'130px'}} icon="noto-v1:sad-but-relieved-face"></iconify-icon>  
-                        
-                    </div>                                          
+    <div className='flex justify-center w-full'>
+        {subfolder && filesData[selectedFolder]?.files ? (
+            // Mostrar archivos de la subcarpeta seleccionada
+            <div>
+                {filesData[selectedFolder]?.[subfolder] && (
+                    <div className="col-span-4">
+                        {/* Recorremos y mostramos los archivos de la subcarpeta */}
+                        {filesData[selectedFolder][subfolder]?.files?.length > 0 ? (
+                            <div className="grid grid-cols-4 gap-4">
+                                <FilesContainer fileData={filesData[selectedFolder][subfolder].files} album={filesData[selectedFolder][subfolder]} />
+                            </div>
+                        ) : (
+                            <p>No hay archivos en esta subcarpeta</p>                            
+                        )}
+                    </div>
                 )}
-
-            </div>                
-
-            {adminForm && <NewFileForm onClose={closeAdminForm}/>}
-
-                
             </div>
+        ) : (
+            // Renderizar FilesContainer si no estás en una subcarpeta
+            selectedFolder && filesData[selectedFolder]?.files ? (
+                <FilesContainer fileData={filesData[selectedFolder].files} album={filesData[selectedFolder]} />
+            ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginLeft: '240px', marginTop: '200px', paddingBottom: '250px' }}>
+                    <h1>Esta carpeta no cuenta con archivos</h1>
+                    <iconify-icon style={{ fontSize: '130px' }} icon="noto-v1:sad-but-relieved-face"></iconify-icon>
+                </div>
+            )
+        )}
 
-            {requestSeeFile && userRole === "OPE"}
+        {/* Si no hay archivos en la subcarpeta, redirige a home */}
+        {/* {subfolder && !filesData[selectedFolder]?.[subfolder]?.files && 
+            alert("Esta carpeta no tiene contenido")
+            
+        } */}
 
-            {userRole === "ADM" && <History />}
-            {userRole === "GER" && <History />}
-            
-            
-        </section>
+        {/* Mensaje "test" si la subcarpeta está vacía */}
+        {subfolder && filesData[selectedFolder]?.[subfolder]?.files?.length === 0 && <h1>test</h1>}
+
+        {adminForm && <NewFileForm onClose={closeAdminForm} />}
+    </div>
+
+    {requestSeeFile && userRole === "OPE"}
+
+    {(userRole === "ADM" || userRole === "GER") && <History />}
+    </section>
+
     );
 }
 

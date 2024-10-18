@@ -3,22 +3,40 @@ import Files from "./files";
 import HeaderFiles from "./headerFiles";
 import '../../Styles/filesContainer.css'
 import DragAndDrop from "../dragDrop";
+import SubFolder from "./subFolder";
+import { useState } from "react";
 
-function FilesContainer({fileData}){
+
+function FilesContainer({fileData, album}){
+    const [selectedSubFolder, setSelectedSubFolder] = useState(null);
+    const folders = Object.keys(album).filter(key => key !== 'files'); // Filtra todas las claves que no sean 'files'
+    const files = album.files || []; // Toma solo el arreglo de archivos en la carpeta actual
+
     console.log('fileData desde fileontainer: ', fileData)
+    console.log('album: ', album);
     return(
-        <section style={{display:'flex', flexDirection:'column', paddingBottom:'90px'}}>
+        <div  className="pb-10 w-full flex flex-col">
             <HeaderFiles/>
-            <div style={{display:'grid', gridTemplateColumns:'150px 150px 150px 150px', backgroundColor:'rgba(172, 207, 217, 1)', alignItems:'center',justifyContent:'center', columnGap:'20px', rowGap:'30px', minHeight: '100vh', width:'100%', marginLeft:'60px', marginTop:'120px', gridTemplateRows:'80px 80px 80px 80px'}}>
 
-
-            {fileData.map((file) =>(
-                <Files key={file.id} fileName={file.name} fileId={file.id}/>
-            ))}
-
+             {/*RENDERIZA SUBCARPETAS Y SUS ARCHIVOS*/}
+            <div id="Grid-Folders" className="grid grid-cols-5 items-center content-center  ml-6">
+                {folders.map((folderName)=>(
+                    <div key={folderName} id="subfolder">
+                        <SubFolder folderName={folderName} album={album} onSelect={() => setSelectedSubFolder(folderName)} />
+                    </div>    
+                ))}
             </div>
+
+
+
+            <div id="Grid-Archivos" className="grid grid-cols-4 items-center content-center gap-y-8 ml-6 ">
+                {fileData.map((file) => (
+                    <Files key={file.id} fileName={file.name} fileId={file.id} className="break-words"/>
+                ))}
+            </div>
+
             
-        </section>
+        </div>
 
     )
 }

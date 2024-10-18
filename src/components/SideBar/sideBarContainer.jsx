@@ -17,34 +17,24 @@ function SidebarContainer({foalderData, filesData}){
         setSelectedFolder(foalder);             
     }
 
-    console.log('desde sidebar: ',foalderData);
+    // console.log('desde sidebar: ',foalderData);
 
     return(
-        <div style={{width:'25vw', height:'100%', backgroundColor:'rgba(0, 0, 112, 1)', display:'flex', flexDirection:'column', gap:'30px', position:'fixed'}}>
+        <div className="w-[22%] bg-customSidebarColor flex flex-col gap-12 flex-shrink-0">
+
             <div>
                 <Title/>
             </div>
 
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+            <div className="flex flex-col gap-6">
                 {/* Renderizar la lista de carpetas */}
                 {foalderData.map((foalder, index) => (
-                    <div key={index} onClick={() => handleFolderClick(foalder)}>
+                    <div key={index} onClick={() => handleFolderClick(foalder)} className="flex items-center justify-center">
                         <FoalderSidebar foalderName={foalder} />
                     </div>
                 ))}
-            </div>
-
-            {/* {selectedFolder && filesData[selectedFolder].files?(
-                filesData[selectedFolder].files.map((file)=>(
-                    <FilesContainer fileData={filesData[selectedFolder].files}/>
-
-                    // <Files key={file.id} fileName={file.name} fileId={file.id}/>
-                ))
-            ):(
-                <p>No files available</p>            
-            )} */}
-            
+            </div>            
         </div>
     )
 }

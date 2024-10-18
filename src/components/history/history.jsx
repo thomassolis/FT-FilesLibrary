@@ -26,19 +26,13 @@ function History(){
     }
 
     return(
-        <section style={{width:'110%', 
-            height: changeSize ? '260px': '30px', 
-            transition: 'height 0.5s ease',
-            position:'fixed', 
-            backgroundColor:'rgba(255, 237, 0, 1)', 
-            bottom:'0px',             
-            display:'flex', 
-            flexDirection:'column',            
-            }}>
+        <section 
+            className={`w-[110%] fixed bg-[rgba(255,237,0,1)] bottom-0 flex flex-col transition-all duration-500 ${changeSize ? 'h-[160px]' : 'h-[30px]'}`}
+            >
 
-            <div style={{display:'flex',justifyContent:'space-between', alignItems:'center'}}>
+            <div className="flex justify-between items-center">
 
-                <div style={{display:'flex', alignItems:'center'}}>
+                <div className="flex items-center">
                     <p style={{marginLeft:'25px', transform: changeSize ? 'translateY(-2px)' : 'translateY(0)',           transition: 'transform 0.5s ease'}}>Historial de solicitudes</p>
 
                     <iconify-icon onClick={toggleExpand} style={{cursor:'pointer', transform: changeSize ? 'translateY(-2px)' : 'translateY(0)', transition: 'transform 0.5s ease'}} icon="ep:arrow-up-bold"></iconify-icon>

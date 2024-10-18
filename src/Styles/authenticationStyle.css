@@ -22,6 +22,8 @@
 .authenticationTitle{
     font-family: italiana;
     color: white;
+    font-size: 25px;
+    margin-bottom: 30px;
 }
 
 .authenticationSpan{

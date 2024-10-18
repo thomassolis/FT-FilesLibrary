@@ -1,9 +1,7 @@
-import '../../Styles/completeHistoryStyle.css';
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../context/authProvider';
 import { io } from "socket.io-client";
 import { getHistoryData } from '../../api/auth';
-import { Axios } from 'axios';
 const socket = io("/");
 
 function SmallHistory() {
@@ -25,9 +23,9 @@ function SmallHistory() {
                     <td>{data.fileName}</td>
                     <td>{data.userName}</td>
                     <td>{data.textAreaValue}</td>
-                    <td style={{ display: 'flex', gap: '20px' }}>
-                        <button style={{ margin: '0', marginTop: '10px', marginLeft: '110px', backgroundColor: 'red', width: '90px' }}>Denegar</button>
-                        <button style={{ margin: '0', marginTop: '10px', backgroundColor: 'green', width: '90px' }}>Aceptar</button>
+                    <td className='flex gap-5 items-center justify-center'>
+                        <button className='m-0 bg-red-700 w-24'>Denegar</button>
+                        <button className='m-0 bg-green-900 w-24'>Aceptar</button>
                     </td>
                 </tr>
             );
@@ -88,12 +86,12 @@ useEffect(() => {
 
 
             {userRole === 'ADM' && (
-                <table style={{ width: '120%', paddingRight: '150px' }}>
+                <table style={{ width: '120%'}} className='pr-36'>
                     <thead>
                         <tr>
                             <th scope="col">Nombre del archivo requerido</th>
-                            <th scope="col">Nombre del operador que desea el archivo</th>
-                            <th scope="col">Comentario de pedido</th>
+                            <th scope="col">Operador que desea el archivo</th>
+                            <th scope="col">Comentario de pedido</th>                            
                             <th scope="col">¿Desea brindar permisos de lectura al operador?</th>
                         </tr>
                     </thead>
@@ -114,13 +112,13 @@ useEffect(() => {
             )}
 
             {userRole === 'GER' && (
-                <table style={{ width: '130%', paddingRight: '90px' }}>
+                <table style={{ width: '100vw', padding:'0', margin:'0'}}>
                     <thead>
                         <tr>
-                            <th scope="col" style={{ width: '430px' }}>Nombre del archivo requerido</th>
-                            <th scope="col" style={{ width: '430px' }}>Nombre del operador que desea el archivo</th>
-                            <th scope="col" style={{ width: '430px' }}>Comentario de pedido</th>
-                            <th scope="col" style={{ width: '430px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>¿Desea brindar permisos de lectura al operador?</th>
+                            <th scope="col" className='w-[20vw]' >Archivo requerido</th>
+                            <th scope="col" className='w-[15vw]' >Operador que desea el archivo</th>
+                            <th scope="col" className='w-[35vw]' >Comentario de pedido</th>
+                            <th scope="col" className='w-[30vw] break-words whitespace-normal' >Brindar permisos de lectura</th>
                         </tr>
                     </thead>
                     <tbody>

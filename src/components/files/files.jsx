@@ -35,10 +35,12 @@ function Files({fileId, fileName}){
     }
 
     return(
-        <div style={{backgroundColor:'rgba(172, 207, 217, 1)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center'}}>
-            {/* <iconify-icon style={{margin:'0', padding:'0',width:'90px', color:'black', fontSize:'70px'}} icon="vscode-icons:file-type-pdf2"></iconify-icon> */}
-            <Icon style={{width:'90px', color:'black', height:'70px', cursor:'pointer'}} icon="fluent:document-pdf-32-regular" onClick={handleOpenFile}/>             
-            <p style={{margin:'0px', padding:'0'}}>{fileName}</p>
+        <div className="flex flex-col items-center justify-center p-1">
+
+            <iconify-icon className="w-24 h-16 cursor-pointer" style={{fontSize:'60px'}} onClick={handleOpenFile} icon="vscode-icons:file-type-pdf2"></iconify-icon>
+            
+            {/* <Icon icon="fluent:document-pdf-32-regular" className="w-24 h-16 cursor-pointer" onClick={handleOpenFile}/>              */}
+            <p className="w-full break-words whitespace-pre-wrap overflow-hidden text-center">{fileName}</p>
 
             {modalSeeFile && <SeeFile closeModal={close} fileId={fileId} fileName={fileName}/>
 

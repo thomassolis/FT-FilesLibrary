@@ -11,7 +11,7 @@ import NotFound from "./components/notFound";
 import CompleteHistory from "./components/history/completeHistory";
 import { PermissionsProvider } from "./context/permissions/permissionsProvider";
 import { FoldersFilesProvider } from "./context/Folders-Files/Folders_Files";
-
+import NewSubFolder from "./components/NewSubFolder";
 
 
 function App() {
@@ -37,6 +37,7 @@ function App() {
                     {/* Rutas protegidas que requieren un rol */}
                     <Route element={<ProtectedRoute allowedRoles={['ADM', 'GER', 'USER']} redirectTo="/" />}>
                       <Route path="/home" element={<Home />} />        
+                      <Route path="/home/:subfolder" element={<Home />} />  
                     </Route>
 
                   <Route>

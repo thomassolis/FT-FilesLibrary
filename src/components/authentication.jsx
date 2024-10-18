@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import '../Styles/authenticationStyle.css';
+
 import { useNavigate } from 'react-router-dom'; 
 import { useState, useEffect, useContext } from "react";
 import { enviarVerificacion2pasos } from "../api/auth"; 

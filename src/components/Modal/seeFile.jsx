@@ -3,6 +3,7 @@ import { useContext, useState, useEffect } from "react";
 import { io } from "socket.io-client";
 const socket = io("/")
 import { AuthContext } from "../../context/authProvider";
+import { postRequestDataForSeeFile } from "../../api/auth";
 
 function SeeFile({closeModal, fileId, fileName}){
 
@@ -14,20 +15,29 @@ function SeeFile({closeModal, fileId, fileName}){
         setTextAreaValue(e.target.value);
     }
     
-    
-    const sendRequest = async(e) =>{ //FUNCIONAA
+
+    const sendRequest = async(e)=>{
         e.preventDefault();
         const data = {
             userName: userName,
             textAreaValue: textAreaValue,
             fileId: fileId,
             fileName: fileName
-        }        
+        };
+        try{            
+   
+            const response = await postRequestDataForSeeFile(data);
+            console.log('data desde seefileee:', data)
+            socket.emit('message', data);
 
-        socket.emit('message', data);
-        alert("Su solicitud se ha enviado con éxito, en caso de que se apruebe podrá ver el archivo en su correo electrónico.")
+            console.log('message emitted to socket');
+            alert("Su solicitud se ha enviado con éxito, en caso de que se apruebe podrá ver el archivo en su correo electrónico.")
+            closeModal();
 
-        closeModal();
+
+        }catch(error){
+            alert('hay un error',error);
+        }
     }
 
 
@@ -45,7 +55,8 @@ function SeeFile({closeModal, fileId, fileName}){
 
                 <form action="" onSubmit={sendRequest}>
                     <textarea 
-                        style={{width:'600px', height:'150px'}} 
+                        style={{width:'600px'}} 
+                        className="h-40 border-black border"
                         placeholder="Explica por que deseas ver el archivo" 
                         onChange={handleChange}
                         value={textAreaValue}

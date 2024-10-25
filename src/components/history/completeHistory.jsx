@@ -1,63 +1,69 @@
-import '../../Styles/completeHistoryStyle.css'
-import logo from '../../images/MLC logo.png'
+import '../../Styles/completeHistoryStyle.css';
+import logo from '../../images/MLC logo.png';
+import { useState, useEffect } from 'react';
+import { getOficialHistory } from '../../api/auth';
 
-function CompleteHistory(){
-    return(
+function CompleteHistory() {
+    const [oficialHistory, setOficialHistory] = useState([]);
+
+    useEffect(() => {
+        const fetchHistory = async () => {
+            try {
+                const response = await getOficialHistory();
+                console.log('response: ', response);
+                setOficialHistory(response.data);  // Acceder a los datos dentro de "response.data"
+            } catch (e) {
+                console.log(e);
+            }
+        };
+
+        fetchHistory();
+        
+    }, []);
+
+    // Función para renderizar las filas de la tabla
+    function renderRows() {
+        return oficialHistory.map((data, i) => (
+            <tr key={i}>
+                <td>{data.event}</td>
+                <td>{data.id}</td>
+                <td>{data.timestamp}</td>
+            </tr>
+        ));
+    }
+
+    return (
         <section>
-            <div style={{backgroundColor:'rgba(255, 237, 0, 1)', width:'100%', height:'5vw', position:'fixed', alignItems:'center', display:'flex'}}>
-                <h1 style={{marginLeft:'20px'}}>Historial de solicitudes</h1>
-                <img src = {logo} alt="" />
+            <div style={{backgroundColor:'rgba(255, 237, 0, 1)'}} className='] w-full h-[5vw] fixed items-center flex'>
+                <h1 style={{ marginLeft: '20px' }}>Historial de solicitudes</h1>
+                <img src={logo} alt="logo" />
             </div>
 
-            <div style={{paddingTop:'58px'}}>
+            <div className='pt-20'>
                 <table>
-                    
                     <thead>
                         <tr>
-                        <th scope="col">Nombre del archivo requerido</th>
-                        <th scope="col">Nombre del operador que desea el archivo</th>
-                        <th scope="col">Comentario de pedido</th>
-                        <th scope="col">Fecha del pedido</th>
-                        <th scope="col">Nombre de gerente asignado</th>
-                        <th scope="col">¿Fue aceptado por el gerente?</th>
-                        <th scope="col">Comentario del gerente</th>
-                        <th scope="col">Fecha de aceptación por gerencia</th>
-                        <th scope="col">Nombre de administrador encargado</th>
-                        <th scope="col">¿Fue aceptado por el administrador?</th>
-                        <th scope="col">Nombre de administrador encargado</th>
-                        <th scope="col">Comentario de administración</th>
+                            <th>Nombre del archivo requerido</th>
+                            <th>Nombre del operador que desea el archivo</th>
+                            <th>Comentario de pedido</th>
+                            <th>Fecha del pedido</th>
+                            <th>Nombre de gerente asignado</th>
+                            <th>¿Fue aceptado por el gerente?</th>
+                            <th>Comentario del gerente</th>
+                            <th>Fecha de aceptación por gerencia</th>
+                            <th>Nombre de administrador encargado</th>
+                            <th>¿Fue aceptado por el administrador?</th>
+                            <th>Nombre de administrador encargado</th>
+                            <th>Comentario de administración</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                        <td data-label="Account">Visa - 3412</td>
-                        <td data-label="Due Date">04/01/2016</td>
-                        <td data-label="Amount">$1,190</td>
-                        <td data-label="Period">03/01/2016 - 03/31/2016</td>
-                        </tr>
-                        <tr>
-                        <td scope="row" data-label="Account">Visa - 6076</td>
-                        <td data-label="Due Date">03/01/2016</td>
-                        <td data-label="Amount">$2,443</td>
-                        <td data-label="Period">02/01/2016 - 02/29/2016</td>
-                        </tr>
-                        <tr>
-                        <td scope="row" data-label="Account">Corporate AMEX</td>
-                        <td data-label="Due Date">03/01/2016</td>
-                        <td data-label="Amount">$1,181</td>
-                        <td data-label="Period">02/01/2016 - 02/29/2016</td>
-                        </tr>
-                        <tr>
-                        <td scope="row" data-label="Acount">Visa - 3412</td>
-                        <td data-label="Due Date">02/01/2016</td>
-                        <td data-label="Amount">$842</td>
-                        <td data-label="Period">01/01/2016 - 01/31/2016</td>
-                        </tr>
+                        {renderRows()} {/* Aquí se renderizan las filas */}
                     </tbody>
                 </table>
             </div>
         </section>
-    )
+    );
 }
 
 export default CompleteHistory;

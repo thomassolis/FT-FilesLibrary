@@ -8,7 +8,8 @@ export default {
     extend: {
       colors:{
         customBlue:'rgba(172, 207, 217, 1)',       
-        customSidebarColor: 'rgba(0, 0, 112, 1)'
+        customSidebarColor: 'rgba(0, 0, 112, 1)',
+        customYellow:'rgba(249, 198, 0, 1)'
         
       },
       screens:{

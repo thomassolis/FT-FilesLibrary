@@ -87,6 +87,25 @@ export const sendFilesFromAdmin = async (data) => {
         console.error(e)
     }
   }
+  //6. HALANDO LOS DATOS DE LA RUTA PARA IMPRIMIRLOS EN EL HISTORIAL DE PARTE DE ADMIN
+  export const getHistoryDataAdmin = async (data) =>{
+    try{
+        const response = await axios.get('auth/get/historialAdmin');        
+        return response.data
+    }catch(e){
+        console.error(e)
+    }
+  }
+
+  export const getOficialHistory = async() =>{
+    try{
+        const response = await axios.get('auth/get/oficialHistory')
+        return response.data;  // Retornar la respuesta completa
+    }catch(e){
+        console.log(e);
+    }
+  }
+
 
   export const postRequestDataForSeeFile = async (data)=>{
     console.log('data: ',data)
@@ -105,5 +124,25 @@ export const sendFilesFromAdmin = async (data) => {
         
     }catch(e){
         console.log('error:',e);
+    }
+  }
+
+  export const postAprobacionGerencia = async (data) =>{
+    try{
+        const response = await axios.post('auth/post/managerApproval',{
+            userName: data.userName,
+            textAreaValue: data.textAreaValue,
+            fileId: data.fileId,
+            fileName: data.fileName,
+            OPEUserName: data.OPEUserName,
+            OPEComment: data.OPEComment            
+
+            
+        });
+        console.log('respuesta de login desde auth ',response.data);
+        //console.log('response.data', response.data)
+        return response.data;
+    }catch(e){
+        console.log(e);
     }
   }

@@ -12,7 +12,7 @@ import CompleteHistory from "./components/history/completeHistory";
 import { PermissionsProvider } from "./context/permissions/permissionsProvider";
 import { FoldersFilesProvider } from "./context/Folders-Files/Folders_Files";
 import NewSubFolder from "./components/NewSubFolder";
-
+import { Toaster,toast } from 'react-hot-toast';
 
 function App() {
   
@@ -24,6 +24,7 @@ function App() {
         {/* PROVEEDOR DE DATOS DEL FOLDER Y ARCHIVOS */}
         <FoldersFilesProvider>
           <BrowserRouter>
+                <div> <Toaster position="top-center" reverseOrder={false} /> </div>
                 <Routes>
                   {/* Ruta pública que no requiere autenticación */}
 
@@ -36,8 +37,10 @@ function App() {
 
                     {/* Rutas protegidas que requieren un rol */}
                     <Route element={<ProtectedRoute allowedRoles={['ADM', 'GER', 'USER']} redirectTo="/" />}>
-                      <Route path="/home" element={<Home />} />        
-                      <Route path="/home/:subfolder" element={<Home />} />  
+                      <Route path="/:folder" element={<Home />} />        
+                      <Route path="/:folder/:subfolder" element={<Home />} />  
+                      <Route path="/:folder/:subfolder/:subsubfolder" element={<Home />} /> 
+
                     </Route>
 
                   <Route>

@@ -1,19 +1,23 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-function SubFolder({ folderName, album, onSelect }) {
+function SubFolder({ folderName, onSelect, isSelected }) {
+    const { folder, subfolder, subsubfolder } = useParams(); // Obtenemos los parámetros de la URL
     const navigate = useNavigate();
 
+    console.log('subsubfolder: ',subsubfolder)
+
     function handleClick() {
-        console.log('onSelect:',onSelect);
         if (onSelect) {
-            onSelect(folderName); // Pasar el folderName a onSelect
+            onSelect(folderName); // Pasar el folderName a onSelect para Home
         }
-        navigate(`/home/${folderName}`); // Navegar a la ruta con la carpeta seleccionada
+        // Construimos la nueva ruta en función de si estamos en una carpeta o subcarpeta
+        const newPath = subfolder ? `/${folder}/${subfolder}/${folderName}` : `/${folder}/${folderName}`;
+        navigate(newPath); 
     }
 
     return (
-        <div onClick={handleClick} className="flex justify-center items-center font-bold cursor-pointer border border-black rounded border-dashed p-4 w-auto m-3 hover:bg-slate-400">
-            <iconify-icon style={{fontSize:'25px'}} icon="fxemoji:folder"></iconify-icon>
+        <div onClick={handleClick} className={`flex justify-center items-center font-bold cursor-pointer  w-full m-3 hover:bg-slate-400  ${isSelected? 'bg-slate-400' : 'bg-[customBlue]'}`}>
+            <iconify-icon style={{ fontSize: '25px' }} icon="fxemoji:folder"></iconify-icon>
             <p className="ml-2">{folderName}</p>            
         </div>
     );

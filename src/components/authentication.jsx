@@ -6,7 +6,8 @@ import { enviarVerificacion2pasos } from "../api/auth";
 import React from 'react';
 import { AuthContext } from "../context/authProvider";
 import Home from "./home";
-
+import FoldersFilesContext from "../context/Folders-Files/Folders_Files";
+import { Toaster,toast } from 'react-hot-toast';
 function Authentication() {
     // const {setIsBan} = AuthContext()
     const { register, handleSubmit, getValues, formState: { errors } } = useForm();
@@ -18,13 +19,14 @@ function Authentication() {
     //Datos que vienen del backend 
     
     const {userRole, setUserRole, userName, setUserName, banTime, setBanTime } = useContext(AuthContext);
-
+    const {selectedFolder} = useContext(FoldersFilesContext);
+    // const folder = selectedFolder;
     //ir a home al pasar la verificación
     useEffect(() => {
                 
         if (shouldNavigateHome) {
             const rol = userRole;
-            navigate('/home'); //Va hacia la url con el rol
+            navigate(`/home`);
         }
     }, [shouldNavigateHome]);
 
@@ -74,7 +76,7 @@ function Authentication() {
                 
                 switch (statusCode) {
                     case 429:
-                        alert(error.response.data.message);                    
+                        toast.error(error.response.data.message);                                      
                         userBan();
                         setTimeBan(error.response.data.segundosBan.seconds);
 
@@ -82,10 +84,10 @@ function Authentication() {
                         // setIsBan(true)
                         break;
                     case 401:
-                        alert(error.response.data.message);
+                        toast.error(error.response.data.message);                        
                         break;
                     case 500:
-                        alert(error.response.data.message);
+                        toast.error(error.response.data.message);
                         break;
                     case 200:
                         alert("Todo bien")
@@ -93,9 +95,8 @@ function Authentication() {
                     case 404:
                         alert("Error 404")
                         break;
-                    default:
-                        alert('Ha ocurrido un error');
-                        alert(error.response.data.message);
+                    default:                        
+                        toast.error(error.response.data.message);                        
                         setShouldNavigateHome(true)
                 }
             } else {

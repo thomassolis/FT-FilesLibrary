@@ -3,13 +3,12 @@ import { useForm } from "react-hook-form"
 
 import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import '../../src/images/MLC logo.png'
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { enviarLogin } from "../api/auth";
 import { AuthContext } from "../context/authProvider";
 import logo from '../images/MLC logo.png'
 import CountDown from "./countDown.jsx";
-
+import { Toaster,toast } from 'react-hot-toast';
 function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate();
@@ -65,7 +64,8 @@ function Login() {
             const errorCode = error.response.status;
             switch(errorCode){
                 case 429:
-                    alert(error.response.data.message);  
+                    toast.error(error.response.data.message)
+                    //  alert(error.response.data.message);  
                     console.log('time: ', error.response.data.segundosBan.seconds);
                     setTimeBan(error.response.data.segundosBan.seconds);
                     console.log('tiempo de baneo ',timeBan);
@@ -73,13 +73,15 @@ function Login() {
                     isBan();        
                     break;
                 case 401:
-                    alert(error.response.data.message);
+                    toast.error(error.response.data.message)
+                    // alert(error.response.data.message);
                     break;
                 case 500:
-                    alert(error.response.data.message);
+                    toast.error(error.response.data.message)                    
                     break;
                 default:
-                    alert('Ha ocurrido un error');
+                    toast.error('Ha ocurrido un error')
+                    
             }
 
 
@@ -90,7 +92,7 @@ function Login() {
         <section className="body">
             <div className="main">  	
                 {/* Renderiza el ToastContainer una vez en tu aplicación */}
-                <ToastContainer />
+                
                 <div className="signup">
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <label aria-hidden="true" className="title">MLC Library</label>

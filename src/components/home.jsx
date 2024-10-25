@@ -17,22 +17,23 @@ function Home() {
     const { filesData, setFilesData, selectedFolder, setSelectedFolder } = useContext(FoldersFilesContext);
     const { requestSeeFile, setRequestSeeFile } = useContext(PermissionsContext);
     const [adminForm, setAdminForm] = useState(false);
-    const { subfolder } = useParams(); // Obtener el parámetro de la URL
+    const { folder, subfolder, subsubfolder } = useParams(); // Obtener los parámetros de la URL para manejar carpetas, subcarpetas y subsubcarpetas
 
-    const [selectedSubFolder, setSelectedSubFolder] = useState(null); // Nuevo estado para la subcarpeta seleccionada
     const navigate = useNavigate();
-    // Función para actualizar la subcarpeta seleccionada
-    function handleSelectSubFolder(folderName) {
-        setSelectedSubFolder(folderName);
-    }
+
+    // Definir la función handleSelectSubFolder
+    const handleSelectSubFolder = (folderName) => {
+        setSelectedFolder(folderName); // Actualiza la carpeta seleccionada       
+    };
 
     useEffect(() => {
         const fetchFiles = async () => {
             try {
                 const response = await getFilesData();
                 setFilesData(response);
+                console.log('filesData desde HOME: ', filesData);
                 console.log('filesData[selectedFolder][subfolder]: ', filesData[selectedFolder]?.[subfolder]);
-                // console.log('soy nuevo',filesData[selectedFolder].files)
+
                 const foalders = Object.keys(response);
                 setFoalderData(foalders);
             } catch (error) {
@@ -46,6 +47,7 @@ function Home() {
     useEffect(() => {
         if (filesData) {
             setSelectedFolder(Object.keys(filesData)[0]);
+            console.log('selectedFolder: ', selectedFolder);
         }
     }, [filesData]);
 
@@ -63,57 +65,56 @@ function Home() {
         setAdminForm(false);
     }
 
-    return (
-        <section id='soyyo' className='bg-customBlue flex min-h-screen'>
-    <SidebarContainer foalderData={foalderData} filesData={filesData} onSelect={handleSelectSubFolder} />
+    // Función para renderizar archivos dependiendo del nivel de carpeta
+    const renderFiles = () => {
+        if (folder && filesData[folder]) {
+            if (subsubfolder && filesData[folder][subfolder]?.[subsubfolder]?.files) {
+                return filesData[folder][subfolder][subsubfolder].files;
+            } else if (subfolder && filesData[folder]?.[subfolder]?.files) {
+                return filesData[folder][subfolder].files;
+            } else if (filesData[folder]?.files) {
+                return filesData[folder].files;
+            }
+        }
+        return [];
+    };
+    
 
-    <div className='flex justify-center w-full'>
-        {subfolder && filesData[selectedFolder]?.files ? (
-            // Mostrar archivos de la subcarpeta seleccionada
-            <div>
-                {filesData[selectedFolder]?.[subfolder] && (
-                    <div className="col-span-4">
-                        {/* Recorremos y mostramos los archivos de la subcarpeta */}
-                        {filesData[selectedFolder][subfolder]?.files?.length > 0 ? (
-                            <div className="grid grid-cols-4 gap-4">
-                                <FilesContainer fileData={filesData[selectedFolder][subfolder].files} album={filesData[selectedFolder][subfolder]} />
-                            </div>
-                        ) : (
-                            <p>No hay archivos en esta subcarpeta</p>                            
-                        )}
-                    </div>
-                )}
-            </div>
-        ) : (
-            // Renderizar FilesContainer si no estás en una subcarpeta
-            selectedFolder && filesData[selectedFolder]?.files ? (
-                <FilesContainer fileData={filesData[selectedFolder].files} album={filesData[selectedFolder]} />
+    return (
+    <section id='soyyo' className='bg-customBlue flex min-h-screen'>
+        {/* Mostrar la barra lateral */}
+        <SidebarContainer foalderData={foalderData} filesData={filesData} onSelect={handleSelectSubFolder} />
+
+        <div className='flex justify-center w-full'>
+            {folder && subsubfolder && filesData[folder]?.[subfolder]?.[subsubfolder]?.files ? (
+                // Mostrar archivos de la subsubcarpeta seleccionada
+                <div className="col-span-4">
+                    <FilesContainer fileData={renderFiles()} album={filesData[folder][subfolder][subsubfolder]} />
+                </div>
+            ) : folder && subfolder && filesData[folder]?.[subfolder]?.files ? (
+                // Mostrar archivos de la subcarpeta seleccionada
+                <div className="col-span-4">
+                    <FilesContainer fileData={renderFiles()} album={filesData[folder][subfolder]} />
+                </div>
+            ) : selectedFolder && filesData[selectedFolder]?.files ? (
+                // Mostrar archivos de la carpeta seleccionada
+                <FilesContainer fileData={renderFiles()} album={filesData[selectedFolder]} />
             ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginLeft: '240px', marginTop: '200px', paddingBottom: '250px' }}>
                     <h1>Esta carpeta no cuenta con archivos</h1>
                     <iconify-icon style={{ fontSize: '130px' }} icon="noto-v1:sad-but-relieved-face"></iconify-icon>
                 </div>
-            )
-        )}
+            )}
 
-        {/* Si no hay archivos en la subcarpeta, redirige a home */}
-        {/* {subfolder && !filesData[selectedFolder]?.[subfolder]?.files && 
-            alert("Esta carpeta no tiene contenido")
-            
-        } */}
+            {adminForm && <NewFileForm onClose={closeAdminForm} />}
+        </div>
 
-        {/* Mensaje "test" si la subcarpeta está vacía */}
-        {subfolder && filesData[selectedFolder]?.[subfolder]?.files?.length === 0 && <h1>test</h1>}
+        {requestSeeFile && userRole === "OPE"}
 
-        {adminForm && <NewFileForm onClose={closeAdminForm} />}
-    </div>
-
-    {requestSeeFile && userRole === "OPE"}
-
-    {(userRole === "ADM" || userRole === "GER") && <History />}
+        {(userRole === "ADM" || userRole === "GER") && <History />}
     </section>
+);
 
-    );
 }
 
 export default Home;

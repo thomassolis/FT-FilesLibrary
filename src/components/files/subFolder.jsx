@@ -16,7 +16,7 @@ function SubFolder({ folderName, onSelect, isSelected }) {
     }
 
     return (
-        <div onClick={handleClick} className={`flex justify-center items-center font-bold cursor-pointer  w-full m-3 hover:bg-slate-400  ${isSelected? 'bg-slate-400' : 'bg-[customBlue]'}`}>
+        <div onClick={handleClick} className={`flex justify-center items-center font-bold cursor-pointer  w-full m-3`}>
             <iconify-icon style={{ fontSize: '25px' }} icon="fxemoji:folder"></iconify-icon>
             <p className="ml-2">{folderName}</p>            
         </div>

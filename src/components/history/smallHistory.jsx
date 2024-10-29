@@ -56,7 +56,16 @@ function SmallHistory() {
                     <td className='break-words'>{data.textAreaValue}</td>
                     
                     <td>
-                        <button className='inline-block mr-3 m-0 bg-red-700 w-24' onClick={() => setShowModal({ visible: true, approvedGER: false, fileName: data.fileName, OPEUserName: data.userName })}>Denegar</button>
+                        <button className='inline-block mr-3 m-0 bg-red-700 w-24' 
+                            onClick={() => setShowModal({ 
+                                visible: true, 
+                                approvedGER: false, 
+                                fileName: data.fileName, 
+                                OPEUserName: data.userName 
+                            })}
+                        >Denegar</button>
+
+
                         <button 
                             className='inline-block m-0 bg-green-900 w-24' 
                             onClick={() => setShowModal({
@@ -217,7 +226,7 @@ function SmallHistory() {
 
             {showModal.visible && (
                 <AprobacionGerencia
-                    approvedADM={showModal.approvedGER}
+                    approvedGER={showModal.approvedGER}
                     onClose={() => setShowModal(false)}
                     fileId={showModal.fileId}
                     fileName={showModal.fileName}

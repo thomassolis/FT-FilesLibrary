@@ -36,7 +36,7 @@ function App() {
                     </Route>
 
                     {/* Rutas protegidas que requieren un rol */}
-                    <Route element={<ProtectedRoute allowedRoles={['ADM', 'GER', 'USER']} redirectTo="/" />}>
+                    <Route element={<ProtectedRoute allowedRoles={['ADM', 'GER', 'OPE']} redirectTo="/" />}>
                       <Route path="/:folder" element={<Home />} />        
                       <Route path="/:folder/:subfolder" element={<Home />} />  
                       <Route path="/:folder/:subfolder/:subsubfolder" element={<Home />} /> 

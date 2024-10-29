@@ -15,11 +15,11 @@ function Logout({closeModal}){
     return(
         <div style={{
                 position:'absolute', 
-                width:'250px', 
+                width:'270px', 
                 height:'200px', 
                 backgroundColor:'skyblue',
-                top:'23px',
-                left:'55px',
+                top:'7px',
+                left:'20px',
                 borderRadius:'20px',
                 display:'flex',
                 flexDirection:'column',
@@ -27,7 +27,7 @@ function Logout({closeModal}){
                 boxShadow: '0 4px 6px rgba(0, 0, 0, 0.7)'
                 }}>
 
-            <div style={{display:'flex', marginTop:'10px', gap:'140px'}}>
+            <div style={{display:'flex', marginTop:'10px', gap:'170px'}}>
                 <iconify-icon style={{color:'black', marginLeft:'20px',fontSize:"30px", cursor:'pointer'}} icon="duo-icons:user" ></iconify-icon>
                 <iconify-icon style={{fontSize:"30px", marginRight:'20px', cursor:'pointer'}} onClick={closeModal} icon="iconamoon:close"></iconify-icon>
             </div>

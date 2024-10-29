@@ -15,6 +15,8 @@ function AprobacionGerencia({ approvedGER, onClose, fileName, OPEUserName, OPECo
     const { userName, userRole } = useContext(AuthContext);
 
     console.log(approvedADM)
+    console.log('approvedGER: ',approvedGER)
+    console.log('approvedADM: ',approvedADM)
     console.log(userRole)
 
 
@@ -53,6 +55,8 @@ function AprobacionGerencia({ approvedGER, onClose, fileName, OPEUserName, OPECo
     return (
         <div style={{position:'fixed', top:'50%', left:'50%',transform: 'translate(-50%, -50%)',width:'964px', height:'350px', backgroundColor:'white', display:'flex',alignItems:'center', justifyContent:'center', flexDirection:'column', boxShadow: '0px 0px 10px rgba(0,0,0,0.9)', borderRadius:'15px'}}>
             <iconify-icon style={{position:'absolute', top:'10px', right:'10px', fontSize:'20px', cursor:'pointer'}} onClick={onClose} icon="zondicons:close"></iconify-icon>
+
+            <h1>{approvedGER}</h1>
 
             {userRole==='GER' && approvedGER === true ? (
                 <div>

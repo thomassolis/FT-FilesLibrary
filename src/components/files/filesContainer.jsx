@@ -33,32 +33,41 @@ function FilesContainer({ fileData, album }) {
             
 
             {/* Renderizamos las carpetas y subcarpetas */}
-            <div className="flex items-center justify-center ">
+            <div className="flex items-center justify-center">
                 <div id="Grid-Folders" 
-                    className={`grid grid-cols-5 gap-4 items-center content-center w-[90%] ${
-                        subsubfolder ? 'mt-12' : ''
-                    }`}>
-                    {folders.map((folderName) => (
-                        <div key={folderName} id="subfolder" className="border border-black rounded border-dashed flex p-2 w-[100%]">
-                            <SubFolder 
-                                folderName={folderName} 
-                                album={album} 
-                                onSelect={() => setSelectedSubFolder(folderName)} 
-                                isSelected={selectedSubFolder === folderName} 
-                            />
-                        </div>
-                    ))}
-                </div>
+                    className={`grid grid-cols-5 gap-4 items-center content-center w-[90%] ${subsubfolder ? 'mt-12' : ''}`}>
+                    {folders.map((folderName) => {
+                        const isSelected = folderName === selectedSubFolder; // Compara si este folder está seleccionado
+                        return (
+                            <div 
+                                key={folderName} 
+                                id="subfolder" 
+                                className={`border border-black rounded border-dashed flex justify-center p-2 w-[100%]  hover:bg-slate-400  cursor-pointer`}
+                                onClick={() => setSelectedSubFolder(folderName)} // Cambia el folder seleccionado al hacer clic
+                            >
+                                <SubFolder 
+                                    folderName={folderName} 
+                                    album={album} 
+                                    onSelect={() => setSelectedSubFolder(folderName)} 
+                                />
+                            </div>
+                        );
+                    })}
+                    </div>
             </div>
+
             
 
 
             {/* Renderizamos los archivos */}
-            <div id="Grid-Archivos" className="grid grid-cols-4 items-center content-center gap-y-8 ml-6">
-                {fileData.map((file) => (
-                    <Files key={file.id} fileName={file.name} fileId={file.id} className="break-words" />
-                ))}
+            <div className="w-full">
+                <div id="Grid-Archivos" className="grid grid-cols-4 items-center content-center gap-y-8">
+                    {fileData.map((file) => (
+                        <Files key={file.id} fileName={file.name} fileId={file.id} className="break-words" />
+                    ))}
+                </div>
             </div>
+            
         </div>
     );
 }

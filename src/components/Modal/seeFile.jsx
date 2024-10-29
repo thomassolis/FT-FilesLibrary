@@ -9,7 +9,7 @@ import { Toaster,toast } from "react-hot-toast";
 function SeeFile({closeModal, fileId, fileName}){
 
     const [textAreaValue, setTextAreaValue] = useState()
-    const {userName}=useContext(AuthContext);
+    const {userName, userRole}=useContext(AuthContext);
     
 
     function handleChange(e){
@@ -19,6 +19,7 @@ function SeeFile({closeModal, fileId, fileName}){
 
     const sendRequest = async(e)=>{
         e.preventDefault();
+        console.log('userRole: ', userRole);
         
         const data = {
             userName: userName,

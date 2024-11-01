@@ -44,16 +44,14 @@ function SmallHistory() {
     // Función para renderizar filas de solicitudes en tiempo real
     function renderRows() {
         const rows = [];
-        console.log('newhistorial', newHistorial);
+        // console.log('newHistorial desde renderRows: ', newHistorial)
         for (let i = 0; i < newHistorial.length; i++) {
             const data = newHistorial[i];
-            console.log('data desde renderrows: ',data);
-            console.log('FILEID: ', data.fileId);
             rows.push(
                 <tr key={i}>
-                    <td className='break-words'>{data.fileName}</td>
-                    <td className='break-words'>{data.userName}</td>
-                    <td className='break-words'>{data.textAreaValue}</td>
+                    <td className='break-words'>{data.Nombre_del_archivo}</td>
+                    <td className='break-words'>{data.Nombre_de_solicitante}</td>
+                    <td className='break-words'>{data.motivo_de_la_solicitud}</td>
                     
                     <td>
                         <button className='inline-block mr-3 m-0 bg-red-700 w-24' 
@@ -93,11 +91,12 @@ function SmallHistory() {
             console.log('data desde rows', data);
             rows.push(
                 <tr key={i}>
-                    <td className='break-words'>{data.fileName}</td>
-                    <td className='break-words'>{data.OPEUserName}</td>
-                    <td className='break-words'>{data.OPEComment}</td>
-                    <td className='break-words'>{data.userName}</td>
-                    <td className='break-words'>{data.textAreaValue}</td>
+                    <td className='break-words'>{data.Nombre_del_archivo}</td>
+                    <td className='break-words'>{data.Nombre_de_solicitante}</td>
+                    <td>{data.Rol_De_Solicitante}</td>
+                    <td className='break-words'>{data.motivo_de_la_solicitud}</td>
+                    <td className='break-words'>{data.Gerente_que_aprobo_solicitud}</td>
+                    <td className='break-words'>{data.Comentario_gerente}</td>
                     <td>
                         <button 
                             className='inline-block m-0 bg-red-700 w-24 mr-3' 
@@ -120,6 +119,7 @@ function SmallHistory() {
                 const response = await getHistoryData();
                 console.log('response desde historial: ', response);
                 setHistorial(response);  // Actualizar el estado con los datos recibidos
+                
             } catch (e) {
                 console.error(e);
             }
@@ -191,15 +191,16 @@ function SmallHistory() {
     return (
         <section style={{ overflowX: 'auto' }}>
             {userRole === 'ADM' && (
-                <table style={{ width: '100vw', padding:'0', margin:'0'}} >
+                <table style={{ width: '97.5vw', padding:'0', margin:'0'}} >
                     <thead>
                         <tr>
-                            <th className='w-[16.6vw]'>Archivo requerido</th>
-                            <th className='w-[16.6vw]'>Persona que desea el archivo (rol)</th>
-                            <th className='w-[16.6vw]'>Comentario de pedido</th>           
-                            <th className='w-[16.6vw]'>Gerente que aprobo solicitud</th>
-                            <th className='w-[16.6vw]'>Comentario de gerente</th>
-                            <th className='w-[16.6vw] ml-3'>Brindar permisos de lectura</th>
+                            <th className='w-[12vw]'>Archivo requerido</th>
+                            <th className='w-[9vw]'>Solicitante</th>
+                            <th className='w-[10vw]'>Rol de solicitante</th>
+                            <th className='w-[14.2vw]'>Comentario de pedido</th>           
+                            <th className='w-[9vw]'>Gerente que aprobó</th>
+                            <th className='w-[14.2vw]'>Comentario de gerente</th>
+                            <th className='w-[14.2vw]'>Brindar permisos de lectura</th>
                         </tr>
                     </thead>
                     <tbody>

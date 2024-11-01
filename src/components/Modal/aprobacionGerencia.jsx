@@ -34,13 +34,17 @@ function AprobacionGerencia({ approvedGER, onClose, fileName, OPEUserName, OPECo
             fileName: fileName,
             OPEUserName: OPEUserName,
             OPEComment: OPEComment,
-            approvedGER: approvedGER
+            approvedGER: approvedGER,
+            approvedADM: approvedADM
+
         };
 
         try {                                    
 
+            await postAprobacionGerencia(data);
+
             if(approvedGER === true){
-                await postAprobacionGerencia(data);
+                //Solo emitir a admin en caso que el gerente lo haya aprobado
                 socket.emit('messageGerencia', data);
             }            
 
@@ -112,7 +116,7 @@ function AprobacionGerencia({ approvedGER, onClose, fileName, OPEUserName, OPECo
 
             {userRole === 'ADM' && approvedADM === false && (
                 <div>
-                    <h1>¿Estás seguro que NO deseas brindar permiso?</h1>
+                    <h1>¿Estás seguro que NO deseas brindar permiso desde Admin?</h1>
                     <form className="w-full flex flex-col items-center" onSubmit={aprobacion}>
                         <textarea 
                             className="w-[90%] border h-28 border-black" 

@@ -10,8 +10,8 @@ function CompleteHistory() {
         const fetchHistory = async () => {
             try {
                 const response = await getOficialHistory();
-                console.log('response: ', response);
-                setOficialHistory(response.data);  // Acceder a los datos dentro de "response.data"
+                
+                setOficialHistory(response);  // Acceder a los datos dentro de "response.data"
             } catch (e) {
                 console.log(e);
             }
@@ -22,16 +22,46 @@ function CompleteHistory() {
     }, []);
 
     // Función para renderizar las filas de la tabla
+    // function renderRows() {
+    //     return oficialHistory.map((data, i) => (
+    //         <tr key={i}>
+    //             <td>{data.Nombre_del_archivo}</td>
+    //             <td>{data.id}</td>
+    //             <td>{data.timestamp}</td>
+    //         </tr>
+    //     ));
+    // }
+
     function renderRows() {
+        // Validar que oficialHistory esté definido y que sea un array
+        if (!Array.isArray(oficialHistory) || oficialHistory.length === 0) {
+            return (
+                <tr>
+                    <td colSpan="3">No hay datos disponibles</td>
+                </tr>
+            );
+        }
+    
+        // Si oficialHistory tiene datos, renderizar las filas
         return oficialHistory.map((data, i) => (
             <tr key={i}>
-                <td>{data.event}</td>
-                <td>{data.id}</td>
-                <td>{data.timestamp}</td>
+                <td className='break-words'>{data.Nombre_del_archivo}</td>
+                <td className='break-words'>{data.Nombre_de_solicitante}</td>
+                <td className='break-words'>{data.Rol_De_Solicitante}</td>
+                <td className='break-words'>{data.motivo_de_la_solicitud}</td>
+                <td className='break-words'>{data.fecha_solicitud}</td>
+                <td className='break-words'>{data.Gerente_que_aprobo_solicitud}</td>
+                <td className='break-words'>{data.aprobacion_gerencia}</td>
+                <td className='break-words'>{data.Comentario_gerente}</td>
+                <td className='break-words'>{data.fecha_aprobacion_gerente}</td>
+                <td className='break-words'>{data.nombre_administrador}</td>
+                <td className='break-words'>{data.aprobacion_administracion}</td>
+                <td className='break-words'>{data.Comentario_administracion}</td>
             </tr>
         ));
     }
-
+    
+    
     return (
         <section>
             <div style={{backgroundColor:'rgba(255, 237, 0, 1)'}} className='] w-full h-[5vw] fixed items-center flex'>
@@ -44,8 +74,9 @@ function CompleteHistory() {
                     <thead>
                         <tr>
                             <th>Nombre del archivo requerido</th>
-                            <th>Nombre del operador que desea el archivo</th>
-                            <th>Comentario de pedido</th>
+                            <th>Nombre del solicitante</th>
+                            <th>Rol de solicitante</th>
+                            <th>Comentario del solicitante</th>
                             <th>Fecha del pedido</th>
                             <th>Nombre de gerente asignado</th>
                             <th>¿Fue aceptado por el gerente?</th>
@@ -53,7 +84,6 @@ function CompleteHistory() {
                             <th>Fecha de aceptación por gerencia</th>
                             <th>Nombre de administrador encargado</th>
                             <th>¿Fue aceptado por el administrador?</th>
-                            <th>Nombre de administrador encargado</th>
                             <th>Comentario de administración</th>
                         </tr>
                     </thead>

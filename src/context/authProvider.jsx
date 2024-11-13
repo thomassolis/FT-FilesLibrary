@@ -7,7 +7,10 @@ export const AuthProvider = ({ children }) => {
     const [userName, setUserName] = useState(null);
     const [banTime, setBanTime] = useState(null);
 
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(() => {
+        return sessionStorage.getItem('isAuthenticated') === 'true';
+    });
+    
 
     const [isDisabled, setIsDisabled] = useState(false);
 
@@ -18,12 +21,12 @@ export const AuthProvider = ({ children }) => {
             }
         }, [userRole]); // Solo actualiza cuando userRole cambie
 
-                // Efecto para actualizar sessionStorage cuando userRole cambie
+        // Efecto para actualizar sessionStorage cuando isAuthenticated cambie
         useEffect(() => {
             if (isAuthenticated) {
                 sessionStorage.setItem('isAuthenticated', isAuthenticated);
             }
-        }, [isAuthenticated]); // Solo actualiza cuando userRole cambie
+        }, [isAuthenticated]);
 
     return (
         <AuthContext.Provider value={{userRole, setUserRole, userName, setUserName, banTime, setBanTime, isAuthenticated, setIsAuthenticated, isDisabled, setIsDisabled }}>

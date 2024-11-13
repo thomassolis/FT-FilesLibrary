@@ -2,19 +2,21 @@ import Files from "./files";
 import HeaderFiles from "./headerFiles";
 import '../../Styles/filesContainer.css';
 import SubFolder from "./subFolder";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 function FilesContainer({ fileData, album }) {
     const [selectedSubFolder, setSelectedSubFolder] = useState(null);
-    
+    const [showRoute , setShowRoute] = useState(false);
 
     // Obtenemos las claves del objeto album que no son 'files' (las carpetas)
     const folders = Object.keys(album).filter(key => key !== 'files');
     const files = album.files || []; // Archivos en la carpeta actual
 
-    const {subfolder, subsubfolder} = useParams();
+    const {folder, subfolder, subsubfolder} = useParams();
     console.log(subfolder)
+
+ 
 
 
     console.log(subsubfolder)
@@ -25,17 +27,29 @@ function FilesContainer({ fileData, album }) {
     });
 
     return (
-        <div className="pb-10 w-full flex flex-col">
+        <div className="pb-10 w-full flex flex-col ml-4">
 
-            {!subsubfolder &&
+      
+
+        
                 <HeaderFiles />
-            }
+            
             
 
             {/* Renderizamos las carpetas y subcarpetas */}
-            <div className="flex items-center justify-center">
-                <div id="Grid-Folders" 
-                    className={`grid grid-cols-5 gap-4 items-center content-center w-[90%] ${subsubfolder ? 'mt-12' : ''}`}>
+            <div className="flex justify-center flex-col">
+                {folder && !subfolder &&
+                    <h1 className="font-serif text-2xl ">{folder}</h1>
+                }
+                {folder && subfolder && !subsubfolder &&
+                    <h1 className="font-serif text-2xl ">{folder} / {subfolder}</h1>
+                }
+                {folder && subfolder && subsubfolder &&
+                    <h1 className="font-serif text-2xl ">{folder} / {subfolder} / {subsubfolder}</h1>
+                }
+
+                <div id="Grid-Folders"
+                    className={`grid grid-cols-5 gap-4 items-center, mt-4 content-center w-[90%] ${subsubfolder ? 'mt-12' : ''}`}>
                     {folders.map((folderName) => {
                         const isSelected = folderName === selectedSubFolder; // Compara si este folder está seleccionado
                         return (

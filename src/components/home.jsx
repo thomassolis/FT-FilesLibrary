@@ -18,7 +18,8 @@ function Home() {
     const { requestSeeFile, setRequestSeeFile } = useContext(PermissionsContext);
     const [adminForm, setAdminForm] = useState(false);
     const { folder, subfolder, subsubfolder } = useParams(); // Obtener los parámetros de la URL para manejar carpetas, subcarpetas y subsubcarpetas
-
+    console.log("Valor de folder:", folder);
+    
     const navigate = useNavigate();
 
     // Definir la función handleSelectSubFolder
@@ -29,8 +30,10 @@ function Home() {
     useEffect(() => {
         const fetchFiles = async () => {
             try {
+                
                 const response = await getFilesData();
                 setFilesData(response);
+                console.log('response desde HOME: ',response)
                 console.log('filesData desde HOME: ', filesData);
                 console.log('filesData[selectedFolder][subfolder]: ', filesData[selectedFolder]?.[subfolder]);
 
@@ -85,15 +88,15 @@ function Home() {
         {/* Mostrar la barra lateral */}
         <SidebarContainer foalderData={foalderData} filesData={filesData} onSelect={handleSelectSubFolder} />
 
-        <div className='flex justify-center w-full'>
+        <div className='flex w-full'>
             {folder && subsubfolder && filesData[folder]?.[subfolder]?.[subsubfolder]?.files ? (
                 // Mostrar archivos de la subsubcarpeta seleccionada
-                <div className="col-span-4">
+                <div className="col-span-4 w-full">
                     <FilesContainer fileData={renderFiles()} album={filesData[folder][subfolder][subsubfolder]} />
                 </div>
             ) : folder && subfolder && filesData[folder]?.[subfolder]?.files ? (
                 // Mostrar archivos de la subcarpeta seleccionada
-                <div className="col-span-4">
+                <div className="col-span-4 w-full">
                     <FilesContainer fileData={renderFiles()} album={filesData[folder][subfolder]} />
                 </div>
             ) : selectedFolder && filesData[selectedFolder]?.files ? (
@@ -109,7 +112,7 @@ function Home() {
             {adminForm && <NewFileForm onClose={closeAdminForm} />}
         </div>
 
-        {requestSeeFile && userRole === "OPE"}
+        {/* {requestSeeFile && userRole === "OPE"} */}
 
         {(userRole === "ADM" || userRole === "GER") && <History />}
     </section>

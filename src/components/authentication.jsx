@@ -31,7 +31,8 @@ function Authentication() {
     // Navegar a home cuando sea necesario
     useEffect(() => {
         if (shouldNavigateHome) {
-            navigate('/home'); // Corregir el error de comillas faltantes en la ruta
+            const folder = 'avisos'            
+            navigate(`/${folder}`); // Corregir el error de comillas faltantes en la ruta
         }
     }, [shouldNavigateHome, navigate]);
 

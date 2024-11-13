@@ -12,6 +12,7 @@ function CompleteHistory() {
                 const response = await getOficialHistory();
                 
                 setOficialHistory(response);  // Acceder a los datos dentro de "response.data"
+                console.log('response para saber:', response)
             } catch (e) {
                 console.log(e);
             }
@@ -21,16 +22,6 @@ function CompleteHistory() {
         
     }, []);
 
-    // Función para renderizar las filas de la tabla
-    // function renderRows() {
-    //     return oficialHistory.map((data, i) => (
-    //         <tr key={i}>
-    //             <td>{data.Nombre_del_archivo}</td>
-    //             <td>{data.id}</td>
-    //             <td>{data.timestamp}</td>
-    //         </tr>
-    //     ));
-    // }
 
     function renderRows() {
         // Validar que oficialHistory esté definido y que sea un array

@@ -35,10 +35,7 @@ export const enviarVerificacion2pasos = async (data) => {
 
 export const getFilesData = async () => {
     try{
-        // let variableRol = 'GER'
-        // const response = await axios.get(`auth/get/files/${variableRol}`);
         const response = await axios.get(`auth/get/files/ADM`);
-        // console.log(response);
         return response.data
     }catch(error){
         console.log("error buscando los datos");
@@ -133,14 +130,16 @@ export const sendFilesFromAdmin = async (data) => {
     try{
         const response = await axios.post('files/post/managerApproval',{
             userName: data.userName,
-            textAreaValue: data.textAreaValue,
+            comentarioGerente: data.comentarioGerente,
+            comentarioAdministracion: data.comentarioAdministracion,
             fileId: data.fileId,
             fileName: data.fileName,
             OPEUserName: data.OPEUserName,
             OPEComment: data.OPEComment,
             folder: data.selectedFolder,
             approvedGER: data.approvedGER,     
-            approvedADM: data.approvedADM          
+            approvedADM: data.approvedADM,     
+            motivo_solicitud: data.motivo_solicitud     
         });
         console.log('respuesta de login desde files ',response.data);
         //console.log('response.data', response.data)

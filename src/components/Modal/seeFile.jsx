@@ -27,10 +27,10 @@ function SeeFile({closeModal, fileId, fileName}){
         e.preventDefault();
         
         const data = {
-            userName: userName,
-            textAreaValue: textAreaValue,
+            Nombre_de_solicitante: userName,
+            motivo_solicitud: textAreaValue,
             fileId: fileId,
-            fileName: fileName,
+            Nombre_del_archivo: fileName,
             folder: selectedFolder
         };
         try{            
@@ -40,7 +40,8 @@ function SeeFile({closeModal, fileId, fileName}){
 
             if(userRole=='OPE'){
                 socket.emit('message', data);            
-            }else{
+            }
+            else{
                 socket.emit('messageGerencia', data);
             }
 

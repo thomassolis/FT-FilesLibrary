@@ -2,8 +2,6 @@
 import axios from './axios'; // Importa tu instancia de axios
 
 
-//1. LOGIN
-        // ENVIAR CORREO Y CONTRASEÑA AL BACKEND
 export const enviarLogin = async (data) => {
 
     const response = await axios.post('auth/login', {
@@ -21,12 +19,11 @@ export const enviarLogin = async (data) => {
 //2. VERIFICACION DE 2 PASOS
         // ENVIAR CÓDIGO A BACKEND
 export const enviarVerificacion2pasos = async (data) => {
-    
-        const response = await axios.post('auth/authentication', {
+        const response = await axios.post('auth/authentication/2fa', {
             authentication: data.authentication
         });
-        console.log(response.data);
-        return response.data;
+        console.log(response);
+        return response;
 
 }
 
@@ -34,10 +31,7 @@ export const enviarVerificacion2pasos = async (data) => {
 
 export const getFilesData = async () => {
     try{
-        // let variableRol = 'GER'
-        // const response = await axios.get(`auth/get/files/${variableRol}`);
-        const response = await axios.get(`auth/get/files/ADM`);
-        // console.log(response);
+        const response = await axios.get(`/files/get/archivos/byuser`);
         return response.data
     }catch(error){
         console.log("error buscando los datos");

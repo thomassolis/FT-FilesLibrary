@@ -10,6 +10,7 @@ import NewFileForm from './Modal/newFileForm';
 import { useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import Files from './files/files';
+import { comprobarDrive } from '../api/files';
 
 function Home() {
     const { userRole } = useContext(AuthContext);
@@ -30,11 +31,11 @@ function Home() {
         const fetchFiles = async () => {
             try {
                 const response = await getFilesData();
-                setFilesData(response);
+                setFilesData(response.data);
                 console.log('filesData desde HOME: ', filesData);
                 console.log('filesData[selectedFolder][subfolder]: ', filesData[selectedFolder]?.[subfolder]);
 
-                const foalders = Object.keys(response);
+                const foalders = Object.keys(response.data);
                 setFoalderData(foalders);
             } catch (error) {
                 setFilesData({});
@@ -45,6 +46,7 @@ function Home() {
     }, []);
 
     useEffect(() => {
+        
         if (filesData) {
             setSelectedFolder(Object.keys(filesData)[0]);
             console.log('selectedFolder: ', selectedFolder);
@@ -52,7 +54,7 @@ function Home() {
     }, [filesData]);
 
     useEffect(() => {
-        if (userRole === 'OPE') {
+        if (userRole === 'OPERADOR') {
             setRequestSeeFile(true);
         }
     }, [userRole, setRequestSeeFile]);

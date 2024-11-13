@@ -48,28 +48,31 @@ function Authentication() {
         const onSubmit = async (data) => {
             try {
                 const response = await enviarVerificacion2pasos(data);
-    
-                if (response && response.success && response.status === 200) {                    
+                console.log(response.data.data)
+                if (response && response.data.success && response.status === 200) {      
+                    console.log("esto es en el try")              
                     console.log(response);
                     setShouldNavigateHome(true);
-                    
-                    const role = response.Data.userRol;
-                    const name = response.Data.userName;
-                    const banTime = response.Data.banTime;
+                    console.log("esto es en el try 1")
+
+                    const role = response.data.data.nombre_rol;
+                    const name = response.data.data.userName;
+                    const banTime = response.data.data.banTime;
     
                     // Guardar userRole en el state de React y en sessionStorage
                     setUserRole(role);
                     setUserName(name);
                     setBanTime(banTime);
                     
-                    sessionStorage.setItem("userRole", role); // Guardar en sessionStorage
+                    sessionStorage.setItem("userRole", role);
+                    console.log("esto es en el try")
                 }
     
             } catch (error) {
                 console.log(error.response);
                 if (error.response) {
                     const statusCode = error.response.status;
-    
+                    console.log("esto es en el catch")
                     switch (statusCode) {
                         case 429:
                             toast.error(error.response.data.message);

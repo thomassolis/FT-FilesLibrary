@@ -1,16 +1,54 @@
-import reactLogo from './assets/react.svg'
-import Logo from '/Logo.png'
-import './App.css'
+import React, {useState, useEffect} from "react";
+import Login from "./components/login";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Authentication from "./components/authentication";
+import Home from "./components/home";
+import AuthProvider from "./context/authProvider";
+import ProtectedRoute from "./components/protectedRoute";
+import NotFound from "./components/notFound";
+import CompleteHistory from "./components/history/completeHistory";
+import { PermissionsProvider } from "./context/permissions/permissionsProvider";
+import { FoldersFilesProvider } from "./context/Folders-Files/Folders_Files";
+import NewSubFolder from "./components/NewSubFolder";
+import { Toaster,toast } from 'react-hot-toast';
 
 function App() {
-
+  
   return (
-    <>
-      <div>
-        <h1>Project init</h1>
-      /</div> 
-    </>
+    <AuthProvider> 
+      <PermissionsProvider>
+        <FoldersFilesProvider>
+          <BrowserRouter>
+                <div> <Toaster position="top-center" reverseOrder={false} /> </div>
+                <Routes>
+
+                    <Route path="/" element={<Login />} />
+
+                    <Route element={<ProtectedRoute redirectTo="/" />}>
+                      <Route path="/authentication" element={<Authentication />} />
+                    </Route>
+
+                    <Route element={<ProtectedRoute allowedRoles={['ADM', 'GER', 'OPE']} redirectTo="/" />}>
+                      <Route path="/:folder" element={<Home />} />        
+                      <Route path="/:folder/:subfolder" element={<Home />} />  
+                      <Route path="/:folder/:subfolder/:subsubfolder" element={<Home />} /> 
+
+                    </Route>
+
+                  <Route>
+                    <Route path="/completeHistory" element={<CompleteHistory/>} />
+                  </Route>
+
+                    <Route path="*" element={<NotFound />} />
+                  
+                </Routes>
+            </BrowserRouter>
+        </FoldersFilesProvider>          
+      </PermissionsProvider>
+  
+    </AuthProvider>
+
   )
 }
 
-export default App
+export default App;

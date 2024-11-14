@@ -1,0 +1,46 @@
+import Title from "../title";
+import FoalderSidebar from "./foalderSidebar";
+import { useContext, useState } from "react";
+import FilesContainer from "../files/filesContainer";
+import Files from "../files/files";
+import {FoldersFilesContext} from "../../context/Folders-Files/Folders_Files";
+import { useNavigate } from "react-router-dom";
+
+function SidebarContainer({foalderData, filesData}){  
+    // const [selectedFolder, setSelectedFolder] = useState(null);
+    // const [selectedFiles, setSelectedFiles] = useState([])
+
+    const navigate = useNavigate()
+
+    const {selectedFolder, setSelectedFolder} = useContext(FoldersFilesContext);
+
+    const handleFolderClick = (foalder) =>{
+        console.log('folder seleccionado: ', foalder);
+
+        setSelectedFolder(foalder);  
+        navigate(`/${foalder}`)
+    }
+
+    // console.log('desde sidebar: ',foalderData);
+
+    return(
+        <div className="w-[22%] bg-customSidebarColor flex flex-col gap-12 flex-shrink-0">
+
+            <div>
+                <Title/>
+            </div>
+
+
+            <div className="flex flex-col gap-6 pb-9">
+                {/* Renderizar la lista de carpetas */}
+                {foalderData.map((foalder, index) => (
+                    <div key={index} onClick={() => handleFolderClick(foalder)} className="flex items-center justify-center">
+                        <FoalderSidebar foalderName={foalder} isSelected={foalder===selectedFolder}/>
+                    </div>
+                ))}
+            </div>            
+        </div>
+    )
+}
+
+export default SidebarContainer;

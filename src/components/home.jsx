@@ -11,15 +11,16 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import Files from './files/files';
 import { comprobarDrive } from '../api/files';
-
+import SkeletonFilesContainer from './skeleton/SkeletonFilesContainer';
+import { FadeLoader } from 'react-spinners';
 function Home() {
     const { userRole } = useContext(AuthContext);
     const [foalderData, setFoalderData] = useState([]);
     const { filesData, setFilesData, selectedFolder, setSelectedFolder } = useContext(FoldersFilesContext);
     const { requestSeeFile, setRequestSeeFile } = useContext(PermissionsContext);
     const [adminForm, setAdminForm] = useState(false);
-    const { folder, subfolder, subsubfolder } = useParams(); // Obtener los parámetros de la URL para manejar carpetas, subcarpetas y subsubcarpetas
-    console.log("Valor de folder:", folder);
+    const { folder, subfolder, subsubfolder } = useParams(); // Obtener los parámetros de la URL para manejar carpetas, subcarpetas y subsubcarpeta
+    const [loading, setLoading] = useState(true); // Inicialmente true mientras carga
     
     const navigate = useNavigate();
 
@@ -30,18 +31,17 @@ function Home() {
 
     useEffect(() => {
         const fetchFiles = async () => {
-            try {
-                
+            try {                
                 const response = await getFilesData();
-                setFilesData(response.data);
-                console.log('filesData desde HOME: ', filesData);
-                console.log('filesData[selectedFolder][subfolder]: ', filesData[selectedFolder]?.[subfolder]);
+                setFilesData(response.data);                
 
                 const foalders = Object.keys(response.data);
                 setFoalderData(foalders);
             } catch (error) {
                 setFilesData({});
                 setFoalderData([]);
+            } finally {
+                setLoading(false); // Cambia loading a false cuando termina la carga
             }
         };
         fetchFiles();
@@ -51,12 +51,11 @@ function Home() {
         
         if (filesData) {
             setSelectedFolder(Object.keys(filesData)[0]);
-            console.log('selectedFolder: ', selectedFolder);
         }
     }, [filesData]);
 
     useEffect(() => {
-        if (userRole === 'OPERADOR') {
+        if (userRole === 'OPE') {
             setRequestSeeFile(true);
         }
     }, [userRole, setRequestSeeFile]);
@@ -90,7 +89,11 @@ function Home() {
         <SidebarContainer foalderData={foalderData} filesData={filesData} onSelect={handleSelectSubFolder} />
 
         <div className='flex w-full'>
-            {folder && subsubfolder && filesData[folder]?.[subfolder]?.[subsubfolder]?.files ? (
+            {loading ? (
+                <div className="flex justify-center items-center w-full h-screen">
+                    <FadeLoader size={15}  /> {/* BeatLoader aparece mientras loading es true */}
+                </div>
+            ) : folder && subsubfolder && filesData[folder]?.[subfolder]?.[subsubfolder]?.files ? (
                 // Mostrar archivos de la subsubcarpeta seleccionada
                 <div className="col-span-4 w-full">
                     <FilesContainer fileData={renderFiles()} album={filesData[folder][subfolder][subsubfolder]} />

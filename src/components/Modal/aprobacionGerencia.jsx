@@ -15,16 +15,6 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
     const [textAreaValueAdmin, setTextAreaValueAdmin] = useState('');
     const { userName, userRole } = useContext(AuthContext);
 
-    console.log('Nombre_del_archivo: ',Nombre_del_archivo)
-    console.log('approvedGER: ',approvedGER)
-    console.log('OPEUserName: ',OPEUserName)
-    console.log('v: ',OPEComment)
-    console.log('v: ',fileId)
-    console.log('v: ',approvedADM)
-    
-    
-
-
     function handleChange(e) {
         setTextAreaValue(e.target.value);
     }

@@ -9,8 +9,6 @@ import { FoldersFilesContext } from '../context/Folders-Files/Folders_Files';
 import NewFileForm from './Modal/newFileForm';
 import { useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-import Files from './files/files';
-import { comprobarDrive } from '../api/files';
 
 function Home() {
     const { userRole } = useContext(AuthContext);
@@ -56,7 +54,7 @@ function Home() {
     }, [filesData]);
 
     useEffect(() => {
-        if (userRole === 'OPERADOR') {
+        if (userRole === 'OPE') {
             setRequestSeeFile(true);
         }
     }, [userRole, setRequestSeeFile]);

@@ -3,7 +3,7 @@ import { useContext, useState, useEffect } from "react";
 import { io } from "socket.io-client";
 const socket = io("/")
 import { AuthContext } from "../../context/authProvider";
-import { postAprobacionGerencia } from "../../api/auth";
+import { postAprobacionGerencia } from "../../api/solicitudes";
 import { Toaster,toast } from "react-hot-toast";
 import FoldersFilesContext from "../../context/Folders-Files/Folders_Files";
 

@@ -19,11 +19,18 @@ export const enviarLogin = async (data) => {
 //2. VERIFICACION DE 2 PASOS
         // ENVIAR CÓDIGO A BACKEND
 export const enviarVerificacion2pasos = async (data) => {
+    try{
         const response = await axios.post('auth/authentication/2fa', {
-            authentication: data.authentication
+            authentication: data.authentication,
+            withCredentials: true
         });
-        console.log(response);
         return response;
+    }
+    catch (error)
+    {
+        console.log(error)
+    }
+
 
 }
 
@@ -75,7 +82,7 @@ export const sendFilesFromAdmin = async (data) => {
   //5. HALANDO LOS DATOS DE LA RUTA PARA IMPRIMIRLOS EN EL HISTORIAL
   export const getHistoryData = async (data) =>{
     try{
-        const response = await axios.get('auth/get/historial');        
+        const response = await axios.get('files/get/historial');        
         return response.data
     }catch(e){
         console.error(e)
@@ -84,7 +91,7 @@ export const sendFilesFromAdmin = async (data) => {
   //6. HALANDO LOS DATOS DE LA RUTA PARA IMPRIMIRLOS EN EL HISTORIAL DE PARTE DE ADMIN
   export const getHistoryDataAdmin = async (data) =>{
     try{
-        const response = await axios.get('auth/get/historialAdmin');        
+        const response = await axios.get('files/get/historial');        
         return response.data
     }catch(e){
         console.error(e)
@@ -93,7 +100,7 @@ export const sendFilesFromAdmin = async (data) => {
 
   export const getOficialHistory = async() =>{
     try{
-        const response = await axios.get('auth/get/oficialHistory')
+        const response = await axios.get('files/get/oficialHistory')
         return response.data;  // Retornar la respuesta completa
     }catch(e){
         console.log(e);
@@ -121,19 +128,23 @@ export const sendFilesFromAdmin = async (data) => {
     }
   }
 
+  //RUTA EN DONDE EL OPERADOR ENVÍA LA SOLICITUD DE VER EL ARCHIVO AL GERENTE
   export const postAprobacionGerencia = async (data) =>{
     try{
-        const response = await axios.post('auth/post/managerApproval',{
+        const response = await axios.post('files/post/managerApproval',{
             userName: data.userName,
-            textAreaValue: data.textAreaValue,
+            comentarioGerente: data.comentarioGerente,
+            comentarioAdministracion: data.comentarioAdministracion,
             fileId: data.fileId,
             fileName: data.fileName,
             OPEUserName: data.OPEUserName,
-            OPEComment: data.OPEComment            
-
-            
+            OPEComment: data.OPEComment,
+            folder: data.selectedFolder,
+            approvedGER: data.approvedGER,     
+            approvedADM: data.approvedADM,     
+            motivo_solicitud: data.motivo_solicitud     
         });
-        console.log('respuesta de login desde auth ',response.data);
+        console.log('respuesta de login desde files ',response.data);
         //console.log('response.data', response.data)
         return response.data;
     }catch(e){

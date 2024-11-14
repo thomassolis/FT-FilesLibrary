@@ -9,19 +9,27 @@ import { Toaster, toast } from "react-hot-toast";
 
 const socket = io("/");
 
-function AprobacionGerencia({ approvedGER, onClose, fileName, OPEUserName, OPEComment, onDecision, fileId, approvedADM }) 
+function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserName, OPEComment, onDecision, fileId, approvedADM }) 
 {
     const [textAreaValue, setTextAreaValue] = useState('');
+    const [textAreaValueAdmin, setTextAreaValueAdmin] = useState('');
     const { userName, userRole } = useContext(AuthContext);
 
-    console.log(approvedADM)
+    console.log('Nombre_del_archivo: ',Nombre_del_archivo)
     console.log('approvedGER: ',approvedGER)
-    console.log('approvedADM: ',approvedADM)
-    console.log(userRole)
+    console.log('OPEUserName: ',OPEUserName)
+    console.log('v: ',OPEComment)
+    console.log('v: ',fileId)
+    console.log('v: ',approvedADM)
+    
+    
 
 
     function handleChange(e) {
         setTextAreaValue(e.target.value);
+    }
+    function handleChangeAdmin(e) {
+        setTextAreaValueAdmin(e.target.value);
     }
 
     const aprobacion = async (e) => {
@@ -29,23 +37,30 @@ function AprobacionGerencia({ approvedGER, onClose, fileName, OPEUserName, OPECo
 
         const data = {
             userName: userName,
-            textAreaValue: textAreaValue,  
+            comentarioGerente: textAreaValue,  
             fileId: fileId,          
-            fileName: fileName,
+            Nombre_del_archivo: Nombre_del_archivo,
             OPEUserName: OPEUserName,
             OPEComment: OPEComment,
-            approvedGER: approvedGER
+            approvedGER: approvedGER,
+            approvedADM: approvedADM ,
+            comentarioAdministracion:  textAreaValueAdmin
+
+            
         };
+
 
         try {                                    
 
+            await postAprobacionGerencia(data);
+
             if(approvedGER === true){
-                await postAprobacionGerencia(data);
+                //Solo emitir a admin en caso que el gerente lo haya aprobado
                 socket.emit('messageGerencia', data);
             }            
 
             // Llamamos a la función para eliminar el registro del historial
-            onDecision(fileName, OPEUserName);
+            onDecision(Nombre_del_archivo, OPEUserName);
             onClose(); // Cerrar el modal
         } catch (error) {
             toast.error('Hay un error en la aprobación')            
@@ -82,7 +97,7 @@ function AprobacionGerencia({ approvedGER, onClose, fileName, OPEUserName, OPECo
                             className="w-[90%] border h-28 border-black" 
                             placeholder="Escribe una justificación"
                             onChange={handleChange}
-                            value={textAreaValue}
+                            value={textAreaValueAdmin}
                             required
                         />
                         <div className="flex gap-5">
@@ -99,8 +114,8 @@ function AprobacionGerencia({ approvedGER, onClose, fileName, OPEUserName, OPECo
                         <textarea 
                             className="w-[90%] border h-28 border-black " 
                             placeholder="Escribe una justificación"
-                            onChange={handleChange}
-                            value={textAreaValue}
+                            onChange={handleChangeAdmin}
+                            value={textAreaValueAdmin}
                             required
                         />
                         <div className="flex gap-5">
@@ -112,12 +127,12 @@ function AprobacionGerencia({ approvedGER, onClose, fileName, OPEUserName, OPECo
 
             {userRole === 'ADM' && approvedADM === false && (
                 <div>
-                    <h1>¿Estás seguro que NO deseas brindar permiso?</h1>
+                    <h1>¿Estás seguro que NO deseas brindar permiso desde Admin?</h1>
                     <form className="w-full flex flex-col items-center" onSubmit={aprobacion}>
                         <textarea 
                             className="w-[90%] border h-28 border-black" 
                             placeholder="Escribe una justificación"
-                            onChange={handleChange}
+                            onChange={handleChangeAdmin}
                             value={textAreaValue}
                             required
                         />

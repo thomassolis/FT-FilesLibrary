@@ -1,5 +1,11 @@
 import logo from "../../images/MLC logo.png"
+import { useParams } from "react-router-dom";
+
+
+
 function HeaderFiles(){
+    const {subfolder} = useParams();
+
     
     return(
         <div className="bg-customBlue h-24 w-full flex items-center">
@@ -11,7 +17,7 @@ function HeaderFiles(){
                 <img src={logo} alt="" style={{position:'fixed', right:'20px'}}/>
             </div>
 
-            
+        
         </div>
     )
 }

@@ -27,13 +27,14 @@ function Login() {
     useEffect(()=>{
         const storedIsAuthenticated = sessionStorage.getItem("isAuthenticated");
         if(storedIsAuthenticated){
-            setIsAuthenticated(JSON.parse(storedIsAuthenticated))
+            setIsAuthenticated(storedIsAuthenticated)
         }
     }, [setIsAuthenticated]);
 
     useEffect(() => {
-        sessionStorage.setItem("isAuthenticated", JSON.stringify(isAuthenticated));
+        sessionStorage.setItem('isAuthenticated', JSON.stringify(isAuthenticated));
     }, [isAuthenticated]);
+    
 
     // Este useEffect se ejecuta cada vez que userData cambia
     useEffect(() => {
@@ -70,10 +71,7 @@ function Login() {
             if (response.success) {
                 setUserData(response.Data);  // Aquí actualizas el estado
                 setIsAuthenticated(true);
-                console.log('autenticacion desde el login: ',isAuthenticated)
-
-                //Guardar si está autenticado en el session storage
-                
+                // sessionStorage.setItem("isAuthenticated", isAuthenticated); // Almacena en sessionStorage                
             }
         } catch (error) {
             //conexion se interrumpio front <-> back(error 400 a 500)

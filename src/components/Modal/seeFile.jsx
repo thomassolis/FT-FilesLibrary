@@ -5,11 +5,17 @@ const socket = io("/")
 import { AuthContext } from "../../context/authProvider";
 import { postAprobacionGerencia } from "../../api/auth";
 import { Toaster,toast } from "react-hot-toast";
+import FoldersFilesContext from "../../context/Folders-Files/Folders_Files";
+
+
 
 function SeeFile({closeModal, fileId, fileName}){
-
+    
     const [textAreaValue, setTextAreaValue] = useState()
     const {userName, userRole}=useContext(AuthContext);
+    const {selectedFolder} = useContext(FoldersFilesContext);
+
+ 
     
 
     function handleChange(e){
@@ -19,13 +25,13 @@ function SeeFile({closeModal, fileId, fileName}){
 
     const sendRequest = async(e)=>{
         e.preventDefault();
-        console.log('userRole: ', userRole);
         
         const data = {
-            userName: userName,
-            textAreaValue: textAreaValue,
+            Nombre_de_solicitante: userName,
+            motivo_solicitud: textAreaValue,
             fileId: fileId,
-            fileName: fileName
+            Nombre_del_archivo: fileName,
+            folder: selectedFolder
         };
         try{            
             // console.log('data desde seefileee:', data)
@@ -33,14 +39,13 @@ function SeeFile({closeModal, fileId, fileName}){
             // console.log('data desde seefileee:', data)
 
             if(userRole=='OPE'){
-                socket.emit('message', data);
-            }else{
+                socket.emit('message', data);            
+            }
+            else{
                 socket.emit('messageGerencia', data);
             }
 
-            
-
-            console.log('message emitted to socket');
+            console.log('data emitida en el socket: ', data);
             toast.success("Su solicitud se ha enviado con éxito, en caso de que se apruebe podrá ver el archivo en su correo electrónico.")            
             closeModal();
 

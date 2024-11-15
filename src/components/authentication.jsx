@@ -8,6 +8,7 @@ import Home from "./home";
 import FoldersFilesContext from "../context/Folders-Files/Folders_Files";
 import { Toaster, toast } from 'react-hot-toast';
 
+
 function Authentication() {
     const { register, handleSubmit, getValues, formState: { errors } } = useForm();
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ function Authentication() {
     //Datos que vienen del backend y se guardarán
     const { userRole, setUserRole, userName, setUserName, banTime, setBanTime } = useContext(AuthContext);
     const { selectedFolder } = useContext(FoldersFilesContext);
-
+    console.log('selectedFolder desde autenticador:_',selectedFolder)
     // Leer el userRole desde sessionStorage cuando se cargue el componente
     useEffect(() => {
         const storedUserRole = sessionStorage.getItem("userRole");
@@ -31,7 +32,7 @@ function Authentication() {
     // Navegar a home cuando sea necesario
     useEffect(() => {
         if (shouldNavigateHome) {
-            const folder = 'avisos'            
+            const folder = 'Escrituras'            
             navigate(`/${folder}`); // Corregir el error de comillas faltantes en la ruta
         }
     }, [shouldNavigateHome, navigate]);

@@ -127,3 +127,44 @@ export const sendFilesFromAdmin = async (data) => {
         console.log('error:',e);
     }
   }
+
+  //RUTA EN DONDE EL OPERADOR ENVÍA LA SOLICITUD DE VER EL ARCHIVO AL GERENTE
+  export const postAprobacionGerencia = async (data) =>{
+    try{
+        const response = await axios.post('files/post/managerApproval',{
+            userName: data.userName,
+            comentarioGerente: data.comentarioGerente,
+            comentarioAdministracion: data.comentarioAdministracion,
+            fileId: data.fileId,
+            fileName: data.fileName,
+            OPEUserName: data.OPEUserName,
+            OPEComment: data.OPEComment,
+            folder: data.selectedFolder,
+            approvedGER: data.approvedGER,     
+            approvedADM: data.approvedADM,     
+            motivo_solicitud: data.motivo_solicitud     
+        });
+        console.log('respuesta de login desde files ',response.data);
+        //console.log('response.data', response.data)
+        return response.data;
+    }catch(e){
+        console.log(e);
+    }
+  }
+
+  // Ruta para solicitar previsualizar un archivo
+  export const previsualizarArchivos = async(data) =>{
+    try{
+        const response = await axios.post('files/post/solicitarArchivo',{
+            fileId: data.fileId
+            
+        }, {
+            responseType: 'blob' // Especifica que la respuesta es un blob
+        });
+        
+        return response.data;
+    }catch(error){
+        console.log(error);
+    }
+
+  }

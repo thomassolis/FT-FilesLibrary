@@ -19,7 +19,7 @@ function Authentication() {
     //Datos que vienen del backend y se guardarán
     const { userRole, setUserRole, userName, setUserName, banTime, setBanTime } = useContext(AuthContext);
     const { selectedFolder } = useContext(FoldersFilesContext);
-  
+    
     // Leer el userRole desde sessionStorage cuando se cargue el componente
     useEffect(() => {
         const storedUserRole = sessionStorage.getItem("userRole");
@@ -31,11 +31,11 @@ function Authentication() {
 
     // Navegar a home cuando sea necesario
     useEffect(() => {
-        if (shouldNavigateHome) {
-            const folder = 'Escrituras'            
-            navigate(`/${folder}`); // Corregir el error de comillas faltantes en la ruta
+        if (shouldNavigateHome) {   
+            const folderSeleccionado = 'ESCRITURAS';                    
+            navigate(`/${folderSeleccionado}`); // Corregir el error de comillas faltantes en la ruta
         }
-    }, [shouldNavigateHome, navigate]);
+    }, [shouldNavigateHome, navigate, selectedFolder]);
 
     //Función que manejará el input en caso de un error 219
     const userBan = () => {
@@ -51,16 +51,17 @@ function Authentication() {
             try {
                 const response = await enviarVerificacion2pasos(data);
                 console.log(response.data.data)
-                if (response && response.data.success && response.status === 200) {      
-                    console.log("esto es en el try")              
+                if (response && response.data.success && response.status === 200) {                      
                     console.log(response);
                     setShouldNavigateHome(true);
-                    console.log("esto es en el try 1")
+
+                    console.log('response desde autenticador:',response)
+                    
 
                     const role = response.data.data.nombre_rol;
-                    const name = response.data.data.userName;
+                    const name = response.data.data.nombre;
                     const banTime = response.data.data.banTime;
-    
+                    sessionStorage.setItem('userName', name);
                     // Guardar userRole en el state de React y en sessionStorage
                     setUserRole(role);
                     setUserName(name);

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/authProvider';
-import { getFilesData } from '../api/auth';
+import { getFilesData } from '../api/files';
 import FilesContainer from './files/filesContainer';
 import SidebarContainer from './SideBar/sideBarContainer';
 import History from './history/history';
@@ -8,49 +8,43 @@ import { PermissionsContext } from '../context/permissions/permissionsProvider';
 import { FoldersFilesContext } from '../context/Folders-Files/Folders_Files';
 import NewFileForm from './Modal/newFileForm';
 import { useParams } from "react-router-dom";
-import { useNavigate } from 'react-router-dom';
 import { FadeLoader } from 'react-spinners';
+import NoFilesMessage from './Modal/NoFilesMessage';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
     const { userRole } = useContext(AuthContext);
     const [foalderData, setFoalderData] = useState([]);
     const { filesData, setFilesData, selectedFolder, setSelectedFolder } = useContext(FoldersFilesContext);
-    const { requestSeeFile, setRequestSeeFile } = useContext(PermissionsContext);
+    const { setRequestSeeFile } = useContext(PermissionsContext);
     const [adminForm, setAdminForm] = useState(false);
-    const { folder, subfolder, subsubfolder } = useParams(); // Obtener los parámetros de la URL para manejar carpetas, subcarpetas y subsubcarpeta
-    const [loading, setLoading] = useState(true); // Inicialmente true mientras carga
-    
-    const navigate = useNavigate();
-
-    // Definir la función handleSelectSubFolder
-    const handleSelectSubFolder = (folderName) => {
-        setSelectedFolder(folderName); // Actualiza la carpeta seleccionada       
-    };
-
+    const { folder, subfolder, subsubfolder } = useParams();
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate()
     useEffect(() => {
         const fetchFiles = async () => {
-            try {                
+            try {
                 const response = await getFilesData();
-                setFilesData(response.data);                
-
+                setFilesData(response.data);
                 const foalders = Object.keys(response.data);
                 setFoalderData(foalders);
             } catch (error) {
                 setFilesData({});
                 setFoalderData([]);
             } finally {
-                setLoading(false); // Cambia loading a false cuando termina la carga
+                setLoading(false);
             }
         };
         fetchFiles();
-    }, []);
+    }, [setFilesData]);
 
     useEffect(() => {
-        
         if (filesData) {
             setSelectedFolder(Object.keys(filesData)[0]);
+        } else {
+            console.log('No hay archivos');
         }
-    }, [filesData]);
+    }, [filesData, setSelectedFolder]);
 
     useEffect(() => {
         if (userRole === 'OPE') {
@@ -58,15 +52,14 @@ function Home() {
         }
     }, [userRole, setRequestSeeFile]);
 
-    function newFile() {
+    const newFile = () => {
         setAdminForm(true);
-    }
+    };
 
-    function closeAdminForm() {
+    const closeAdminForm = () => {
         setAdminForm(false);
-    }
+    };
 
-    // Función para renderizar archivos dependiendo del nivel de carpeta
     const renderFiles = () => {
         if (folder && filesData[folder]) {
             if (subsubfolder && filesData[folder][subfolder]?.[subsubfolder]?.files) {
@@ -79,47 +72,43 @@ function Home() {
         }
         return [];
     };
-    
+
+    const renderSubfolders = () => {
+        if (folder && filesData[folder]) {
+            const subfolders = Object.keys(filesData[folder]).filter(
+                key => key !== 'files' // Filtra las claves que no sean "files"
+            );
+            return subfolders;
+        }
+        return [];
+    };
+
+    const filesToRender = renderFiles();
+    const subfoldersToRender = renderSubfolders();
 
     return (
-    <section id='soyyo' className='bg-customBlue flex min-h-screen'>
-        {/* Mostrar la barra lateral */}
-        <SidebarContainer foalderData={foalderData} filesData={filesData} onSelect={handleSelectSubFolder} />
+        <section id='soyyo' className='bg-customBlue flex min-h-screen'>
+            <SidebarContainer foalderData={foalderData} filesData={filesData} onSelect={setSelectedFolder} />
 
-        <div className='flex w-full'>
-            {loading ? (
-                <div className="flex justify-center items-center w-full h-screen">
-                    <FadeLoader size={15}  /> {/* BeatLoader aparece mientras loading es true */}
-                </div>
-            ) : folder && subsubfolder && filesData[folder]?.[subfolder]?.[subsubfolder]?.files ? (
-                // Mostrar archivos de la subsubcarpeta seleccionada
-                <div className="col-span-4 w-full">
-                    <FilesContainer fileData={renderFiles()} album={filesData[folder][subfolder][subsubfolder]} />
-                </div>
-            ) : folder && subfolder && filesData[folder]?.[subfolder]?.files ? (
-                // Mostrar archivos de la subcarpeta seleccionada
-                <div className="col-span-4 w-full">
-                    <FilesContainer fileData={renderFiles()} album={filesData[folder][subfolder]} />
-                </div>
-            ) : selectedFolder && filesData[selectedFolder]?.files ? (
-                // Mostrar archivos de la carpeta seleccionada
-                <FilesContainer fileData={renderFiles()} album={filesData[selectedFolder]} />
-            ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginLeft: '240px', marginTop: '200px', paddingBottom: '250px' }}>
-                    <h1>Esta carpeta no cuenta con archivos</h1>
-                    <iconify-icon style={{ fontSize: '130px' }} icon="noto-v1:sad-but-relieved-face"></iconify-icon>
-                </div>
-            )}
+            <div className='flex w-full'>
+                {loading ? (
+                    <div className="flex justify-center items-center w-full h-screen">
+                        <FadeLoader size={15} />
+                    </div>
+                ) : filesToRender.length > 0 ? (
+                    <div className="col-span-4 w-full">
+                        <FilesContainer fileData={filesToRender} album={filesData[folder]?.[subfolder]?.[subsubfolder] || filesData[folder]?.[subfolder] || filesData[folder]} />
+                    </div>
+                ) : (
+                    <NoFilesMessage />
+                )}
+            </div>
 
             {adminForm && <NewFileForm onClose={closeAdminForm} />}
-        </div>
 
-        {/* {requestSeeFile && userRole === "OPE"} */}
-
-        {(userRole === "ADM" || userRole === "GER") && <History />}
-    </section>
-);
-
+            {(userRole === "ADM" || userRole === "GER") && <History />}
+        </section>
+    );
 }
 
 export default Home;

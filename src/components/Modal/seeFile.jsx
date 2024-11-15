@@ -1,4 +1,4 @@
-import { sendFilesData } from "../../api/auth";
+import { sendFilesData } from "../../api/files";
 import { useContext, useState, useEffect } from "react";
 import { io } from "socket.io-client";
 const socket = io("/")

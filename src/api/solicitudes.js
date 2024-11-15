@@ -21,3 +21,27 @@ export const postAprobacionGerencia = async (data) =>{
         console.log(e);
     }
   }
+
+  
+  export const postRequestDataForSeeFile = async (data)=>{
+    console.log('data: ',data)
+    try{
+        const response = await axios.post('auth/post/historialdata',{
+            userName: data.userName,
+            textAreaValue: data.textAreaValue,
+            fileId: data.fileId,
+            fileName: data.fileName            
+
+            
+        });
+        console.log('respuesta de login desde auth ',response.data);
+        //console.log('response.data', response.data)
+        return response.data;
+        
+    }catch(e){
+        console.log('error:',e);
+    }
+  }
+
+
+  

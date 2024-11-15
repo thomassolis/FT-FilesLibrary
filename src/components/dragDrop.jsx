@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import '../Styles/DragAnsDropStyles.css';
-import { sendFilesFromAdmin } from "../api/auth";
+import { sendFilesFromAdmin } from "../api/files";
 
 const DragAndDrop = ({ passFunctionToParent }) => {
   const [file, setFile] = useState(null);

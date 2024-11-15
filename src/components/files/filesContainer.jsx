@@ -3,14 +3,14 @@ import HeaderFiles from "./headerFiles";
 import '../../Styles/filesContainer.css';
 import SubFolder from "./subFolder";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SkeletonFolder from "../skeleton/skeletonFolder";
 
 
 function FilesContainer({ fileData, album }) {
     const [selectedSubFolder, setSelectedSubFolder] = useState(null);
     const [showRoute , setShowRoute] = useState(false);
-
+    const navigate = useNavigate();
     // Obtenemos las claves del objeto album que no son 'files' (las carpetas)
     const folders = Object.keys(album).filter(key => key !== 'files');
     const files = album.files || []; // Archivos en la carpeta actual
@@ -29,6 +29,7 @@ function FilesContainer({ fileData, album }) {
             setLoading(false);
         }
     }, [folders, files]);
+
     
 
     return (
@@ -36,15 +37,24 @@ function FilesContainer({ fileData, album }) {
             <HeaderFiles />                
             {/* Renderizamos las carpetas y subcarpetas */}
             <div className="flex justify-center flex-col">
-                {folder && !subfolder &&
-                    <h1 className="font-serif text-2xl ">{folder}</h1>
-                }
-                {folder && subfolder && !subsubfolder &&
-                    <h1 className="font-serif text-2xl ">{folder} / {subfolder}</h1>
-                }
-                {folder && subfolder && subsubfolder &&
-                    <h1 className="font-serif text-2xl ">{folder} / {subfolder} / {subsubfolder}</h1>
-                }
+            {folder && !subfolder && (
+                <h1 className="font-serif text-2xl">
+                    <a onClick={() => navigate(`/${folder}`)} className="cursor-pointer text-blue-800">{folder}</a>
+                </h1>
+            )}
+            {folder && subfolder && !subsubfolder && (
+                <h1 className="font-serif text-2xl">
+                    <a onClick={() => navigate(`/${folder}`)} className="cursor-pointer text-blue-800">{folder}</a> / 
+                    <a onClick={() => navigate(`/${folder}/${subfolder}`)} className="cursor-pointer text-blue-800">{subfolder}</a>
+                </h1>
+            )}
+            {folder && subfolder && subsubfolder && (
+                <h1 className="font-serif text-2xl " >
+                    <a onClick={() => navigate(`/${folder}`)} className="cursor-pointer text-blue-800">{folder}</a> / 
+                    <a onClick={() => navigate(`/${folder}/${subfolder}`)} className="cursor-pointer text-blue-800">{subfolder}</a> / 
+                    <a onClick={() => navigate(`/${folder}/${subfolder}/${subsubfolder}`)} className="cursor-pointer text-blue-800">{subsubfolder}</a>
+                </h1>
+            )}
 
                 <div 
                     id="Grid-Folders" 

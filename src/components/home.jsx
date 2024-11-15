@@ -89,26 +89,33 @@ function Home() {
     return (
         <section id='soyyo' className='bg-customBlue flex min-h-screen'>
             <SidebarContainer foalderData={foalderData} filesData={filesData} onSelect={setSelectedFolder} />
-
+    
             <div className='flex w-full'>
                 {loading ? (
                     <div className="flex justify-center items-center w-full h-screen">
                         <FadeLoader size={15} />
                     </div>
                 ) : filesToRender.length > 0 ? (
+                    // Mostrar los archivos si existen
                     <div className="col-span-4 w-full">
-                        <FilesContainer fileData={filesToRender} album={filesData[folder]?.[subfolder]?.[subsubfolder] || filesData[folder]?.[subfolder] || filesData[folder]} />
+                        <FilesContainer
+                            fileData={filesToRender}
+                            album={filesData[folder]?.[subfolder]?.[subsubfolder] || filesData[folder]?.[subfolder] || filesData[folder]}
+                        />
                     </div>
                 ) : (
+                    // Mostrar mensaje de "No hay archivos ni subcarpetas"                    
                     <NoFilesMessage />
-                )}
+                )
+                }
             </div>
-
+    
             {adminForm && <NewFileForm onClose={closeAdminForm} />}
-
+    
             {(userRole === "ADM" || userRole === "GER") && <History />}
         </section>
     );
+    
 }
 
 export default Home;

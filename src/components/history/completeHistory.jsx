@@ -1,7 +1,7 @@
 import '../../Styles/completeHistoryStyle.css';
 import logo from '../../images/MLC logo.png';
 import { useState, useEffect } from 'react';
-import { getOficialHistory } from '../../api/auth';
+import { getOficialHistory } from '../../api/historial';
 
 function CompleteHistory() {
     const [oficialHistory, setOficialHistory] = useState([]);

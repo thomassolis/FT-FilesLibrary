@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { previsualizarArchivos } from "../../api/auth";
+import { previsualizarArchivos } from "../../api/files";
 
 function PrevisualizeFile({ closeModal, fileName, fileId }) {
     const [pdfUrl, setPdfUrl] = useState(null);
@@ -26,7 +26,7 @@ function PrevisualizeFile({ closeModal, fileName, fileId }) {
 
     return (
         <div style={{
-            position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+            position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', 
             width: '750px', height: '600px', backgroundColor: 'white', display: 'flex',
             alignItems: 'center', justifyContent: 'center', flexDirection: 'column',
             boxShadow: '0px 0px 10px rgba(0,0,0,0.9)', borderRadius: '15px', zIndex: '100'

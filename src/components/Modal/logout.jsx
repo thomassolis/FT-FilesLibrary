@@ -4,9 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function Logout({closeModal}){
     const navigate = useNavigate();
-    const {userName} = useContext(AuthContext);
-
-    console.log(closeModal)
+    const userName = sessionStorage.getItem('userName');
 
     function logout(){
         navigate('/')
@@ -31,7 +29,7 @@ function Logout({closeModal}){
                 <iconify-icon style={{color:'black', marginLeft:'20px',fontSize:"30px", cursor:'pointer'}} icon="duo-icons:user" ></iconify-icon>
                 <iconify-icon style={{fontSize:"30px", marginRight:'20px', cursor:'pointer'}} onClick={closeModal} icon="iconamoon:close"></iconify-icon>
             </div>
-            <h2> Hola {userName}</h2>
+            <h2 className="font-serif text-xl"> Hola {userName}</h2>
             <button style={{backgroundColor:'red'}} onClick={logout}>Cerrar sesión</button>
         </div>
     )

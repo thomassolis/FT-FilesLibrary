@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../context/authProvider';
 import { io } from "socket.io-client";
-import { getHistoryData } from '../../api/auth';
+import { getHistoryData } from '../../api/historial';
 import AprobacionGerencia from '../Modal/aprobacionGerencia';
-import { getHistoryDataAdmin } from '../../api/auth';
+import { getHistoryDataAdmin } from '../../api/historial';
 
 const socket = io("/");
 

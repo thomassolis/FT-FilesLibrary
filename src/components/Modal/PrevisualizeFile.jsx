@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { previsualizarArchivos } from "../../api/auth";
+import { previsualizarArchivos } from "../../api/files";
 
 function PrevisualizeFile({ closeModal, fileName, fileId }) {
     const [pdfUrl, setPdfUrl] = useState(null);

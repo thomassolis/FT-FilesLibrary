@@ -9,10 +9,8 @@ import { FoldersFilesContext } from '../context/Folders-Files/Folders_Files';
 import NewFileForm from './Modal/newFileForm';
 import { useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
-import Files from './files/files';
-import { comprobarDrive } from '../api/files';
-import SkeletonFilesContainer from './skeleton/SkeletonFilesContainer';
 import { FadeLoader } from 'react-spinners';
+
 function Home() {
     const { userRole } = useContext(AuthContext);
     const [foalderData, setFoalderData] = useState([]);

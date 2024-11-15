@@ -19,7 +19,7 @@ function Authentication() {
     //Datos que vienen del backend y se guardarán
     const { userRole, setUserRole, userName, setUserName, banTime, setBanTime } = useContext(AuthContext);
     const { selectedFolder } = useContext(FoldersFilesContext);
-    console.log('selectedFolder desde autenticador:_',selectedFolder)
+  
     // Leer el userRole desde sessionStorage cuando se cargue el componente
     useEffect(() => {
         const storedUserRole = sessionStorage.getItem("userRole");

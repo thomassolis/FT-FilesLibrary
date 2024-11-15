@@ -1,6 +1,6 @@
 import { AuthContext } from "../../context/authProvider";
 import { useContext, useState } from "react";
-import { postAprobacionGerencia } from "../../api/auth";
+import { postAprobacionGerencia } from "../../api/solicitudes";
 import { io } from "socket.io-client";
 
 import { Toaster, toast } from "react-hot-toast";

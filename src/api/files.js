@@ -9,3 +9,16 @@ export const comprobarDrive = async (data) => {
     return response.data;
 
 }
+
+export const previsualizarArchivos = async (data) => {
+    try {
+        const response = await axios.post('files/post/solicitarArchivo', {
+            fileId: data.fileId
+        }, {
+            responseType: 'blob' // Especifica que la respuesta es un blob
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};

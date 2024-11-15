@@ -33,8 +33,8 @@ function Files({fileId, fileName}){
     const close =() =>{
         if(modalSeeFile && userRole == 'OPE'){
             setModalSeeFile(false);
-        }else if(modalSeeFileWaterBrand){
-            setModalSeeFileWaterBrand(false);        
+        }else if(modalSeeFileWaterBrand && userRole == 'GER'){
+            setModalSeeFileWaterBrand(false);                    
         }else if(previsualizeFile){
             setPrevisualizeFile(false);
         }
@@ -51,7 +51,7 @@ function Files({fileId, fileName}){
 
             {modalSeeFile && <SeeFile closeModal={close} fileId={fileId} fileName={fileName}/>}
 
-            {modalSeeFileWaterBrand && <SeeFileWaterBrand closeModal={close} fileName={fileName}/>}
+            {modalSeeFileWaterBrand && <SeeFileWaterBrand closeModal={close} fileName={fileName} fileId={fileId}/>}
 
             {previsualizeFile && <PrevisualizeFile closeModal={close} fileName={fileName} userRole={userRole} fileId={fileId}/>}
         </div>

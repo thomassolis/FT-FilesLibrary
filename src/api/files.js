@@ -1,11 +1,14 @@
-// usuarios.js
-import axios from './axios'; // Importa tu instancia de axios
+import axios from './axios';
 
-
-export const comprobarDrive = async (data) => {
-    const response = await axios.get('/files/get/archivos/byuser');
-    console.log('respuesta de la solicitud de Archivo  ',response.data);
-    //console.log('response.data', response.data)
-    return response.data;
+export const getFilesData = async () => {
+    try
+    {
+        const response = await axios.get(`/files/get/archivos/byuser`);
+        return response.data
+    }
+    catch(error)
+    {
+        console.log("error buscando los datos");
+    }
 
 }

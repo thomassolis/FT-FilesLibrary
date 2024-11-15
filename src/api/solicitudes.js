@@ -13,7 +13,7 @@ export const postAprobacionGerencia = async (data) =>{
             folder: data.selectedFolder,
             approvedGER: data.approvedGER,     
             approvedADM: data.approvedADM,     
-            motivo_solicitud: data.motivo_solicitud     
+            motivo_solicitud: data.motivo_solicitud
         });
         console.log('respuesta de login desde files ',response.data);
         return response.data;

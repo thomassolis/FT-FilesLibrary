@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/authProvider';
-import { getFilesData } from '../api/auth';
+import { getFilesData } from '../api/files';
 import FilesContainer from './files/filesContainer';
 import SidebarContainer from './SideBar/sideBarContainer';
 import History from './history/history';
@@ -10,7 +10,6 @@ import NewFileForm from './Modal/newFileForm';
 import { useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import Files from './files/files';
-import { comprobarDrive } from '../api/files';
 import SkeletonFilesContainer from './skeleton/SkeletonFilesContainer';
 import { FadeLoader } from 'react-spinners';
 function Home() {
@@ -19,14 +18,12 @@ function Home() {
     const { filesData, setFilesData, selectedFolder, setSelectedFolder } = useContext(FoldersFilesContext);
     const { requestSeeFile, setRequestSeeFile } = useContext(PermissionsContext);
     const [adminForm, setAdminForm] = useState(false);
-    const { folder, subfolder, subsubfolder } = useParams(); // Obtener los parámetros de la URL para manejar carpetas, subcarpetas y subsubcarpeta
-    const [loading, setLoading] = useState(true); // Inicialmente true mientras carga
-    
+    const { folder, subfolder, subsubfolder } = useParams();
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    // Definir la función handleSelectSubFolder
     const handleSelectSubFolder = (folderName) => {
-        setSelectedFolder(folderName); // Actualiza la carpeta seleccionada       
+        setSelectedFolder(folderName);     
     };
 
     useEffect(() => {

@@ -1,20 +1,14 @@
-// usuarios.js
 import axios from './axios'; // Importa tu instancia de axios
 
-
 export const enviarLogin = async (data) => {
-
     const response = await axios.post('auth/login', {
         Email: data.email,
         Password: data.password
     });
     console.log('respuesta de login desde auth ',response.data);
-    //console.log('response.data', response.data)
     return response.data;
 
 }
-
-
 
 //2. VERIFICACION DE 2 PASOS
         // ENVIAR CÓDIGO A BACKEND
@@ -31,18 +25,6 @@ export const enviarVerificacion2pasos = async (data) => {
         console.log(error)
     }
 
-
-}
-
-//3. HOME PARA PEDIR INFORMACIÓN DE ARHIVOS DEPENDIENDO DEL ROL
-
-export const getFilesData = async () => {
-    try{
-        const response = await axios.get(`/files/get/archivos/byuser`);
-        return response.data
-    }catch(error){
-        console.log("error buscando los datos");
-    }
 
 }
 
@@ -63,7 +45,7 @@ export const sendFilesData = async(data) =>{
 }
 
 //5. ENVIAR los ARCHIVOS que sube el administrador HACIA EL BACKend 
-// 5. ENVIAR los ARCHIVOS que sube el administrador HACIA EL BACKEND
+//5. ENVIAR los ARCHIVOS que sube el administrador HACIA EL BACKEND
 export const sendFilesFromAdmin = async (data) => {
     try {
       const response = await axios.post('auth/admin/files', data, {

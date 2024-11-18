@@ -2,9 +2,11 @@ import axios from './axios';
 
 
 export const previsualizarArchivos = async (data) => {
+    console.log('data desde previsualizar: ',data.fileId);
     try {
-        const response = await axios.post('files/post/solicitarArchivo', {
+        const response = await axios.post('files/post/previsualizarArchivo', {
             fileId: data.fileId
+            
         }, {
             responseType: 'blob' // Especifica que la respuesta es un blob
         });

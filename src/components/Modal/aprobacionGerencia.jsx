@@ -1,6 +1,6 @@
 import { AuthContext } from "../../context/authProvider";
 import { useContext, useState } from "react";
-import { postAprobacionGerencia } from "../../api/solicitudes";
+import { enviarPeticion } from "../../api/solicitudes";
 import { io } from "socket.io-client";
 
 import { Toaster, toast } from "react-hot-toast";
@@ -42,7 +42,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
 
         try {                                    
 
-            await postAprobacionGerencia(data);
+            await enviarPeticion(data);
 
             if(approvedGER === true){
                 //Solo emitir a admin en caso que el gerente lo haya aprobado

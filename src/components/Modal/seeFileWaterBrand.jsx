@@ -1,10 +1,14 @@
 import SeeFile from "./seeFile";
 import { useState, useEffect } from "react";
-
+import { previsualizarArchivos } from "../../api/files";
 
 function SeeFileWaterBrand({closeModal, fileName, fileId}){
     const [sendRequest, setSendRequest] = useState(false);
     const [pdfUrl, setPdfUrl] = useState(null);
+    console.log('fileName desde marca de agua', fileName)
+    console.log('fileID desde marca de agua', fileId)
+
+
     useEffect(() => {
         const pedirArchivos = async () => {
             try {                
@@ -51,7 +55,7 @@ function SeeFileWaterBrand({closeModal, fileName, fileId}){
                 <button style={{backgroundColor:'green'}} onClick={request}>Solicitar</button>
             </div>
 
-            {sendRequest && <SeeFile fileName={fileName} closeModal={closeModal}/>
+            {sendRequest && <SeeFile fileName={fileName} fileId={fileId} closeModal={closeModal}/>
 
             }
             

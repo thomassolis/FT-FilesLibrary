@@ -5,7 +5,7 @@ import SubFolder from "./subFolder";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import SkeletonFolder from "../skeleton/skeletonFolder";
-import NoFilesMessage from "../Modal/NoFilesMessage";
+
 
 function FilesContainer({ fileData, album }) {
     const [selectedSubFolder, setSelectedSubFolder] = useState(null);
@@ -102,5 +102,4 @@ function FilesContainer({ fileData, album }) {
 }
 
 export default FilesContainer;
-
 

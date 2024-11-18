@@ -3,10 +3,9 @@ import { useContext, useState, useEffect } from "react";
 import { io } from "socket.io-client";
 const socket = io("/")
 import { AuthContext } from "../../context/authProvider";
-import { postAprobacionGerencia } from "../../api/solicitudes";
 import { Toaster,toast } from "react-hot-toast";
 import FoldersFilesContext from "../../context/Folders-Files/Folders_Files";
-
+import { enviarPeticion } from "../../api/solicitudes";
 
 
 function SeeFile({closeModal, fileId, fileName}){
@@ -15,7 +14,7 @@ function SeeFile({closeModal, fileId, fileName}){
     const {userName, userRole}=useContext(AuthContext);
     const {selectedFolder} = useContext(FoldersFilesContext);
 
- 
+    console.log('Mi fileId desde gerencia y marca de agua es: ', fileId);
     
 
     function handleChange(e){
@@ -23,7 +22,7 @@ function SeeFile({closeModal, fileId, fileName}){
     }
     
 
-    const sendRequest = async(e)=>{
+    const sendRequest = async(e)=>{        
         e.preventDefault();
         
         const data = {
@@ -33,11 +32,13 @@ function SeeFile({closeModal, fileId, fileName}){
             Nombre_del_archivo: fileName,
             folder: selectedFolder
         };
+        console.log(data);
         try{            
-            // console.log('data desde seefileee:', data)
-            const response = await postAprobacionGerencia(data);
-            // console.log('data desde seefileee:', data)
 
+            console.log('Aqui')
+            const response = await enviarPeticion(data);
+            // console.log('data desde seefileee:', data)
+            console.log('Aqui2')
             if(userRole=='OPE'){
                 socket.emit('message', data);            
             }
@@ -51,7 +52,7 @@ function SeeFile({closeModal, fileId, fileName}){
 
 
         }catch(error){
-            toast.error('hay un error');
+            toast.error('hay un error al enviar los datos.');
         }
     }
 

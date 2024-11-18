@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/authProvider';
 import { getFilesData } from '../api/files';
-import { getFilesData } from '../api/files';
 import FilesContainer from './files/filesContainer';
 import SidebarContainer from './SideBar/sideBarContainer';
 import History from './history/history';
@@ -14,7 +13,6 @@ import NoFilesMessage from './Modal/NoFilesMessage';
 import { useNavigate } from 'react-router-dom';
 import Files from './files/files';
 import SkeletonFilesContainer from './skeleton/SkeletonFilesContainer';
-import { FadeLoader } from 'react-spinners';
 function Home() {
     const { userRole } = useContext(AuthContext);
     const [foalderData, setFoalderData] = useState([]);

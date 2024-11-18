@@ -2,6 +2,10 @@ import axios from './axios'; // Importa tu instancia de axios
 
 export const postAprobacionGerencia = async (data) =>{
     try{
+        console.log("----------------------")
+        console.log(data)
+        console.log("**********************")
+
         const response = await axios.post('solicitud/agregar/nueva',{
             userName: data.userName,
             comentarioGerente: data.comentarioGerente,

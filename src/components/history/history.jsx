@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SmallHistory from "./smallHistory";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authProvider";
@@ -24,7 +24,7 @@ function History(){
             navigate('/completeHistory')
         }
     }
-
+    
     return(
         <section 
             className={`w-full fixed bg-[rgba(255,237,0,1)] bottom-0 flex flex-col transition-all duration-500 

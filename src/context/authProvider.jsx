@@ -3,7 +3,7 @@ import React, { createContext, useState, useEffect } from 'react';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [userRole, setUserRole] = useState(null);
+    const [userRole, setUserRole] = useState(() => sessionStorage.getItem('userRole') || null);
     const [userName, setUserName] = useState(null);
     const [banTime, setBanTime] = useState(null);
 

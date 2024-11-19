@@ -11,8 +11,6 @@ const ProtectedRoute = ({ allowedRoles, redirectTo = "/" }) => {
       return <Navigate to={redirectTo} replace />;
     }
 
-
-
     // Si el usuario está autenticado y tiene los permisos necesarios, permitir el acceso
     return <Outlet />;
   } catch (error) {

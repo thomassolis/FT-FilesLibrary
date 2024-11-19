@@ -10,7 +10,6 @@ import NewFileForm from './Modal/newFileForm';
 import { useParams } from "react-router-dom";
 import { FadeLoader } from 'react-spinners';
 import NoFilesMessage from './Modal/NoFilesMessage';
-import { useNavigate } from 'react-router-dom';
 import Files from './files/files';
 import SkeletonFilesContainer from './skeleton/SkeletonFilesContainer';
 function Home() {
@@ -21,11 +20,6 @@ function Home() {
     const [adminForm, setAdminForm] = useState(false);
     const { folder, subfolder, subsubfolder } = useParams();
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate();
-
-    const handleSelectSubFolder = (folderName) => {
-        setSelectedFolder(folderName);     
-    };
 
     useEffect(() => {
         const fetchFiles = async () => {
@@ -58,14 +52,6 @@ function Home() {
         }
     }, [userRole, setRequestSeeFile]);
 
-    const newFile = () => {
-        setAdminForm(true);
-    };
-
-    const closeAdminForm = () => {
-        setAdminForm(false);
-    };
-
     const renderFiles = () => {
         if (folder && filesData[folder]) {
             if (subsubfolder && filesData[folder][subfolder]?.[subsubfolder]?.files) {
@@ -79,18 +65,35 @@ function Home() {
         return [];
     };
 
-    const renderSubfolders = () => {
+    const hasSubfolders = () => {
         if (folder && filesData[folder]) {
-            const subfolders = Object.keys(filesData[folder]).filter(
-                key => key !== 'files' // Filtra las claves que no sean "files"
-            );
-            return subfolders;
+            if (subsubfolder) {
+                return Object.keys(filesData[folder][subfolder]?.[subsubfolder] || {}).filter(
+                    key => key !== 'files'
+                ).length > 0;
+            } else if (subfolder) {
+                return Object.keys(filesData[folder][subfolder] || {}).filter(
+                    key => key !== 'files'
+                ).length > 0;
+            } else {
+                return Object.keys(filesData[folder] || {}).filter(
+                    key => key !== 'files'
+                ).length > 0;
+            }
         }
-        return [];
+        return false;
     };
 
     const filesToRender = renderFiles();
-    const subfoldersToRender = renderSubfolders();
+    const subfoldersExist = hasSubfolders();
+
+    const newFile = () => {
+        setAdminForm(true);
+    };
+
+    const closeAdminForm = () => {
+        setAdminForm(false);
+    };
 
     return (
         <section id='soyyo' className='bg-customBlue flex min-h-screen'>
@@ -101,8 +104,8 @@ function Home() {
                     <div className="flex justify-center items-center w-full h-screen">
                         <FadeLoader size={15} />
                     </div>
-                ) : filesToRender.length > 0 ? (
-                    // Mostrar los archivos si existen
+                ) : filesToRender.length > 0 || subfoldersExist ? (
+                    // Mostrar los archivos o subcarpetas si existen
                     <div className="col-span-4 w-full">
                         <FilesContainer
                             fileData={filesToRender}
@@ -110,10 +113,9 @@ function Home() {
                         />
                     </div>
                 ) : (
-                    // Mostrar mensaje de "No hay archivos ni subcarpetas"                    
+                    // Mostrar mensaje de "No hay archivos ni subcarpetas"
                     <NoFilesMessage />
-                )
-                }
+                )}
             </div>
     
             {adminForm && <NewFileForm onClose={closeAdminForm} />}
@@ -121,7 +123,6 @@ function Home() {
             {(userRole === "ADM" || userRole === "GER") && <History />}
         </section>
     );
-    
 }
 
 export default Home;

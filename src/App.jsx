@@ -9,7 +9,6 @@ import NotFound from "./components/notFound";
 import CompleteHistory from "./components/history/completeHistory";
 import { PermissionsProvider } from "./context/permissions/permissionsProvider";
 import { FoldersFilesProvider } from "./context/Folders-Files/Folders_Files";
-import NewSubFolder from "./components/NewSubFolder";
 import { Toaster,toast } from 'react-hot-toast';
 
 function App() {

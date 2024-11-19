@@ -5,7 +5,7 @@ import SubFolder from "./subFolder";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import SkeletonFolder from "../skeleton/skeletonFolder";
-
+import Routes from "../Rutas/routes";
 
 function FilesContainer({ fileData, album }) {
     const [selectedSubFolder, setSelectedSubFolder] = useState(null);
@@ -36,54 +36,36 @@ function FilesContainer({ fileData, album }) {
         <div className="pb-10 w-full flex flex-col ml-4">
             <HeaderFiles />                
             {/* Renderizamos las carpetas y subcarpetas */}
-            <div className="flex justify-center flex-col">
-            {folder && !subfolder && (
-                <h1 className="font-serif text-2xl">
-                    <a onClick={() => navigate(`/${folder}`)} className="cursor-pointer text-blue-800">{folder}</a>
-                </h1>
-            )}
-            {folder && subfolder && !subsubfolder && (
-                <h1 className="font-serif text-2xl">
-                    <a onClick={() => navigate(`/${folder}`)} className="cursor-pointer text-blue-800">{folder}</a> / 
-                    <a onClick={() => navigate(`/${folder}/${subfolder}`)} className="cursor-pointer text-blue-800">{subfolder}</a>
-                </h1>
-            )}
-            {folder && subfolder && subsubfolder && (
-                <h1 className="font-serif text-2xl " >
-                    <a onClick={() => navigate(`/${folder}`)} className="cursor-pointer text-blue-800">{folder}</a> / 
-                    <a onClick={() => navigate(`/${folder}/${subfolder}`)} className="cursor-pointer text-blue-800">{subfolder}</a> / 
-                    <a onClick={() => navigate(`/${folder}/${subfolder}/${subsubfolder}`)} className="cursor-pointer text-blue-800">{subsubfolder}</a>
-                </h1>
-            )}
+            <div>
+                <Routes/>            
 
-                <div 
-                    id="Grid-Folders" 
-                    className={`grid grid-cols-5 gap-4 items-center mt-4 content-center w-[90%] ${subsubfolder ? 'mt-12' : ''}`}
-                >
+                <div id="Grid-Folders" className={`grid grid-cols-5 gap-4 items-center mt-4 content-center w-[90%] ${subsubfolder ? 'mt-12' : ''}`}>
                     {loading ? (
-                        // Renderiza los skeletons mientras carga
                         Array(5).fill().map((_, index) => (
                             <SkeletonFolder key={index} />
                         ))
                     ) : (
-                        // Renderiza las carpetas reales cuando ya están cargadas
-                        folders.map((folderName) => {
-                            const isSelected = folderName === selectedSubFolder;
-                            return (
-                                <div 
-                                    key={folderName} 
-                                    id="subfolder" 
-                                    className={`border border-black rounded border-dashed flex justify-center p-2 w-[100%] hover:bg-slate-400 cursor-pointer ${isSelected ? 'bg-slate-400' : ''}`}
-                                    onClick={() => setSelectedSubFolder(folderName)}
-                                >
-                                    <SubFolder 
-                                        folderName={folderName} 
-                                        album={album} 
-                                        onSelect={() => setSelectedSubFolder(folderName)} 
-                                    />
-                                </div>
-                            );
-                        })
+                        folders.length > 0 ? (
+                            folders.map((folderName) => {
+                                const isSelected = folderName === selectedSubFolder;
+                                return (
+                                    <div
+                                        key={folderName}
+                                        id="subfolder"
+                                        className={`border border-black rounded border-dashed flex justify-center p-2 w-[100%] hover:bg-slate-400 cursor-pointer ${isSelected ? 'bg-slate-400' : ''}`}
+                                        onClick={() => setSelectedSubFolder(folderName)}
+                                    >
+                                        <SubFolder
+                                            folderName={folderName}
+                                            album={album}
+                                            onSelect={() => setSelectedSubFolder(folderName)}
+                                        />
+                                    </div>
+                                );
+                            })
+                        ) : (
+                            <p></p>
+                        )
                     )}
                 </div>
             </div>

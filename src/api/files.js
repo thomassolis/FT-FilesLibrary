@@ -1,20 +1,29 @@
-import axios from './axios';
+// usuarios.js
+import axios from './axios'; // Importa tu instancia de axios
 
 
-export const previsualizarArchivos = async (data) => {
-    console.log('data desde previsualizar: ',data.fileId);
+export const comprobarDrive = async (data) => {
+    const response = await axios.get('/files/get/archivos/byuser');
+    console.log('respuesta de la solicitud de Archivo  ',response.data);
+    //console.log('response.data', response.data)
+    return response.data;
+
+}
+
+export const previsualizarArchivos = async ({ fileId }) => {
     try {
-        const response = await axios.post('files/post/previsualizarArchivo', {
-            fileId: data.fileId
-            
-        }, {
-            responseType: 'blob' // Especifica que la respuesta es un blob
-        });
-        return response.data;
+        const response = await axios.post(
+            'files/post/previsualizarArchivo',
+            { fileId },
+            { responseType: 'blob' } // Esto asegura que la respuesta sea un Blob
+        );
+        return response.data; // Debe ser un Blob si el backend responde correctamente
     } catch (error) {
-        console.log(error);
+        console.error('Error al solicitar archivo:', error);
+        throw error;
     }
 };
+
 
 // 5. ENVIAR los ARCHIVOS que sube el administrador HACIA EL BACKEND
 export const sendFilesFromAdmin = async (data) => {

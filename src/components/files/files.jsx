@@ -51,7 +51,11 @@ function Files({fileId, fileName}){
 
             {modalSeeFile && <SeeFile closeModal={close} fileId={fileId} fileName={fileName}/>}
 
-            {modalSeeFileWaterBrand && <SeeFileWaterBrand closeModal={close} fileName={fileName} fileId={fileId}/>}
+            {modalSeeFileWaterBrand && (                         
+                <SeeFileWaterBrand closeModal={close} fileName={fileName} fileId={fileId} />     
+                                                                                     
+            )}
+
 
             {previsualizeFile && <PrevisualizeFile closeModal={close} fileName={fileName} userRole={userRole} fileId={fileId}/>}
         </div>

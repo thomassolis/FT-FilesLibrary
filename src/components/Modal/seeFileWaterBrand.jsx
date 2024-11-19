@@ -5,29 +5,33 @@ import { previsualizarArchivos } from "../../api/files";
 function SeeFileWaterBrand({closeModal, fileName, fileId}){
     const [sendRequest, setSendRequest] = useState(false);
     const [pdfUrl, setPdfUrl] = useState(null);
-    console.log('fileName desde marca de agua', fileName)
-    console.log('fileID desde marca de agua', fileId)
-
 
     useEffect(() => {
         const pedirArchivos = async () => {
-            try {                
+            try {
                 const pdfBlob = await previsualizarArchivos({ fileId });
-                const pdfUrl = URL.createObjectURL(pdfBlob); // Crea una URL para el blob
+    
+                if (!(pdfBlob instanceof Blob)) {
+                    throw new Error('La respuesta no es un Blob válido.');
+                }
+    
+                const pdfUrl = URL.createObjectURL(pdfBlob); // Crea una URL para el Blob
                 setPdfUrl(pdfUrl);
             } catch (error) {
-                console.log(error);
+                console.error('Error al cargar el archivo:', error);
             }
         };
+    
         pedirArchivos();
-
-        // Limpieza de la URL del blob cuando el componente se desmonte
+    
+        // Limpieza de la URL del Blob cuando el componente se desmonte
         return () => {
             if (pdfUrl) {
                 URL.revokeObjectURL(pdfUrl);
             }
         };
-    }, [fileId]);    
+    }, [fileId]);
+     
 
     function request(){
        
@@ -35,31 +39,62 @@ function SeeFileWaterBrand({closeModal, fileName, fileId}){
     }
 
     return(
-        <div style={{position:'fixed', top:'50%', left:'50%',transform: 'translate(-50%, -50%)',width:'750px', height:'600px', backgroundColor:'white', display:'flex',alignItems:'center', justifyContent:'center', flexDirection:'column', boxShadow: '0px 0px 10px rgba(0,0,0,0.9)', borderRadius:'15px', zIndex:'100'}}>
-            <iconify-icon style={{position:'absolute', top:'-8px', right:'-12px', color:'black', fontSize:'30px', cursor:'pointer'}} onClick={closeModal} icon="carbon:close-filled"></iconify-icon>
-            <div>
-                <h1>{fileName}</h1>
+        <div
+        className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+        >
+            <div className="bg-white w-3/4 max-w-4xl rounded-lg shadow-lg flex flex-col items-center justify-center p-6 relative h-full">
+                <iconify-icon
+                style={{
+                    position: 'absolute',
+                    top: '20px',
+                    right: '20px',
+                    color: 'black',
+                    fontSize: '30px',
+                    cursor: 'pointer',
+                }}
+                onClick={closeModal}
+                icon="carbon:close-filled"
+                ></iconify-icon>
+                <h1 className="font-serif text-xl text-center mb-4">{fileName}</h1>
                 {pdfUrl ? (
-                    <iframe
-                        src={pdfUrl}
-                        style={{ width: '100%', height: '500px' }}
-                        title="PDF Preview"
-                    ></iframe>
+                <iframe
+                    src={pdfUrl}
+                    className="w-full rounded-lg"
+                    style={{
+                    height: '500px',
+                    border: 'none',
+                    }}
+                    title="PDF Preview"
+                ></iframe>
                 ) : (
-                    <p>Cargando archivo...</p>
+                <p className="text-center">Cargando archivo...</p>
+                )}
+                <div className="mt-5 text-center">
+                <p className="font-serif">
+                    ¿Deseas solicitar este archivo para descargar sin marca de agua?
+                </p>
+                <button
+                    style={{
+                    backgroundColor: 'green',
+                    color: 'white',
+                    padding: '10px 20px',
+                    borderRadius: '5px',
+                    marginTop: '10px',
+                    cursor: 'pointer',
+                    }}
+                    onClick={request}
+                >
+                    Solicitar
+                </button>
+                </div>
+                {sendRequest && (
+                <SeeFile fileName={fileName} fileId={fileId} closeModal={closeModal} />
                 )}
             </div>
-
-            <div>
-                <p>¿Deseas solicitar este archivo para descargar sin marca de agua?</p>
-                <button style={{backgroundColor:'green'}} onClick={request}>Solicitar</button>
-            </div>
-
-            {sendRequest && <SeeFile fileName={fileName} fileId={fileId} closeModal={closeModal}/>
-
-            }
-            
         </div>
+
+    
+        
     )
 }
 

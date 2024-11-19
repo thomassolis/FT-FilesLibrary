@@ -33,7 +33,6 @@ export const enviarPeticion = async (data) =>{
             fileName: data.fileName                        
         });
         console.log('respuesta de login desde auth ',response.data);
-        //console.log('response.data', response.data)
         return response.data;
         
     }catch(e){

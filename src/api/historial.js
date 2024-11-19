@@ -3,7 +3,7 @@ import axios from './axios'; // Importa tu instancia de axios
 //5. HALANDO LOS DATOS DE LA RUTA PARA IMPRIMIRLOS EN EL HISTORIAL
 export const getHistoryData = async (data) =>{
 try{
-    const response = await axios.get('files/get/historial');        
+    const response = await axios.get('solicitud/ver/pendientes/gerencia');        
     return response.data
 }catch(e){
     console.error(e)

@@ -1,7 +1,6 @@
 import axios from './axios'; // Importa tu instancia de axios
 
 export const enviarPeticion = async (data) =>{
-    console.log('Entre a solicitudes');
     try{
         const response = await axios.post('solicitud/agregar/nueva',{
             userName: data.userName,
@@ -23,7 +22,7 @@ export const enviarPeticion = async (data) =>{
     }
   }
 
-  
+
   export const postRequestDataForSeeFile = async (data)=>{
     console.log('data: ',data)
     try{
@@ -41,6 +40,3 @@ export const enviarPeticion = async (data) =>{
         console.log('error:',e);
     }
   }
-
-
-  

@@ -22,14 +22,14 @@ function SeeFile({closeModal, fileId, fileName}){
 
     const sendRequest = async(e)=>{        
         e.preventDefault();
-        
-        const data = {            
-            motivo_solicitud: textAreaValue,
-            fileId: fileId                     
-        };
-        console.log(data);
-        try{                        
-            const response = await CrearNuevaPeticion(data);                        
+        try{  
+            const data = {            
+                motivo_solicitud: textAreaValue,
+                fileId: fileId                     
+            };                              
+            const response = await CrearNuevaPeticion(data);           
+            console.log('response desde seefile: ', response)
+            if(response.data)
             if(userRole=='OPE'){
                 socket.emit('message', data);            
             }
@@ -43,7 +43,9 @@ function SeeFile({closeModal, fileId, fileName}){
 
 
         }catch(error){
+            console.log(error);
             toast.error('hay un error al enviar los datos.');
+            
         }
     }
 

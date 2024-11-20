@@ -28,24 +28,20 @@ function SmallHistory() {
     // Función para eliminar una solicitud aceptada o denegada
     function handleDeleteFromHistorial(ID_Solicitudes) {
         setNewHistorial((prevHistorial) => {
-            const updatedHistorial = prevHistorial.filter(
-                (item) => item.ID_Solicitudes !== ID_Solicitudes
-            );
+            const updatedHistorial = prevHistorial.filter((item) => item.ID_Solicitudes !== ID_Solicitudes);
+            console.log('Historial actualizado:', updatedHistorial);
             return updatedHistorial;
         });
     }
     
+    
 
-    function handleDeleteFromHistorialAdmin(Nombre_del_archivo, OPEUserName, ID_Solicitudes) {
-        
+    function handleDeleteFromHistorialAdmin(ID_Solicitudes) {
         setNewHistorialAdmin((prevHistorial) => {
-            const updatedHistorialAdmin = prevHistorial.filter(
-                (item) => !(item.Nombre_del_archivo === Nombre_del_archivo && item.userName === OPEUserName)
-            );
-            
-            return updatedHistorialAdmin;
+            return prevHistorial.filter((item) => item.ID_Solicitudes !== ID_Solicitudes);
         });
     }
+    
 
     // Función para renderizar filas de solicitudes en tiempo real
     function renderRows() {
@@ -122,7 +118,7 @@ function SmallHistory() {
 
     // Cargar historial desde la API
     useEffect(() => {
-        const getHistory = async () => {
+        const getHistoryGerente = async () => {
             try {
                 const response = await getHistoryDataGerente();    
                 setHistorial(response.data);  // Actualizar el estado con los datos recibidos
@@ -131,21 +127,20 @@ function SmallHistory() {
                 console.error(e);
             }
         };
-        getHistory();
+        getHistoryGerente();
     }, []);
 
     // Cargar historial desde la API para Admin
     useEffect(() => {
-        const getHistory = async () => {
+        const getHistoryAdmin = async () => {
             try {
-                const response = await getHistoryDataAdmin();
-                // console.log('response desde historialAdmin: ', response);
+                const response = await getHistoryDataAdmin();                
                 setHistorialAdmin(response);  // Actualizar el estado con los datos recibidos
             } catch (e) {
                 console.error(e);
             }
         };
-        getHistory();
+        getHistoryAdmin();
     }, []);
 
     // Escuchar eventos en tiempo real usando WebSocket

@@ -40,7 +40,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
 
         try {                                    
 
-            await APIaprobacionGerencia(data);
+            await APIaprobacionGerencia(data);            
 
             if(approvedGER === true){
                 //Solo emitir a admin en caso que el gerente lo haya aprobado
@@ -48,7 +48,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
             }            
 
             // Llamamos a la función para eliminar el registro del historial
-            onDecision(Nombre_del_archivo, OPEUserName, ID_Solicitudes);
+            onDecision(ID_Solicitudes);
             onClose(); // Cerrar el modal
         } catch (error) {
             console.log(error)

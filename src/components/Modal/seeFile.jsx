@@ -23,12 +23,9 @@ function SeeFile({closeModal, fileId, fileName}){
     const sendRequest = async(e)=>{        
         e.preventDefault();
         
-        const data = {
-            Nombre_de_solicitante: userName,
+        const data = {            
             motivo_solicitud: textAreaValue,
-            fileId: fileId,
-            Nombre_del_archivo: fileName,
-            folder: selectedFolder            
+            fileId: fileId                     
         };
         console.log(data);
         try{                        

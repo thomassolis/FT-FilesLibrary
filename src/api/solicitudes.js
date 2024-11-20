@@ -3,13 +3,14 @@ import axios from './axios'; // Importa tu instancia de axios
 
 //ENVIAR PETICIÓN PARA VER ARCHIVO DESDE OPERADOR 
 export const CrearNuevaPeticion = async (data) =>{    
+    alert(data.userName);    
     try{
         const response = await axios.post('/solicitud/agregar/nueva',{            
-            userName: data.Nombre_de_solicitante,
+            //userName: data.Nombre_de_solicitante,
             // comentarioGerente: data.comentarioGerente,
             // comentarioAdministracion: data.comentarioAdministracion,
-            // fileId: data.fileId,
-            fileName: data.Nombre_del_archivo,
+            fileId: data.fileId,
+            //fileName: data.Nombre_del_archivo,
             // OPEUserName: data.OPEUserName,
             // OPEComment: data.OPEComment,
             // folder: data.folder,
@@ -33,7 +34,22 @@ export const CrearNuevaPeticion = async (data) =>{
             ID_Solicitudes: dataAdmin.ID_Solicitudes   
         });        
         return response.data;
-        
+    }catch(e){
+        console.log(e);
+    }
+  }
+
+
+  
+  //APROBACIÓN O DENEGACIÓN DEL GERENTE
+  export const APIaprobacionGerencia = async (data) =>{    
+    try{
+        alert('entre')
+        const response = await axios.post('solicitud/aprobacion/solicitud/gerente',{
+            comentarioGerente: data.comentarioGerente,
+            approvedGER: data.approvedGER,
+            ID_Solicitudes: data.ID_Solicitudes
+        })
     }catch(e){
         console.log('error:',e);
     }

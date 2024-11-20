@@ -88,7 +88,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
                             className="w-[90%] border h-28 border-black" 
                             placeholder="Escribe una justificación"
                             onChange={handleChange}
-                            value={textAreaValueAdmin}
+                            value={textAreaValue}
                             required
                         />
                         <div className="flex gap-5">

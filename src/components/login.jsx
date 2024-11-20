@@ -65,13 +65,10 @@ function Login() {
             if (!response) {
                 throw new Error('Response is undefined or null');
             }
-            //conexion buena front <-> back
-            console.log('response', response);
     
             if (response.success) {
                 setUserData(response.Data);  // Aquí actualizas el estado
-                setIsAuthenticated(true);
-                // sessionStorage.setItem("isAuthenticated", isAuthenticated); // Almacena en sessionStorage                
+                setIsAuthenticated(true);          
             }
         } catch (error) {
             //conexion se interrumpio front <-> back(error 400 a 500)

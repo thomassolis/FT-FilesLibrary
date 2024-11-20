@@ -27,6 +27,7 @@ export const CrearNuevaPeticion = async (data) =>{
   }
 
   export const enviarPeticionAdmin = async(dataAdmin) =>{
+    console.log('dataAdmin: ',dataAdmin);
     try{
         const response = await axios.post('/solicitud/administracion',{            
             comentarioAdministracion: dataAdmin.comentarioAdministracion,

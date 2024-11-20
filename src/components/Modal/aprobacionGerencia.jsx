@@ -56,14 +56,18 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
         }
     };
 
-    const aprobacionAdmin =async(e)=>{
+    const aprobacionAdmin =async(e)=>{     
         e.preventDefault();
         const dataAdmin = {                
             fileId: fileId,                                                      
             approvedADM: approvedADM ,
             comentarioAdministracion:  textAreaValueAdmin,
-            ID_Solicitudes: ID_Solicitudes              
+            ID_Solicitudes: ID_Solicitudes               
         };
+
+        console.log(textAreaValueAdmin);
+        console.log(fileId);
+        console.log(ID_Solicitudes);
         try{
             await enviarPeticionAdmin(dataAdmin);
         }catch(e){
@@ -137,7 +141,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
                             className="w-[90%] border h-28 border-black" 
                             placeholder="Escribe una justificación"
                             onChange={handleChangeAdmin}
-                            value={textAreaValue}
+                            value={textAreaValueAdmin}
                             required
                         />
                         <div className="flex gap-5">

@@ -6,18 +6,8 @@ export const CrearNuevaPeticion = async (data) =>{
     alert(data.userName);    
     try{
         const response = await axios.post('/solicitud/agregar/nueva',{            
-            //userName: data.Nombre_de_solicitante,
-            // comentarioGerente: data.comentarioGerente,
-            // comentarioAdministracion: data.comentarioAdministracion,
-            fileId: data.fileId,
-            //fileName: data.Nombre_del_archivo,
-            // OPEUserName: data.OPEUserName,
-            // OPEComment: data.OPEComment,
-            // folder: data.folder,
-            // approvedGER: data.approvedGER,     
-            // approvedADM: data.approvedADM,     
+            fileId: data.fileId,   
             motivo_solicitud: data.motivo_solicitud  ,
-            // ID_Solicitudes: data.ID_Solicitudes   
         });        
         return response.data;
     }catch(e){

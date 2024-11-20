@@ -9,12 +9,13 @@ import { Toaster, toast } from "react-hot-toast";
 
 const socket = io("/");
 
-function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserName, OPEComment, onDecision, fileId, approvedADM }) 
+function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserName, OPEComment, onDecision, fileId, approvedADM, ID_Solicitudes }) 
 {
     const [textAreaValue, setTextAreaValue] = useState('');
     const [textAreaValueAdmin, setTextAreaValueAdmin] = useState('');
     const { userName, userRole } = useContext(AuthContext);
-
+    console.log('ID_Solicitudes: ',ID_Solicitudes)
+    console.log('Nombre_del_archivo: ',Nombre_del_archivo)
     function handleChange(e) {
         setTextAreaValue(e.target.value);
     }
@@ -34,8 +35,8 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
             OPEComment: OPEComment,
             approvedGER: approvedGER,
             approvedADM: approvedADM ,
-            comentarioAdministracion:  textAreaValueAdmin
-
+            comentarioAdministracion:  textAreaValueAdmin,
+            ID_Solicitudes: ID_Solicitudes
             
         };
 

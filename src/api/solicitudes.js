@@ -13,7 +13,8 @@ export const enviarPeticion = async (data) =>{
             folder: data.folder,
             approvedGER: data.approvedGER,     
             approvedADM: data.approvedADM,     
-            motivo_solicitud: data.motivo_solicitud
+            motivo_solicitud: data.motivo_solicitud  ,
+            ID_Solicitudes: data.ID_Solicitudes   
         });
         console.log('respuesta de login desde files ',response);
         return response.data;

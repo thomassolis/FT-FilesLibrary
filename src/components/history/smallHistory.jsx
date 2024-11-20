@@ -27,23 +27,22 @@ function SmallHistory() {
 
     // Función para eliminar una solicitud aceptada o denegada
     function handleDeleteFromHistorial(Nombre_del_archivo, OPEUserName) {
-        console.log("Antes de eliminar:", newHistorial); // Log para verificar el estado antes de eliminar
+        
         setNewHistorial((prevHistorial) => {
             const updatedHistorial = prevHistorial.filter(
                 (item) => !(item.Nombre_del_archivo === Nombre_del_archivo && item.userName === OPEUserName)
-            );
-            console.log("Después de eliminar:", updatedHistorial); // Verificar después de eliminar
+            );        
             return updatedHistorial;
         });
     }
 
     function handleDeleteFromHistorialAdmin(Nombre_del_archivo, OPEUserName) {
-        console.log("Antes de eliminar:", newHistorialAdmin); // Log para verificar el estado antes de eliminar
+        
         setNewHistorialAdmin((prevHistorial) => {
             const updatedHistorialAdmin = prevHistorial.filter(
                 (item) => !(item.Nombre_del_archivo === Nombre_del_archivo && item.userName === OPEUserName)
             );
-            console.log("Después de eliminar:", updatedHistorialAdmin); // Verificar después de eliminar
+            
             return updatedHistorialAdmin;
         });
     }
@@ -51,7 +50,7 @@ function SmallHistory() {
     // Función para renderizar filas de solicitudes en tiempo real
     function renderRows() {
         const rows = [];
-        console.log('newHistorial desde renderRows: ', newHistorial);
+        
         for (let i = 0; i < newHistorial.length; i++) {
             const data = newHistorial[i];
             rows.push(
@@ -66,7 +65,8 @@ function SmallHistory() {
                                 visible: true, 
                                 approvedGER: false, 
                                 Nombre_del_archivo: data.Nombre_del_archivo, 
-                                OPEUserName: data.userName 
+                                OPEUserName: data.userName,
+                                ID_Solicitudes: data.ID_Solicitudes
                             })}
                         >Denegar</button>
 
@@ -79,7 +79,8 @@ function SmallHistory() {
                                 Nombre_del_archivo: data.Nombre_del_archivo, 
                                 OPEUserName: data.userName, 
                                 OPEComment: data.textAreaValue,
-                                fileId: data.fileId
+                                fileId: data.fileId,
+                                ID_Solicitudes: data.ID_Solicitudes
                             })}
                         >Aceptar</button>
                     </td>
@@ -123,9 +124,13 @@ function SmallHistory() {
     useEffect(() => {
         const getHistory = async () => {
             try {
-                const response = await getHistoryData();
-                // console.log('response desde historial: ', response);
-                setHistorial(response);  // Actualizar el estado con los datos recibidos
+                const response = await getHistoryData();    
+                // Acceder al ID de cada solicitud dinámicamente
+                // response.data.forEach(solicitud => {
+                //     console.log(`ID de la solicitud: ${solicitud.ID_Solicitudes}`);
+                // });            
+                // console.log('response desde historial: ', response.data.ID_Solicitudes);
+                setHistorial(response.data);  // Actualizar el estado con los datos recibidos
                 
             } catch (e) {
                 console.error(e);
@@ -238,10 +243,12 @@ function SmallHistory() {
                     approvedGER={showModal.approvedGER}
                     onClose={() => setShowModal(false)}
                     fileId={showModal.fileId}
+                    ID_Solicitudes = {showModal.ID_Solicitudes}
                     Nombre_del_archivo={showModal.Nombre_del_archivo}
                     OPEUserName={showModal.OPEUserName}
                     OPEComment={showModal.OPEComment}
                     onDecision={(Nombre_del_archivo, userName) => handleDeleteFromHistorial(Nombre_del_archivo, userName)}
+
                 />
             )}
             {showModal.visibleAdmin && (
@@ -249,6 +256,7 @@ function SmallHistory() {
                     approvedADM={showModal.approvedADM}
                     onClose={() => setShowModal(false)}
                     fileId={showModal.fileId}
+                    ID_Solicitudes = {showModal.ID_Solicitudes}
                     Nombre_del_archivo={showModal.Nombre_del_archivo}
                     OPEUserName={showModal.OPEUserName}
                     OPEComment={showModal.OPEComment}

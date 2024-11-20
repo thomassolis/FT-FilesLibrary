@@ -1,6 +1,6 @@
 import { AuthContext } from "../../context/authProvider";
 import { useContext, useState } from "react";
-import { CrearNuevaPeticion, aprobacionGerencia } from "../../api/solicitudes";
+import { CrearNuevaPeticion, APIaprobacionGerencia } from "../../api/solicitudes";
 import { io } from "socket.io-client";
 import { enviarPeticionAdmin } from "../../api/solicitudes";
 import { Toaster, toast } from "react-hot-toast";
@@ -21,8 +21,8 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
         setTextAreaValueAdmin(e.target.value);
     }
 
-    const aprobacionGerencia = async (e) => {
-        e.preventDefault();
+    const aprobacionGerencia = async (event) => {
+        event.preventDefault();
 
         const data = {
             // userName: userName,
@@ -40,7 +40,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
 
         try {                                    
 
-            await CrearNuevaPeticion(data);
+            await APIaprobacionGerencia(data);
 
             if(approvedGER === true){
                 //Solo emitir a admin en caso que el gerente lo haya aprobado
@@ -51,6 +51,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
             onDecision(Nombre_del_archivo, OPEUserName, ID_Solicitudes);
             onClose(); // Cerrar el modal
         } catch (error) {
+            console.log(error)
             toast.error('Hay un error en la aprobación');            
         }
     };

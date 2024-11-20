@@ -10,11 +10,10 @@ export const comprobarDrive = async (data) => {
 
 }
 
-export const previsualizarArchivos = async ({ fileId }) => {
+export const previsualizarArchivos = async ({ fileId }) => {    
     try {
-        const response = await axios.post(
-            'files/post/previsualizarArchivo',
-            { fileId },
+        const response = await axios.get(
+            `files/get/archivos/copia/byuser/${fileId}`,
             { responseType: 'blob' } // Esto asegura que la respuesta sea un Blob
         );
         return response.data; // Debe ser un Blob si el backend responde correctamente

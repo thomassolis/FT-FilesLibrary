@@ -1,6 +1,7 @@
 import SeeFile from "./seeFile";
 import { useState, useEffect } from "react";
 import { previsualizarArchivos } from "../../api/files";
+import { FadeLoader } from 'react-spinners';
 
 function SeeFileWaterBrand({closeModal, fileName, fileId}){
     const [sendRequest, setSendRequest] = useState(false);
@@ -67,7 +68,7 @@ function SeeFileWaterBrand({closeModal, fileName, fileId}){
                     title="PDF Preview"
                 ></iframe>
                 ) : (
-                <p className="text-center">Cargando archivo...</p>
+                    <FadeLoader size={15} />
                 )}
                 <div className="mt-5 text-center">
                 <p className="font-serif">

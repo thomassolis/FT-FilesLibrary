@@ -26,15 +26,15 @@ function SmallHistory() {
     const [realTimeData, setRealTimeData] = useState([]);
 
     // Función para eliminar una solicitud aceptada o denegada
-    function handleDeleteFromHistorial(Nombre_del_archivo, OPEUserName, ID_Solicitudes) {
-        
+    function handleDeleteFromHistorial(ID_Solicitudes) {
         setNewHistorial((prevHistorial) => {
             const updatedHistorial = prevHistorial.filter(
-                (item) => !(item.Nombre_del_archivo === Nombre_del_archivo && item.userName === OPEUserName)
-            );        
+                (item) => item.ID_Solicitudes !== ID_Solicitudes
+            );
             return updatedHistorial;
         });
     }
+    
 
     function handleDeleteFromHistorialAdmin(Nombre_del_archivo, OPEUserName, ID_Solicitudes) {
         

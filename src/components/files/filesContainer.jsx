@@ -39,7 +39,7 @@ function FilesContainer({ fileData, album }) {
             <div>
                 <Routes/>            
 
-                <div id="Grid-Folders" className={`grid grid-cols-5 gap-4 items-center mt-4 content-center w-[90%] ${subsubfolder ? 'mt-12' : ''}`}>
+                <div id="Grid-Folders" className={`grid grid-cols-4 gap-4 items-center mt-4 content-center mb-9 w-[90%] ${subsubfolder ? 'mt-12' : ''}`}>
                     {loading ? (
                         Array(5).fill().map((_, index) => (
                             <SkeletonFolder key={index} />

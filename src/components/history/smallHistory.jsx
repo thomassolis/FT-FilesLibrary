@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../context/authProvider';
 import { io } from "socket.io-client";
-import { getHistoryData } from '../../api/historial';
+import { getHistoryDataGerente } from '../../api/historial';
 import AprobacionGerencia from '../Modal/aprobacionGerencia';
 import { getHistoryDataAdmin } from '../../api/historial';
 
@@ -26,7 +26,7 @@ function SmallHistory() {
     const [realTimeData, setRealTimeData] = useState([]);
 
     // Función para eliminar una solicitud aceptada o denegada
-    function handleDeleteFromHistorial(Nombre_del_archivo, OPEUserName) {
+    function handleDeleteFromHistorial(Nombre_del_archivo, OPEUserName, ID_Solicitudes) {
         
         setNewHistorial((prevHistorial) => {
             const updatedHistorial = prevHistorial.filter(
@@ -36,7 +36,7 @@ function SmallHistory() {
         });
     }
 
-    function handleDeleteFromHistorialAdmin(Nombre_del_archivo, OPEUserName) {
+    function handleDeleteFromHistorialAdmin(Nombre_del_archivo, OPEUserName, ID_Solicitudes) {
         
         setNewHistorialAdmin((prevHistorial) => {
             const updatedHistorialAdmin = prevHistorial.filter(
@@ -124,12 +124,7 @@ function SmallHistory() {
     useEffect(() => {
         const getHistory = async () => {
             try {
-                const response = await getHistoryData();    
-                // Acceder al ID de cada solicitud dinámicamente
-                // response.data.forEach(solicitud => {
-                //     console.log(`ID de la solicitud: ${solicitud.ID_Solicitudes}`);
-                // });            
-                // console.log('response desde historial: ', response.data.ID_Solicitudes);
+                const response = await getHistoryDataGerente();    
                 setHistorial(response.data);  // Actualizar el estado con los datos recibidos
                 
             } catch (e) {
@@ -247,7 +242,7 @@ function SmallHistory() {
                     Nombre_del_archivo={showModal.Nombre_del_archivo}
                     OPEUserName={showModal.OPEUserName}
                     OPEComment={showModal.OPEComment}
-                    onDecision={(Nombre_del_archivo, userName) => handleDeleteFromHistorial(Nombre_del_archivo, userName)}
+                    onDecision={(Nombre_del_archivo, userName, ID_Solicitudes) => handleDeleteFromHistorial(Nombre_del_archivo, userName)}
 
                 />
             )}
@@ -260,7 +255,7 @@ function SmallHistory() {
                     Nombre_del_archivo={showModal.Nombre_del_archivo}
                     OPEUserName={showModal.OPEUserName}
                     OPEComment={showModal.OPEComment}
-                    onDecision={(Nombre_del_archivo, userName) => handleDeleteFromHistorialAdmin(Nombre_del_archivo, userName)}
+                    onDecision={(Nombre_del_archivo, userName, ID_Solicitudes) => handleDeleteFromHistorialAdmin(Nombre_del_archivo, userName)}
                 />
             )}
         </section>

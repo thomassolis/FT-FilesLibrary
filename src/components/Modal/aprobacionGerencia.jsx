@@ -1,8 +1,8 @@
 import { AuthContext } from "../../context/authProvider";
 import { useContext, useState } from "react";
-import { enviarPeticion } from "../../api/solicitudes";
+import { CrearNuevaPeticion, aprobacionGerencia } from "../../api/solicitudes";
 import { io } from "socket.io-client";
-
+import { enviarPeticionAdmin } from "../../api/solicitudes";
 import { Toaster, toast } from "react-hot-toast";
 
 
@@ -13,9 +13,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
 {
     const [textAreaValue, setTextAreaValue] = useState('');
     const [textAreaValueAdmin, setTextAreaValueAdmin] = useState('');
-    const { userName, userRole } = useContext(AuthContext);
-    console.log('ID_Solicitudes: ',ID_Solicitudes)
-    console.log('Nombre_del_archivo: ',Nombre_del_archivo)
+    const { userName, userRole } = useContext(AuthContext);    
     function handleChange(e) {
         setTextAreaValue(e.target.value);
     }
@@ -23,27 +21,26 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
         setTextAreaValueAdmin(e.target.value);
     }
 
-    const aprobacion = async (e) => {
+    const aprobacionGerencia = async (e) => {
         e.preventDefault();
 
         const data = {
-            userName: userName,
+            // userName: userName,
             comentarioGerente: textAreaValue,  
-            fileId: fileId,          
-            Nombre_del_archivo: Nombre_del_archivo,
-            OPEUserName: OPEUserName,
-            OPEComment: OPEComment,
+            // fileId: fileId,          
+            // Nombre_del_archivo: Nombre_del_archivo,
+            // OPEUserName: OPEUserName,
+            // OPEComment: OPEComment,
             approvedGER: approvedGER,
-            approvedADM: approvedADM ,
-            comentarioAdministracion:  textAreaValueAdmin,
-            ID_Solicitudes: ID_Solicitudes
-            
+            // approvedADM: approvedADM ,
+            // comentarioAdministracion:  textAreaValueAdmin,
+            ID_Solicitudes: ID_Solicitudes            
         };
 
 
         try {                                    
 
-            await enviarPeticion(data);
+            await CrearNuevaPeticion(data);
 
             if(approvedGER === true){
                 //Solo emitir a admin en caso que el gerente lo haya aprobado
@@ -51,12 +48,27 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
             }            
 
             // Llamamos a la función para eliminar el registro del historial
-            onDecision(Nombre_del_archivo, OPEUserName);
+            onDecision(Nombre_del_archivo, OPEUserName, ID_Solicitudes);
             onClose(); // Cerrar el modal
         } catch (error) {
-            toast.error('Hay un error en la aprobación')            
+            toast.error('Hay un error en la aprobación');            
         }
     };
+
+    const aprobacionAdmin =async(e)=>{
+        e.preventDefault();
+        const dataAdmin = {                
+            fileId: fileId,                                                      
+            approvedADM: approvedADM ,
+            comentarioAdministracion:  textAreaValueAdmin,
+            ID_Solicitudes: ID_Solicitudes              
+        };
+        try{
+            await enviarPeticionAdmin(dataAdmin);
+        }catch(e){
+            toast.error('Hay un error en la aprobación')  
+        }
+    }
 
     return (
         <div style={{position:'fixed', top:'50%', left:'50%',transform: 'translate(-50%, -50%)',width:'964px', height:'350px', backgroundColor:'white', display:'flex',alignItems:'center', justifyContent:'center', flexDirection:'column', boxShadow: '0px 0px 10px rgba(0,0,0,0.9)', borderRadius:'15px'}}>
@@ -67,7 +79,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
             {userRole==='GER' && approvedGER === true ? (
                 <div>
                     <h1>¿Estás seguro que deseas brindarle permiso de descarga?</h1>
-                    <form className="w-full flex flex-col items-center" onSubmit={aprobacion}>
+                    <form className="w-full flex flex-col items-center" onSubmit={aprobacionGerencia}>
                         <textarea 
                             className="w-[90%] border h-28 border-black " 
                             placeholder="Escribe una justificación"
@@ -80,15 +92,15 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
                         </div>
                     </form>
                 </div>
-            ) : approvedGER === false && (
+            ) : userRole==='GER' && approvedGER === false && (
                 <div>
                     <h1>¿Estás seguro que NO deseas brindar permiso?</h1>
-                    <form className="w-full flex flex-col items-center" onSubmit={aprobacion}>
+                    <form className="w-full flex flex-col items-center" onSubmit={aprobacionGerencia}>
                         <textarea 
                             className="w-[90%] border h-28 border-black" 
                             placeholder="Escribe una justificación"
                             onChange={handleChange}
-                            value={textAreaValueAdmin}
+                            value={textAreaValue}
                             required
                         />
                         <div className="flex gap-5">
@@ -101,7 +113,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
             {userRole === 'ADM' && approvedADM === true && (
                 <div>
                     <h1>¿Estás seguro que deseas brindarle permiso de descarga desde Admin?</h1>
-                    <form className="w-full flex flex-col items-center" onSubmit={aprobacion}>
+                    <form className="w-full flex flex-col items-center" onSubmit={aprobacionAdmin}>
                         <textarea 
                             className="w-[90%] border h-28 border-black " 
                             placeholder="Escribe una justificación"
@@ -119,7 +131,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
             {userRole === 'ADM' && approvedADM === false && (
                 <div>
                     <h1>¿Estás seguro que NO deseas brindar permiso desde Admin?</h1>
-                    <form className="w-full flex flex-col items-center" onSubmit={aprobacion}>
+                    <form className="w-full flex flex-col items-center" onSubmit={aprobacionAdmin}>
                         <textarea 
                             className="w-[90%] border h-28 border-black" 
                             placeholder="Escribe una justificación"

@@ -5,7 +5,7 @@ function FoalderSidebar({ foalderName, isSelected }) {
             className={`bg-customYellow hover:bg-yellow-200 ${isSelected ? 'bg-yellow-200' : 'bg-customYellow text-black'}`}  // Condición para el color
         >
             <iconify-icon style={{ fontSize: '20px' }} icon="material-symbols:folder-open"></iconify-icon>
-            <p style={{ fontSize: '20px' }}>{foalderName}</p>      
+            <p className="text-lg truncate">{foalderName}</p>      
         </div>
     );
 }

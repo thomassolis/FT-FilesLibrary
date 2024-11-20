@@ -5,16 +5,14 @@ const socket = io("/")
 import { AuthContext } from "../../context/authProvider";
 import { Toaster,toast } from "react-hot-toast";
 import FoldersFilesContext from "../../context/Folders-Files/Folders_Files";
-import { enviarPeticion } from "../../api/solicitudes";
+import { CrearNuevaPeticion } from "../../api/solicitudes";
 
 
 function SeeFile({closeModal, fileId, fileName}){
     
     const [textAreaValue, setTextAreaValue] = useState()
     const {userName, userRole}=useContext(AuthContext);
-    const {selectedFolder} = useContext(FoldersFilesContext);
-
-    console.log('Mi fileId desde gerencia y marca de agua es: ', fileId);
+    const {selectedFolder} = useContext(FoldersFilesContext);    
     
 
     function handleChange(e){
@@ -30,15 +28,11 @@ function SeeFile({closeModal, fileId, fileName}){
             motivo_solicitud: textAreaValue,
             fileId: fileId,
             Nombre_del_archivo: fileName,
-            folder: selectedFolder
+            folder: selectedFolder            
         };
         console.log(data);
-        try{            
-
-            console.log('Aqui')
-            const response = await enviarPeticion(data);
-            // console.log('data desde seefileee:', data)
-            console.log('Aqui2')
+        try{                        
+            const response = await CrearNuevaPeticion(data);                        
             if(userRole=='OPE'){
                 socket.emit('message', data);            
             }

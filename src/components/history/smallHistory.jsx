@@ -88,7 +88,7 @@ function SmallHistory() {
 
     function renderRowsAdmin(){
         const rows = [];
-        // console.log('newHistorialAdmin', newHistorialAdmin);
+        console.log('newHistorialAdmin', newHistorialAdmin);
         
         for(let i=0; i<newHistorialAdmin.length; i++){
             const data = newHistorialAdmin[i];
@@ -116,32 +116,23 @@ function SmallHistory() {
         return rows;
     }
 
-    // Cargar historial desde la API
-    useEffect(() => {
-        const getHistoryGerente = async () => {
-            try {
-                const response = await getHistoryDataGerente();    
-                setHistorial(response.data);  // Actualizar el estado con los datos recibidos
-                
-            } catch (e) {
-                console.error(e);
-            }
-        };
-        getHistoryGerente();
-    }, []);
 
     // Cargar historial desde la API para Admin
     useEffect(() => {
-        const getHistoryAdmin = async () => {
-            try {
-                const response = await getHistoryDataAdmin();                
-                setHistorialAdmin(response);  // Actualizar el estado con los datos recibidos
-            } catch (e) {
-                console.error(e);
-            }
-        };
-        getHistoryAdmin();
+        if (userRole === 'ADM') {
+            const getHistoryAdmin = async () => {
+                try {
+                    const response = await getHistoryDataAdmin(); 
+                    console.log('Datos obtenidos para Admin:', response.data); // Debug
+                    setHistorialAdmin(response.data); // Asegúrate de que los datos sean válidos
+                } catch (e) {
+                    console.error(e);
+                }
+            };
+            getHistoryAdmin();
+        }
     }, []);
+    
 
     // Escuchar eventos en tiempo real usando WebSocket
     useEffect(() => {
@@ -184,12 +175,15 @@ function SmallHistory() {
     // Efecto para actualizar newHistorial cuando cambia el historial original desde la API
     useEffect(() => {
         setNewHistorialAdmin((prevHistorial) => {
-            const historialSinDuplicados = historial.filter(item => 
-                !prevHistorial.some(prevItem => prevItem.Nombre_del_archivo === item.Nombre_del_archivo && prevItem.userName === item.userName)
+            const historialSinDuplicados = historialAdmin.filter(
+                (item) => !prevHistorial.some(
+                    (prevItem) => prevItem.ID_Solicitudes === item.ID_Solicitudes
+                )
             );
             return [...prevHistorial, ...historialSinDuplicados];
         });
-    }, [historialAdmin]); 
+    }, [historialAdmin]);
+    
 
     return (
         <section style={{ overflowX: 'auto' }}>

@@ -118,7 +118,7 @@ function SmallHistory() {
 
     // Cargar historial desde la API
     useEffect(() => {
-        const getHistory = async () => {
+        const getHistoryGerente = async () => {
             try {
                 const response = await getHistoryDataGerente();    
                 setHistorial(response.data);  // Actualizar el estado con los datos recibidos
@@ -127,21 +127,20 @@ function SmallHistory() {
                 console.error(e);
             }
         };
-        getHistory();
+        getHistoryGerente();
     }, []);
 
     // Cargar historial desde la API para Admin
     useEffect(() => {
-        const getHistory = async () => {
+        const getHistoryAdmin = async () => {
             try {
-                const response = await getHistoryDataAdmin();
-                // console.log('response desde historialAdmin: ', response);
+                const response = await getHistoryDataAdmin();                
                 setHistorialAdmin(response);  // Actualizar el estado con los datos recibidos
             } catch (e) {
                 console.error(e);
             }
         };
-        getHistory();
+        getHistoryAdmin();
     }, []);
 
     // Escuchar eventos en tiempo real usando WebSocket

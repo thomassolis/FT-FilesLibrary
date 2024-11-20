@@ -20,8 +20,9 @@ export const CrearNuevaPeticion = async (data) =>{
             // ID_Solicitudes: data.ID_Solicitudes   
         });        
         return response.data;
-    }catch(e){
-        console.log(e);
+    }catch(error){
+        console.log("Error en CrearNuevaPeticion:", error);
+        throw error;
     }
   }
 

@@ -13,7 +13,7 @@ export const getHistoryDataGerente = async (data) =>{
     //6. HALANDO LOS DATOS DE LA RUTA PARA IMPRIMIRLOS EN EL HISTORIAL DE PARTE DE ADMIN
 export const getHistoryDataAdmin = async (data) =>{
     try{
-        const response = await axios.get('files/get/historial');        
+        const response = await axios.get('solicitud/ver/pendientes/administrador');        
         return response.data
     }catch(e){
         console.error(e)

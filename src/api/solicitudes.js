@@ -1,7 +1,7 @@
 import axios from './axios'; // Importa tu instancia de axios
 
 export const enviarPeticion = async (data) =>{
-    console.log('Entre a solicitudes');
+    console.log('Desde solicitudes', data.ID_Solicitudes);
     try{
         const response = await axios.post('/solicitud/agregar/nueva',{            
             userName: data.Nombre_de_solicitante,
@@ -14,7 +14,8 @@ export const enviarPeticion = async (data) =>{
             folder: data.folder,
             approvedGER: data.approvedGER,     
             approvedADM: data.approvedADM,     
-            motivo_solicitud: data.motivo_solicitud     
+            motivo_solicitud: data.motivo_solicitud  ,
+            ID_Solicitudes: data.ID_Solicitudes   
         });
         console.log('respuesta de login desde files ',response);
         return response.data;

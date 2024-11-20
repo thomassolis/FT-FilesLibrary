@@ -91,10 +91,7 @@ function SeeFileWaterBrand({closeModal, fileName, fileId}){
                 <SeeFile fileName={fileName} fileId={fileId} closeModal={closeModal} />
                 )}
             </div>
-        </div>
-
-    
-        
+        </div>        
     )
 }
 

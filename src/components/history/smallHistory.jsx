@@ -131,6 +131,19 @@ function SmallHistory() {
             };
             getHistoryAdmin();
         }
+
+        else if (userRole==='GER'){
+            const getHistoryGerente = async () => {
+                try {
+                    const response = await getHistoryDataGerente(); 
+                    console.log('Datos obtenidos para Gerente:', response.data); // Debug
+                    setHistorial(response.data); // Asegúrate de que los datos sean válidos
+                } catch (e) {
+                    console.error(e);
+                }
+            };
+            getHistoryGerente();
+        }
     }, []);
     
 

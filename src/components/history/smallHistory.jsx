@@ -104,11 +104,11 @@ function SmallHistory() {
                     <td>
                         <button 
                             className='inline-block m-0 bg-red-700 w-24 mr-3' 
-                            onClick={() => setShowModal({ visibleAdmin: true, approvedADM: false, Nombre_del_archivo: data.Nombre_del_archivo, OPEUserName: data.userName })}>Denegar</button>
+                            onClick={() => setShowModal({ visibleAdmin: true, approvedADM: false, Nombre_del_archivo: data.Nombre_del_archivo, OPEUserName: data.userName, fileId: data.fileId, ID_Solicitudes: data.ID_Solicitudes })}>Denegar</button>
 
                         <button 
                             className='inline-block m-0 bg-green-900 w-24' 
-                            onClick={() => setShowModal({ visibleAdmin: true, approvedADM: true, Nombre_del_archivo: data.Nombre_del_archivo, OPEUserName: data.userName })}>Aceptar</button>
+                            onClick={() => setShowModal({ visibleAdmin: true, approvedADM: true, Nombre_del_archivo: data.Nombre_del_archivo, OPEUserName: data.userName, fileId: data.fileId, ID_Solicitudes: data.ID_Solicitudes })}>Aceptar</button>
                     </td>
                 </tr>
             );

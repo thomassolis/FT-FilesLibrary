@@ -24,8 +24,8 @@ export const getHistoryDataAdmin = async () =>{
     
 export const getOficialHistory = async() =>{
     try{
-        const response = await axios.get('files/get/oficialHistory')
-        return response.data;  // Retornar la respuesta completa
+        const response = await axios.get('solicitud/ver/historial/solicitudes/administrador')
+        return response.data;
     }catch(e){
         console.log(e);
     }

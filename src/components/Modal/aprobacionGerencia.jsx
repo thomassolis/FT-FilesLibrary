@@ -39,7 +39,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
 
 
         try {                                    
-            console.log('aqui1');
+            console.log('aqui1-1');
             await APIaprobacionGerencia(data);            
             console.log('aqui2');
             if(approvedGER === true){
@@ -67,13 +67,12 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
         };
 
         try{
-            console.log('aqui2')
-            await enviarPeticionAdmin(dataAdmin);
-            console.log('aqui3')
+            await APIaprobacionAdministrador(dataAdmin);
             onDecision(ID_Solicitudes);
             onClose(); // Cerrar el modal
         }catch(e){
             toast.error('Hay un error en la aprobación')  
+            console.log(e)
         }
     }
 

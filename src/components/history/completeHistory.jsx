@@ -10,8 +10,8 @@ function CompleteHistory() {
         const fetchHistory = async () => {
             try {
                 const response = await getOficialHistory();
-                
-                setOficialHistory(response);  // Acceder a los datos dentro de "response.data"
+                console.log(response)
+                setOficialHistory(response.Data);  // Acceder a los datos dentro de "response.data"
                 console.log('response para saber:', response)
             } catch (e) {
                 console.log(e);
@@ -42,11 +42,11 @@ function CompleteHistory() {
                 <td className='break-words'>{data.motivo_de_la_solicitud}</td>
                 <td className='break-words'>{data.fecha_solicitud}</td>
                 <td className='break-words'>{data.Gerente_que_aprobo_solicitud}</td>
-                <td className='break-words'>{data.aprobacion_gerencia}</td>
+                <td className='break-words'>{data.aprobacion_gerencia ? 'Aprobado' : 'No Aprobado'}</td>
                 <td className='break-words'>{data.Comentario_gerente}</td>
                 <td className='break-words'>{data.fecha_aprobacion_gerente}</td>
                 <td className='break-words'>{data.nombre_administrador}</td>
-                <td className='break-words'>{data.aprobacion_administracion}</td>
+                <td className='break-words'>{data.aprobacion_administracion ? 'Aprobado' : 'No Aprobado'}</td>
                 <td className='break-words'>{data.Comentario_administracion}</td>
             </tr>
         ));

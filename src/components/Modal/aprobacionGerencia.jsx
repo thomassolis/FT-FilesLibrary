@@ -2,7 +2,7 @@ import { AuthContext } from "../../context/authProvider";
 import { useContext, useState } from "react";
 import { CrearNuevaPeticion, APIaprobacionGerencia } from "../../api/solicitudes";
 import { io } from "socket.io-client";
-import { enviarPeticionAdmin } from "../../api/solicitudes";
+import { APIaprobacionAdministrador } from "../../api/solicitudes";
 import { Toaster, toast } from "react-hot-toast";
 
 
@@ -65,7 +65,8 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
             ID_Solicitudes: ID_Solicitudes              
         };
         try{
-            await enviarPeticionAdmin(dataAdmin);
+            alert(ID_Solicitudes)
+            await APIaprobacionAdministrador(dataAdmin);
         }catch(e){
             toast.error('Hay un error en la aprobación')  
         }

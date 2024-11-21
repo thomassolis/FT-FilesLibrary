@@ -16,9 +16,11 @@ export const CrearNuevaPeticion = async (data) =>{
     }
   }
 
-  export const enviarPeticionAdmin = async(dataAdmin) =>{
+  export const APIaprobacionAdministrador = async(dataAdmin) =>{
     try{
-        const response = await axios.post('/solicitud/administracion',{            
+        
+        alert(dataAdmin.ID_Solicitudes)
+        const response = await axios.post('solicitud/aprobacion/solicitud/administrador',{
             comentarioAdministracion: dataAdmin.comentarioAdministracion,
             fileId: dataAdmin.fileId,                        
             approvedADM: dataAdmin.approvedADM,                 
@@ -44,5 +46,3 @@ export const CrearNuevaPeticion = async (data) =>{
         console.log('error:',e);
     }
   }
-
-  

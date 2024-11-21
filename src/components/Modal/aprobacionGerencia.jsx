@@ -39,14 +39,14 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
 
 
         try {                                    
-
+            console.log('aqui1');
             await APIaprobacionGerencia(data);            
-
+            console.log('aqui2');
             if(approvedGER === true){
                 //Solo emitir a admin en caso que el gerente lo haya aprobado
                 socket.emit('messageGerencia', data);
             }            
-
+            console.log('aqui3');
             // Llamamos a la función para eliminar el registro del historial
             onDecision(ID_Solicitudes);
             onClose(); // Cerrar el modal
@@ -58,6 +58,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
 
     const aprobacionAdmin =async(e)=>{     
         e.preventDefault();
+        console.log('aqui1')
         const dataAdmin = {                
             fileId: fileId,                                                      
             approvedADM: approvedADM ,
@@ -65,12 +66,12 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
             ID_Solicitudes: ID_Solicitudes               
         };
 
-        console.log(textAreaValueAdmin);
-        console.log(fileId);
-        console.log(ID_Solicitudes);
         try{
-            alert(ID_Solicitudes)
-            await APIaprobacionAdministrador(dataAdmin);
+            console.log('aqui2')
+            await enviarPeticionAdmin(dataAdmin);
+            console.log('aqui3')
+            onDecision(ID_Solicitudes);
+            onClose(); // Cerrar el modal
         }catch(e){
             toast.error('Hay un error en la aprobación')  
         }

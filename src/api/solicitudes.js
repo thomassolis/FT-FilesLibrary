@@ -25,8 +25,8 @@ export const CrearNuevaPeticion = async (data) =>{
         throw error;
     }
   }
-
-  export const enviarPeticionAdmin = async(dataAdmin) =>{
+  
+  export const APIaprobacionAdministrador = async(dataAdmin) =>{
     console.log('dataAdmin: ',dataAdmin);
     try{
         const response = await axios.post('solicitud/aprobacion/solicitud/administrador',{            

@@ -27,9 +27,7 @@ function CompleteHistory() {
         // Validar que oficialHistory esté definido y que sea un array
         if (!Array.isArray(oficialHistory) || oficialHistory.length === 0) {
             return (
-                <tr>
-                    <td colSpan="3">No hay datos disponibles</td>
-                </tr>
+                <></>
             );
         }
     
@@ -54,17 +52,17 @@ function CompleteHistory() {
     
     
     return (
-        <section>
-            <div style={{backgroundColor:'rgba(255, 237, 0, 1)'}} className='] w-full h-[5vw] fixed items-center flex'>
-                <h1 style={{ marginLeft: '20px' }}>Historial de solicitudes</h1>
-                <img src={logo} alt="logo" />
+        <section className='flex flex-col'>
+            <div className=' w-full h-[5vw] fixed items-center flex justify-center bg-yellow-300'>
+                <h1 className='ml-5 font-sans text-2xl'>Historial de solicitudes</h1>
+                {/* <img src={logo} alt="logo" /> */}
             </div>
 
-            <div className='pt-20'>
+            <div className='pt-20'>                           
                 <table>
                     <thead>
                         <tr>
-                            <th>Nombre del archivo requerido</th>
+                            <th className='sticky'>Nombre del archivo requerido</th>
                             <th>Nombre del solicitante</th>
                             <th>Rol de solicitante</th>
                             <th>Comentario del solicitante</th>

@@ -2,7 +2,7 @@ import { AuthContext } from "../../context/authProvider";
 import { useContext, useState } from "react";
 import { CrearNuevaPeticion, APIaprobacionGerencia } from "../../api/solicitudes";
 import { io } from "socket.io-client";
-import { enviarPeticionAdmin } from "../../api/solicitudes";
+import { APIaprobacionAdministrador } from "../../api/solicitudes";
 import { Toaster, toast } from "react-hot-toast";
 
 
@@ -39,9 +39,8 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
 
 
         try {                                    
-            console.log('aqui1');
             await APIaprobacionGerencia(data);            
-            console.log('aqui2');
+        
             if(approvedGER === true){
                 //Solo emitir a admin en caso que el gerente lo haya aprobado
                 socket.emit('messageGerencia', data);
@@ -68,7 +67,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
 
         try{
             console.log('aqui2')
-            await enviarPeticionAdmin(dataAdmin);
+            await APIaprobacionAdministrador(dataAdmin);
             console.log('aqui3')
             onDecision(ID_Solicitudes);
             onClose(); // Cerrar el modal

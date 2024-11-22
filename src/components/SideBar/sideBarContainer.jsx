@@ -23,24 +23,29 @@ function SidebarContainer({foalderData, filesData}){
 
     // console.log('desde sidebar: ',foalderData);
 
-    return(
+    return (
         <div className="w-[22%] bg-customSidebarColor flex flex-col gap-12 flex-shrink-0">
-
+            {/* Parte no scrolleable */}
             <div>
-                <Title/>
+                <Title />
             </div>
-
-
-            <div className="flex flex-col gap-6 pb-9">
+    
+            {/* Parte scrolleable */}
+            <div className="flex flex-col gap-6 pb-9 overflow-y-auto max-h-[70vh] ">
                 {/* Renderizar la lista de carpetas */}
                 {foalderData.map((foalder, index) => (
-                    <div key={index} onClick={() => handleFolderClick(foalder)} className="flex items-center justify-center">
-                        <FoalderSidebar foalderName={foalder} isSelected={foalder===selectedFolder}/>
+                    <div
+                        key={index}
+                        onClick={() => handleFolderClick(foalder)}
+                        className="flex items-center justify-center"
+                    >
+                        <FoalderSidebar foalderName={foalder} isSelected={foalder === selectedFolder} />
                     </div>
                 ))}
-            </div>            
+            </div>
         </div>
-    )
+    );
+    
 }
 
 export default SidebarContainer;

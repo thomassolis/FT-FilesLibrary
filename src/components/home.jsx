@@ -64,6 +64,7 @@ function Home() {
     };
 
     const hasSubfolders = () => {
+        console.log('filesData desde HOME: ',filesData)
         if (folder && filesData[folder]) {
             if (subsubfolder) {
                 return Object.keys(filesData[folder][subfolder]?.[subsubfolder] || {}).filter(
@@ -108,6 +109,7 @@ function Home() {
                         <FilesContainer
                             fileData={filesToRender}
                             album={filesData[folder]?.[subfolder]?.[subsubfolder] || filesData[folder]?.[subfolder] || filesData[folder]}
+                            arregloArchivos={filesData} //Data de todos los archivos
                         />
                     </div>
                 ) : (

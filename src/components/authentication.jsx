@@ -32,7 +32,7 @@ function Authentication() {
     // Navegar a home cuando sea necesario
     useEffect(() => {
         if (shouldNavigateHome) {   
-            const folderSeleccionado = 'ESCRITURAS';                    
+            const folderSeleccionado = 'Home';                    
             navigate(`/${folderSeleccionado}`); // Corregir el error de comillas faltantes en la ruta
         }
     }, [shouldNavigateHome, navigate, selectedFolder]);

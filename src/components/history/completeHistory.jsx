@@ -67,7 +67,7 @@ function CompleteHistory() {
     }
     
     function navigateHome(){
-        navigate('/ESCRITURAS');
+        navigate('/Home');
     }    
     
     return (

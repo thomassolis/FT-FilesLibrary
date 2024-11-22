@@ -10,17 +10,7 @@ import { FadeLoader } from 'react-spinners';
 const socket = io("/");
 
 function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserName, OPEComment, onDecision, fileId, approvedADM, ID_Solicitudes }) 
-{
-    console.log("Props recibidas en AprobacionGerencia:");
-    console.log("approvedGER:", approvedGER);
-    console.log("onClose:", onClose);
-    console.log("Nombre_del_archivo:", Nombre_del_archivo);
-    console.log("OPEUserName:", OPEUserName);
-    console.log("OPEComment:", OPEComment);
-    console.log("onDecision:", onDecision);
-    console.log("fileId:", fileId);
-    console.log("approvedADM:", approvedADM);
-    console.log("ID_Solicitudes:", ID_Solicitudes);   
+{  
     const [textAreaValue, setTextAreaValue] = useState('');
     const [textAreaValueAdmin, setTextAreaValueAdmin] = useState('');
     const { userName, userRole } = useContext(AuthContext); 

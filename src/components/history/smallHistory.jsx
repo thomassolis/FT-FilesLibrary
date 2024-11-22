@@ -28,8 +28,7 @@ function SmallHistory() {
     // Función para eliminar una solicitud aceptada o denegada
     function handleDeleteFromHistorial(ID_Solicitudes) {
         setNewHistorial((prevHistorial) => {
-            const updatedHistorial = prevHistorial.filter((item) => item.ID_Solicitudes !== ID_Solicitudes);
-            console.log('Historial actualizado:', updatedHistorial);
+            const updatedHistorial = prevHistorial.filter((item) => item.ID_Solicitudes !== ID_Solicitudes);            
             return updatedHistorial;
         });
     }
@@ -38,7 +37,8 @@ function SmallHistory() {
 
     function handleDeleteFromHistorialAdmin(ID_Solicitudes) {
         setNewHistorialAdmin((prevHistorial) => {
-            return prevHistorial.filter((item) => item.ID_Solicitudes !== ID_Solicitudes);
+            const updatedHistorial = prevHistorial.filter((item) => item.ID_Solicitudes !== ID_Solicitudes);         
+            return updatedHistorial
         });
     }
     

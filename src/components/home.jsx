@@ -10,7 +10,6 @@ import NewFileForm from './Modal/newFileForm';
 import { useParams } from "react-router-dom";
 import { FadeLoader } from 'react-spinners';
 import NoFilesMessage from './Modal/NoFilesMessage';
-
 function Home() {
     const { userRole } = useContext(AuthContext);
     const [foalderData, setFoalderData] = useState([]);

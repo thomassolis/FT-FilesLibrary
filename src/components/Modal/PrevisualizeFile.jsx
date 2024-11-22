@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { previsualizarArchivos } from "../../api/files";
-
+import { FadeLoader } from 'react-spinners';
+import CountDown from "../countDown";
 function PrevisualizeFile({ closeModal, fileName, fileId }) {
     const [pdfUrl, setPdfUrl] = useState(null);
 
@@ -25,7 +26,7 @@ function PrevisualizeFile({ closeModal, fileName, fileId }) {
     }, [fileId]);    
 
     return (
-<div
+    <div
         className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
         >
             <div className="bg-white w-3/4 max-w-4xl rounded-lg shadow-lg flex flex-col items-center justify-center p-6 relative h-full">
@@ -41,23 +42,26 @@ function PrevisualizeFile({ closeModal, fileName, fileId }) {
                 onClick={closeModal}
                 icon="carbon:close-filled"
                 ></iconify-icon>
+                
                 <h1 className="font-serif text-xl text-center mb-4">{fileName}</h1>
                 {pdfUrl ? (
-                <iframe
-                    src={pdfUrl}
-                    className="w-full rounded-lg"
-                    style={{
-                    height: '500px',
-                    border: 'none',
-                    }}
-                    title="PDF Preview"
-                ></iframe>
-                ) : (
-                <p className="text-center">Cargando archivo...</p>
-                )}
-                <div className="mt-5 text-center">
+                    <iframe
+                        src={pdfUrl}
+                        className="w-full rounded-lg"
+                        style={{
+                        height: '500px',
+                        border: 'none',
+                        paddingBottom:'20px'
+                        }}
+                        title="PDF Preview"
+                    ></iframe>
                 
-                </div>
+                ) : (
+                    <FadeLoader size={15}/>
+                )}
+                <CountDown seconds={300} className=""/>
+                 
+          
 
             </div>
         </div>

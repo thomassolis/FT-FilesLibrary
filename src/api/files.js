@@ -43,7 +43,7 @@ export const sendFilesFromAdmin = async (data) => {
   //4. ENVIAR INFORMACIÓN DE ARCHIVOS HACIA EL BACK PARA ASÍ SE PUEDA SABER QUE ARCHIVO EN ESPECÍFICO ES
 export const sendFilesData = async(data) =>{
     try{
-        const response = await axios.post('auth/send/files/data', {
+        const response = await axios.post('solicitud/aprobacion/solicitud/gerente', {
             fileId: data.fileId,
             fileName: data.fileName,
             textAreaValue: data.textAreaValue

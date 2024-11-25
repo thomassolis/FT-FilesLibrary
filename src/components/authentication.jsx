@@ -49,13 +49,10 @@ function Authentication() {
         // Función al enviar el formulario
         const onSubmit = async (data) => {
             try {
-                const response = await enviarVerificacion2pasos(data);
-                console.log(response.data.data)
+                const response = await enviarVerificacion2pasos(data);                
                 if (response && response.data.success && response.status === 200) {                      
                     console.log(response);
                     setShouldNavigateHome(true);
-
-                    console.log('response desde autenticador:',response)
                     
 
                     const role = response.data.data.nombre_rol;

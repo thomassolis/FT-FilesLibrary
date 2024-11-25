@@ -1,11 +1,17 @@
 import SeeFile from "./seeFile";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { previsualizarArchivos } from "../../api/files";
 import { FadeLoader } from 'react-spinners';
-
-function SeeFileWaterBrand({closeModal, fileName, fileId}){
+import { AuthContext } from "../../context/authProvider";
+import { ModalContext } from "../../context/closeModals";
+function SeeFileWaterBrand({fileName, fileId}){
     const [sendRequest, setSendRequest] = useState(false);
     const [pdfUrl, setPdfUrl] = useState(null);
+    const {modalSeeFileWaterBrand, setModalSeeFileWaterBrand} = useContext(ModalContext);
+    
+    function closeModal(){
+        setModalSeeFileWaterBrand(false);
+    }
 
     useEffect(() => {
         const pedirArchivos = async () => {
@@ -40,10 +46,11 @@ function SeeFileWaterBrand({closeModal, fileName, fileId}){
     }
 
     return(
+        
         <div
         className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
-        >
-            <div className="bg-white w-3/4 max-w-4xl rounded-lg shadow-lg flex flex-col items-center justify-center p-6 relative h-full">
+        >            
+            <div id="GERENTE" className="bg-white w-3/4 max-w-4xl rounded-lg shadow-lg flex flex-col items-center justify-center p-6 relative h-full">
                 <iconify-icon
                 style={{
                     position: 'absolute',

@@ -28,7 +28,6 @@ function SeeFile({closeModal, fileId, fileName}){
                 fileId: fileId                     
             };                              
             const response = await CrearNuevaPeticion(data);           
-            console.log('response desde seefile: ', response)
             if(response.data)
             if(userRole=='OPE'){
                 socket.emit('message', data);            

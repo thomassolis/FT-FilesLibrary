@@ -7,7 +7,7 @@ function NoFilesMessage(){
 <section className="w-full h-full flex flex-col">
     {/* Contenedor para Routes alineado a la izquierda y arriba */}
     <HeaderFiles/>
-    <div className="w-full flex justify-start ml-4 ">
+    <div className="w-full flex justify-start pl-4 ">
         <Routes />
     </div>
 

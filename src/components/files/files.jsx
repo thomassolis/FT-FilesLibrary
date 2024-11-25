@@ -6,16 +6,16 @@ import { useContext, useState } from "react";
 import SeeFile from "../Modal/seeFile";
 import SeeFileWaterBrand from "../Modal/seeFileWaterBrand";
 import PrevisualizeFile from "../Modal/PrevisualizeFile";
-
+import { ModalContext } from "../../context/closeModals";
 function Files({fileId, fileName}){
 
     const {requestSeeFile, setRequestSeeFile} = useContext(PermissionsContext)
     const {userRole, setUserRole} = useContext(AuthContext);
 
-    const [modalSeeFile, setModalSeeFile] = useState(false);
-    const [modalSeeFileWaterBrand, setModalSeeFileWaterBrand] = useState(false);
-    const [previsualizeFile, setPrevisualizeFile] = useState(false);
-
+    const {modalSeeFile, setModalSeeFile, modalSeeFileWaterBrand, setModalSeeFileWaterBrand, previsualizeFile, setPrevisualizeFile} = useContext(ModalContext)
+    
+    
+    console.log('previsualizeFile dsde FILES',previsualizeFile)
     const handleOpenFile = () =>{
        
         if(userRole === 'OPE' && requestSeeFile===true){

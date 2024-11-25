@@ -34,10 +34,10 @@ function FilesContainer({ fileData, album, arregloArchivos }) {
     
 
     return (
-        <div className="pb-10 w-full flex flex-col ml-4">
-            <HeaderFiles arregloArchivos={arregloArchivos}/>                
+        <div className="pb-10 w-full flex flex-col">
+            <HeaderFiles arregloArchivos={arregloArchivos} fileData={fileData}/>                
             {/* Renderizamos las carpetas y subcarpetas */}
-            <div>
+            <div className="pl-4">
                 <Routes/>            
 
                 <div id="Grid-Folders" className={ `grid grid-cols-4 gap-4 items-center mt-4 content-center mb-9 w-[90%] ${subsubfolder ? 'mt-12' : ''} `}>

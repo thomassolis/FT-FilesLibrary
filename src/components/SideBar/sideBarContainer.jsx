@@ -15,13 +15,12 @@ function SidebarContainer({foalderData, filesData}){
     const {selectedFolder, setSelectedFolder} = useContext(FoldersFilesContext);
 
     const handleFolderClick = (foalder) =>{
-        console.log('folder seleccionado: ', foalder);
 
         setSelectedFolder(foalder);  
         navigate(`/${foalder}`)
     }
 
-    // console.log('desde sidebar: ',foalderData);
+
 
     return (
         <div className="w-[22%] bg-customSidebarColor flex flex-col gap-12 flex-shrink-0">
@@ -31,7 +30,7 @@ function SidebarContainer({foalderData, filesData}){
             </div>
     
             {/* Parte scrolleable */}
-            <div className="flex flex-col gap-6 pb-9 overflow-y-auto max-h-[70vh] ">
+            <div className="flex flex-col gap-6 pb-9 overflow-y-auto max-h-[70vh] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent">
                 {/* Renderizar la lista de carpetas */}
                 {foalderData.map((foalder, index) => (
                     <div
@@ -43,8 +42,10 @@ function SidebarContainer({foalderData, filesData}){
                     </div>
                 ))}
             </div>
+
         </div>
     );
+
     
 }
 

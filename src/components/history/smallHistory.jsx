@@ -88,7 +88,6 @@ function SmallHistory() {
 
     function renderRowsAdmin(){
         const rows = [];
-        console.log('newHistorialAdmin', newHistorialAdmin);
         
         for(let i=0; i<newHistorialAdmin.length; i++){
             const data = newHistorialAdmin[i];
@@ -136,7 +135,7 @@ function SmallHistory() {
             const getHistoryGerente = async () => {
                 try {
                     const response = await getHistoryDataGerente(); 
-                    console.log('Datos obtenidos para Gerente:', response.data); // Debug
+                    
                     setHistorial(response.data); // Asegúrate de que los datos sean válidos
                 } catch (e) {
                     console.error(e);

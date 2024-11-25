@@ -1,147 +1,189 @@
-import logo from "../../images/MLC logo.png"
 import { useParams } from "react-router-dom";
-
-
-
-function HeaderFiles(){
-    const {subfolder} = useParams();
-
-    
-    return(
-        <div className="bg-customBlue h-24 w-full flex items-center">
-
-            <div className="bg-customBlue fixed w-full h-16 top-0">
-                    
-                    <input className="border-black border-solid pt-4 pb-4 rounded-lg fixed border ml-11" type="text" placeholder="Buscar" />                                   
-                
-                <img src={logo} alt="" style={{position:'fixed', right:'20px'}}/>
-            </div>
-
-        
-        </div>
-    )
-}
-
-export default HeaderFiles;
-
-
-/*
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { getFilesData } from "../../api/files";
+import PrevisualizeFile from "../Modal/PrevisualizeFile";
+import { AuthContext } from "../../context/authProvider";
+import { useContext } from "react";
+import SeeFileWaterBrand from "../Modal/seeFileWaterBrand";
+import SeeFile from "../Modal/seeFile";
+import { ModalContext } from "../../context/closeModals";
 import logo from "../../images/MLC logo.png";
+import _ from "lodash"; // Para debounce
 
-function HeaderFiles({ arregloArchivos }) {
-    const [searchTerm, setSearchTerm] = useState(""); // Estado para el término de búsqueda
-    const [filteredResults, setFilteredResults] = useState([]); // Estado para los resultados filtrados
-    const navigate = useNavigate(); // Hook para redirigir al usuario
+const HeaderFiles = () => {
+  const { subfolder } = useParams();
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para la barra de búsqueda
+  const [filteredResults, setFilteredResults] = useState([]); // Resultados filtrados
+  const [fileData, setFileData] = useState(null); // Datos de los archivos
+  const [selectedFile, setSelectedFile] = useState(null); // Archivo seleccionado
+  const [isLoading, setIsLoading] = useState(true); // Estado de carga
+  const { userRole } = useContext(AuthContext);
+  const {
+    modalSeeFile,
+    setModalSeeFile,
+    modalSeeFileWaterBrand,
+    setModalSeeFileWaterBrand,
+    previsualizeFile,
+    setPrevisualizeFile,
+  } = useContext(ModalContext);
 
-    // Función recursiva para buscar archivos en todas las capas
-    const searchFilesInStructure = (structure, currentPath = "") => {
-        const results = [];
-
-        // Recorre todas las carpetas en la estructura actual
-        for (const folderName in structure) {
-            const folderPath = currentPath ? `${currentPath}/${folderName}` : folderName;
-
-            // Verifica si el nombre de la carpeta coincide con el término de búsqueda
-            const folderMatches = folderName.toLowerCase().includes(searchTerm);
-
-            // Obtén los archivos dentro de la carpeta, si existen
-            const files = structure[folderName]?.files || [];
-            const matchedFiles = files.filter((file) =>
-                file.name.toLowerCase().includes(searchTerm)
-            );
-
-            // Si hay coincidencias en archivos, agrégalos con la ruta completa
-            matchedFiles.forEach((file) => {
-                results.push({ name: file.name, path: `${folderPath}/${file.name}` });
-            });
-
-            // Si la carpeta coincide y no tiene archivos
-            if (folderMatches && !files.length) {
-                results.push({ name: folderName, path: folderPath });
-            }
-
-            // Si hay subcarpetas, realiza una búsqueda recursiva
-            const subfolders = Object.keys(structure[folderName] || {}).filter(
-                (key) => key !== "files"
-            );
-            subfolders.forEach((subfolder) => {
-                const subfolderResults = searchFilesInStructure(
-                    { [subfolder]: structure[folderName][subfolder] },
-                    folderPath
-                );
-                results.push(...subfolderResults);
-            });
-        }
-
-        return results;
+  useEffect(() => {
+    const fetchFiles = async () => {
+      setIsLoading(true);
+      const response = await getFilesData();
+      setFileData(response.data);
+      setIsLoading(false); // Archivos cargados
     };
+    fetchFiles();
+  }, []);
 
-    // Maneja el cambio del input de búsqueda
-    const handleSearchChange = (e) => {
-        const value = e.target.value.toLowerCase();
-        setSearchTerm(value);
+  const searchFilesInStructure = (structure, searchTerm, currentPath = "") => {
+    const results = [];
+    for (const folderName in structure) {
+      const folderPath = currentPath ? `${currentPath}/${folderName}` : folderName;
+      const files = structure[folderName]?.files || [];
+      const matchedFiles = files.filter((file) =>
+        file.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      matchedFiles.forEach((file) => {
+        results.push({
+          id: file.id,
+          name: file.name,
+          path: `${folderPath}/${file.name}`,
+        });
+      });
+      const subfolders = Object.keys(structure[folderName] || {}).filter(
+        (key) => key !== "files"
+      );
+      subfolders.forEach((subfolder) => {
+        const subfolderResults = searchFilesInStructure(
+          { [subfolder]: structure[folderName][subfolder] },
+          searchTerm,
+          folderPath
+        );
+        results.push(...subfolderResults);
+      });
+    }
+    return results;
+  };
 
-        // Si no hay término de búsqueda, no muestra resultados
-        if (!value) {
-            setFilteredResults([]);
-            return;
-        }
+  const handleSearchChange = _.debounce((value) => {
+    if (isLoading) return; // Ignora entradas si está cargando
 
-        // Busca en toda la estructura
-        const results = searchFilesInStructure(arregloArchivos);
-        setFilteredResults(results);
-    };
 
-    // Redirige a la ruta del archivo o carpeta seleccionada
-    const handleNavigate = (path) => {
-        navigate(path); // Navega a la ruta especificada
-    };
+    if (!value || !fileData) {
+      setFilteredResults([]);
+      return;
+    }
+    const results = searchFilesInStructure(fileData, value);
+    setFilteredResults(results);
+  }, 300); // Espera 300ms después de que el usuario deje de escribir
 
-    return (
-        <div className="bg-customBlue h-24 w-full flex items-center">
+  const onSearchInputChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    handleSearchChange(value);
+  };
 
-            <div className="bg-customBlue fixed w-full h-16 top-0 flex items-center px-10 shadow-md">
+  const handleFileClick = (file) => {
+    setSelectedFile(file);
+    if(userRole === 'ADM'){
+        setPrevisualizeFile(true);
+    } else if(userRole === 'GER'){
+        setModalSeeFileWaterBrand(true);
+    }else{
+        setModalSeeFile(true)
+    }
+    
+  };
+
+  const closeModal = () => {
+    if (userRole === "ADM") setPrevisualizeFile(false);
+    else if (userRole === "GER") setModalSeeFileWaterBrand(false);
+    else if (userRole === "OPE") setModalSeeFile(false);
+  };
+
+
+  const renderModal = () => {
+    if (userRole === "ADM" && previsualizeFile) {
+      return (
+        <PrevisualizeFile
+          fileId={selectedFile.id}
+          fileName={selectedFile.name}
+          closeModal={closeModal}
+        />
+      );
+    }
+    if (userRole === "GER" && modalSeeFileWaterBrand) {
+      return (
+        <SeeFileWaterBrand
+          fileId={selectedFile.id}
+          fileName={selectedFile.name}
+          closeModal={closeModal}
+        />
+      );
+    }
+    if (userRole === "OPE" && modalSeeFile) {
+      return (
+        <SeeFile
+          fileId={selectedFile.id}
+          fileName={selectedFile.name}
+          closeModal={closeModal}
+        />
+      );
+    }
+    return null; // Si no hay condiciones que cumplir, no mostrar nada.
+  };
+  
+
+  return (
+    <div className="bg-customBlue h-24 w-full flex items-center">
+      <div className="bg-customBlue fixed w-full h-16 top-0">
+        {isLoading ? (
+            <>
                 <input
-                    className="border border-gray-300 rounded-lg px-4 py-2 w-1/3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="border-black border-solid pt-4 pb-4 rounded-lg fixed border ml-56 w-1/3 cursor-not-allowed bg-gray-200"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
                     type="text"
-                    placeholder="Buscar archivos o carpetas..."
-                    value={searchTerm} // Conecta el estado del input
-                    onChange={handleSearchChange} // Maneja el evento de cambio
+                    placeholder="Cargando..."
                 />
-                <img
-                    src={logo}
-                    alt="Logo"
-                    className="ml-auto h-10"
-                    style={{ position: "fixed", right: "20px" }}
-                />
-            </div>
+                <img src={logo} alt="Logo" style={{ position: "fixed", right: "20px" }} />
+            </>          
+        ) : (
+          <>
+            <input
+              className="border-black border-solid pt-4 pb-4 rounded-lg fixed border ml-56 w-1/3"
+              type="text"
+              placeholder="Buscar archivo"
+              value={searchTerm}
+              onChange={onSearchInputChange}
+            />
+            <img src={logo} alt="Logo" style={{ position: "fixed", right: "20px" }} />
+          </>
+        )}
+        {filteredResults.length > 0 && (
+          <ul className="absolute top-14 bg-white rounded-lg shadow-md p-4 w-1/3 ml-56">
+            {filteredResults.map((file, index) => (
+                <li
+                    key={file.id || index}
+                    className="relative cursor-pointer text-gray-700 hover:text-blue-500 hover:bg-gray-100 p-2 rounded"
+                    onClick={() => handleFileClick(file)}
+                    >
+                    {file.name}
+                    <span className="text-slate-500 absolute bottom-0 right-0 truncate ">
+                        {file.path}
+                    </span>
+                </li>
 
-   
-            <div className="mt-20 p-4">
-                {filteredResults.length > 0 ? (
-                    <ul className="bg-white rounded-lg shadow-md p-4">
-                        {filteredResults.map((result, index) => (
-                            <li
-                                key={index}
-                                className="cursor-pointer text-gray-700 hover:text-blue-500 hover:bg-gray-100 p-2 rounded"
-                                onClick={() => handleNavigate(result.path)}
-                            >
-                                {result.name}
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    searchTerm && (
-                        <p className="text-gray-500 italic">No se encontraron resultados</p>
-                    )
-                )}
-            </div>
-        </div>
-    );
-}
+            ))}
+          </ul>
+        )}
+        {selectedFile && renderModal()}
+
+      </div>
+    </div>
+  );
+};
 
 export default HeaderFiles;
-
-*/ 

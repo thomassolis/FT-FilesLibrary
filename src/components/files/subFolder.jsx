@@ -4,7 +4,6 @@ function SubFolder({ folderName, onSelect, isSelected }) {
     const { folder, subfolder, subsubfolder } = useParams(); // Obtenemos los parámetros de la URL
     const navigate = useNavigate();
 
-    console.log('subsubfolder: ',subsubfolder)
 
     function handleClick() {
         if (onSelect) {

@@ -20,7 +20,7 @@ function SidebarContainer({foalderData, filesData}){
         navigate(`/${foalder}`)
     }
 
-
+    console.log('foalderData desde el sidebar: ',foalderData)
 
     return (
         <div className="w-[22%] bg-customSidebarColor flex flex-col gap-12 flex-shrink-0">

@@ -36,13 +36,7 @@ function Home() {
         fetchFiles();
     }, [setFilesData]);
 
-    useEffect(() => {
-        if (filesData) {
-            setSelectedFolder(Object.keys(filesData)[0]);
-        } else {
-            console.log('No hay archivos');
-        }
-    }, [filesData, setSelectedFolder]);
+
 
     useEffect(() => {
         if (userRole === 'OPE') {
@@ -93,6 +87,7 @@ function Home() {
     const closeAdminForm = () => {
         setAdminForm(false);
     };
+
 
     return (
         <section id='soyyo' className='bg-customBlue flex min-h-screen'>

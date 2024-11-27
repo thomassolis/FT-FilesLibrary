@@ -1,19 +1,19 @@
 import '../../Styles/completeHistoryStyle.css';
 import logo from '../../images/MLC logo.png';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { getOficialHistory } from '../../api/historial';
 import { useNavigate } from 'react-router-dom';
+import FoldersFilesContext from '../../context/Folders-Files/Folders_Files';
 
 function CompleteHistory() {
     const [oficialHistory, setOficialHistory] = useState([]);
     const navigate = useNavigate();
+    const {selectedFolder} = useContext(FoldersFilesContext)
     useEffect(() => {
         const fetchHistory = async () => {
             try {
                 const response = await getOficialHistory();
-                console.log(response)
-                setOficialHistory(response.Data);  // Acceder a los datos dentro de "response.data"
-                console.log('response para saber:', response)
+                setOficialHistory(response.Data);  // Acceder a los datos dentro de "response.data"                
             } catch (e) {
                 console.log(e);
             }
@@ -67,7 +67,7 @@ function CompleteHistory() {
     }
     
     function navigateHome(){
-        navigate('/Home');
+        navigate(`${selectedFolder}`);
     }    
     
     return (

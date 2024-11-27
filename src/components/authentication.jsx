@@ -7,7 +7,7 @@ import { AuthContext } from "../context/authProvider";
 import Home from "./home";
 import FoldersFilesContext from "../context/Folders-Files/Folders_Files";
 import { Toaster, toast } from 'react-hot-toast';
-
+import { getFilesData } from "../api/files";
 
 function Authentication() {
     const { register, handleSubmit, getValues, formState: { errors } } = useForm();
@@ -18,8 +18,8 @@ function Authentication() {
     
     //Datos que vienen del backend y se guardarán
     const { userRole, setUserRole, userName, setUserName, banTime, setBanTime } = useContext(AuthContext);
-    const { selectedFolder } = useContext(FoldersFilesContext);
-    
+    const { filesData, setFilesData, selectedFolder, setSelectedFolder } = useContext(FoldersFilesContext);
+    const [foalderData, setFoalderData] = useState([]);
     // Leer el userRole desde sessionStorage cuando se cargue el componente
     useEffect(() => {
         const storedUserRole = sessionStorage.getItem("userRole");
@@ -29,29 +29,54 @@ function Authentication() {
         }
     }, [setUserRole]);
 
-    // Navegar a home cuando sea necesario
+    //useEffect para traer el objeto de los archivospara así seleccionar el folder en el que comenzará abiera la aplicación dentro del Home
     useEffect(() => {
-        if (shouldNavigateHome) {   
-            const folderSeleccionado = 'Home';                    
-            navigate(`/${folderSeleccionado}`); // Corregir el error de comillas faltantes en la ruta
+        const fetchFiles = async () => {
+            try {
+                const response = await getFilesData();
+                console.log('response desde el autenticador: ', response.data);
+                setFilesData(response.data);
+                const foalders = Object.keys(response.data);
+                setFoalderData(foalders);
+            } catch (error) {
+                setFilesData({});
+                setFoalderData([]);
+            } 
+        };
+        fetchFiles();        
+    }, []);
+
+    useEffect(() => {
+        if (filesData) {
+            setSelectedFolder(Object.keys(filesData)[0]);
+            console.log('selectedFolder: ',selectedFolder)
+        } else {
+            console.log('No hay archivos');
         }
-    }, [shouldNavigateHome, navigate, selectedFolder]);
+    }, [filesData, setSelectedFolder]);
+    
+
+    // Navegar a home cuando sea necesario
+useEffect(() => {
+    if (shouldNavigateHome) {  
+        navigate('/FOLDER2'); // Cambia la URL cuando selectedFolder está disponible
+    }else if(!selectedFolder){
+        console.log('Esperando que se seleccione una carpeta')
+    }
+}, [shouldNavigateHome, selectedFolder, navigate]);
 
     //Función que manejará el input en caso de un error 219
     const userBan = () => {
         setIsDisabled(true);
         const fieldName = "authentication";
         const value = getValues(fieldName); // Obtener el valor del input por su nombre
-        console.log('fieldName: ', fieldName);
-        console.log('value: ', value);
     };
 
         // Función al enviar el formulario
         const onSubmit = async (data) => {
             try {
                 const response = await enviarVerificacion2pasos(data);                
-                if (response && response.data.success && response.status === 200) {                      
-                    console.log(response);
+                if (response && response.data.success && response.status === 200) {                            
                     setShouldNavigateHome(true);
                     
 
@@ -64,15 +89,12 @@ function Authentication() {
                     setUserName(name);
                     setBanTime(banTime);
                     
-                    sessionStorage.setItem("userRole", role);
-                    console.log("esto es en el try")
+                    sessionStorage.setItem("userRole", role);                    
                 }
     
-            } catch (error) {
-                console.log(error.response);
+            } catch (error) {                
                 if (error.response) {
                     const statusCode = error.response.status;
-                    console.log("esto es en el catch")
                     switch (statusCode) {
                         case 429:
                             toast.error(error.response.data.message);
@@ -86,9 +108,11 @@ function Authentication() {
                         case 500:
                             toast.error(error.response.data.message);
                             break;
+                        case 403:
+                            toast.error(error.response.data.message);
                         case 200:
                             alert("Todo bien");
-                            break;
+                            break;                            
                         case 404:
                             alert("Error 404");
                             break;

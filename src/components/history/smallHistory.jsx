@@ -90,8 +90,7 @@ function SmallHistory() {
         const rows = [];
         
         for(let i=0; i<newHistorialAdmin.length; i++){
-            const data = newHistorialAdmin[i];
-            // console.log('data desde rowsADM', data);
+            const data = newHistorialAdmin[i];            
             rows.push(
                 <tr key={i}>
                     <td className='break-words'>{data.Nombre_del_archivo}</td>

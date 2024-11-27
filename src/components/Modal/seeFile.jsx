@@ -51,22 +51,22 @@ function SeeFile({closeModal, fileId, fileName}){
 
     return(
             <div id='PRUEBA' style={{position:'fixed', top:'50%', left:'50%',transform: 'translate(-50%, -50%)',width:'964px', height:'350px', backgroundColor:'white', display:'flex',alignItems:'center', justifyContent:'center', flexDirection:'column', boxShadow: '0px 0px 10px rgba(0,0,0,0.9)', borderRadius:'15px'}}>
-                <h1>¿Estás seguro que deseas enviar una solicitud para ver el archivo "{fileName}"?</h1>
+                <h1>Justifica por qué quieres enviar una petición para poder descargar el archivo "{fileName}"</h1>
 
                 <form action="" onSubmit={sendRequest}>
                     <textarea 
                         style={{width:'600px'}} 
                         className="h-40 border-black border"
-                        placeholder="Explica por que deseas ver el archivo" 
+                        placeholder="Explica por qué deseas ver el archivo" 
                         onChange={handleChange}
                         value={textAreaValue}
                         required>
 
                     </textarea>
 
-                    <div style={{display:'flex', gap:'30px'}}>
-                        <button style={{backgroundColor:'green'}} type="submit">ACEPTAR</button>
+                    <div style={{display:'flex', gap:'30px'}}>                        
                         <button style={{backgroundColor:'red'}} onClick={closeModal}>CANCELAR</button>
+                        <button style={{backgroundColor:'green'}} type="submit">ACEPTAR</button>
                     </div>
                 </form>                
                 

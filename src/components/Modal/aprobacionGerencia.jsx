@@ -52,6 +52,11 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
             // Llamamos a la función para eliminar el registro del historial
             onDecision(ID_Solicitudes);
             onClose(); // Cerrar el modal
+            if(approvedGER === true){
+                toast.success('¡Solicitud aprobada correctamente!')
+            }else{
+                toast.success('Solicitud denegada correctamente')
+            }
         } catch (error) {
             console.log(error)
             toast.error('Hay un error en la aprobación');            
@@ -72,6 +77,11 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
             await APIaprobacionAdministrador(dataAdmin);
             onDecision(ID_Solicitudes);
             onClose(); // Cerrar el modal
+            if(approvedADM === true){
+                toast.success('¡Solicitud aprobada correctamente!')
+            }else{
+                toast.success('Solicitud denegada correctamente')
+            }
         }catch(e){
             toast.error('Hay un error en la aprobación')  
             console.log(e)
@@ -109,7 +119,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
                 </div>
             ) : userRole==='GER' && approvedGER === false && (
                 <div>
-                    <h1>¿Estás seguro que NO deseas brindar permiso?</h1>
+                    <h1>¿Estás seguro que NO deseas brindar permiso para descargar el archivo?</h1>
                     <form className="w-full flex flex-col items-center" onSubmit={aprobacionGerencia}>
                         <textarea 
                             className="w-[90%] border h-28 border-black" 
@@ -137,12 +147,12 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
                     <h1>¿Estás seguro que deseas brindarle permiso de descarga?</h1>
                     <form className="w-full flex flex-col items-center" onSubmit={aprobacionAdmin}>
                         <textarea 
-                            className="w-[90%] border h-28 border-black " 
+                            className="w-[90%] border h-28 border-black max-w-screen-md" 
                             placeholder="Escribe una justificación"
                             onChange={handleChangeAdmin}
                             value={textAreaValueAdmin}
                             required
-                        />
+                        />                        
                         <div className="flex gap-5 flex-col items-center justify-center w-full">
                         <button
                             className={`rounded px-4 py-2 text-white flex items-center justify-center 

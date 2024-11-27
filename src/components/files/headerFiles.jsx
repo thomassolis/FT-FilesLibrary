@@ -142,7 +142,8 @@ const HeaderFiles = () => {
         {isLoading ? (
             <>
                 <input
-                    className="border-black border-solid pt-4 pb-4 rounded-lg fixed border ml-56 w-1/3 cursor-not-allowed bg-gray-200"
+                    className="fixed w-1/3 pt-4 pb-4 ml-56 bg-gray-200 rounded-lg border border-black border-solid cursor-not-allowed max-[765px]:ml-28  max-[517px]:ml-16  max-[417px]:ml-2"
+ 
                     value={searchTerm}
                     onChange={handleSearchChange}
                     type="text"
@@ -153,7 +154,7 @@ const HeaderFiles = () => {
         ) : (
           <>
             <input
-              className="border-black border-solid pt-4 pb-4 rounded-lg fixed border ml-56 w-1/3"
+              className="border-black border-solid pt-4 pb-4 rounded-lg fixed border ml-56 w-1/3 max-[765px]:ml-28 max-[517px]:ml-16 max-[417px]:ml-2"
               type="text"
               placeholder="Buscar archivo"
               value={searchTerm}
@@ -171,7 +172,7 @@ const HeaderFiles = () => {
                     onClick={() => handleFileClick(file)}
                     >
                     {file.name}
-                    <span className="text-slate-500 absolute bottom-0 right-0 truncate ">
+                    <span className="text-slate-500 absolute bottom-0 right-0 truncate">
                         {file.path}
                     </span>
                 </li>

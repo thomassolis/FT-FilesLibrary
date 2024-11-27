@@ -4,7 +4,7 @@ import { AuthContext } from '../context/authProvider';
 
 const ProtectedRoute = ({ allowedRoles, redirectTo = "/" }) => {
   const { userRole, isAuthenticated } = useContext(AuthContext);
-
+  
   try {
     if (!isAuthenticated) {
       // Redirigir a la página de inicio de sesión

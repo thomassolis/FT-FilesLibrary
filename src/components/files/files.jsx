@@ -15,7 +15,16 @@ function Files({fileId, fileName}){
     const {modalSeeFile, setModalSeeFile, modalSeeFileWaterBrand, setModalSeeFileWaterBrand, previsualizeFile, setPrevisualizeFile} = useContext(ModalContext)
     
     
-    console.log('previsualizeFile dsde FILES',previsualizeFile)
+       // Función para verificar si el archivo es de tipo imagen (jpg, png) o PDF
+    const getFileIcon = (fileName) => {
+        const extension = fileName.split('.').pop().toLowerCase();
+        
+        if (extension === 'jpg' || extension === 'png' || extension === 'svg' || extension === 'jpeg' ) {
+            return "bxs:file-jpg";
+        } else if (extension === 'pdf') {
+            return "vscode-icons:file-type-pdf2";
+        } 
+    };
     const handleOpenFile = () =>{
        
         if(userRole === 'OPE' && requestSeeFile===true){
@@ -44,9 +53,13 @@ function Files({fileId, fileName}){
     return(
         <div className="flex flex-col items-center justify-center p-1">
 
-            <iconify-icon className="w-24 h-16 cursor-pointer" style={{fontSize:'60px'}} onClick={handleOpenFile} icon="vscode-icons:file-type-pdf2"></iconify-icon>
+            <Icon
+                className="w-24 h-16 cursor-pointer"
+                style={{ fontSize: '60px' }}
+                onClick={handleOpenFile}
+                icon={getFileIcon(fileName)} // Establece el icono dinámicamente
+            />
             
-            {/* <Icon icon="fluent:document-pdf-32-regular" className="w-24 h-16 cursor-pointer" onClick={handleOpenFile}/>              */}
             <p className="w-full break-words whitespace-pre-wrap overflow-hidden text-center">{fileName}</p>
 
             {modalSeeFile && <SeeFile closeModal={close} fileId={fileId} fileName={fileName}/>}

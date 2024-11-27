@@ -53,7 +53,7 @@ function PrevisualizeFile({fileName, fileId }) {
           icon="carbon:close-filled"
         ></iconify-icon>
 
-        <h1 className="font-serif text-xl text-center mb-4">{fileName}--------------------</h1>
+        <h1 className="font-serif text-xl text-center mb-4">{fileName}</h1>
         {pdfUrl ? (
           <iframe
             src={pdfUrl}

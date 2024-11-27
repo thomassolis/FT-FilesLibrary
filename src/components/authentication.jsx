@@ -19,7 +19,7 @@ function Authentication() {
     //Datos que vienen del backend y se guardarán
     const { userRole, setUserRole, userName, setUserName, banTime, setBanTime } = useContext(AuthContext);
     const { filesData, setFilesData, selectedFolder, setSelectedFolder } = useContext(FoldersFilesContext);
-    const [foalderData, setFoalderData] = useState([]);
+    const [FolderData, setFolderData] = useState([]);
     // Leer el userRole desde sessionStorage cuando se cargue el componente
     useEffect(() => {
         const storedUserRole = sessionStorage.getItem("userRole");
@@ -29,37 +29,12 @@ function Authentication() {
         }
     }, [setUserRole]);
 
-    //useEffect para traer el objeto de los archivospara así seleccionar el folder en el que comenzará abiera la aplicación dentro del Home
-    useEffect(() => {
-        const fetchFiles = async () => {
-            try {
-                const response = await getFilesData();
-                console.log('response desde el autenticador: ', response.data);
-                setFilesData(response.data);
-                const foalders = Object.keys(response.data);
-                setFoalderData(foalders);
-            } catch (error) {
-                setFilesData({});
-                setFoalderData([]);
-            } 
-        };
-        fetchFiles();        
-    }, []);
-
-    useEffect(() => {
-        if (filesData) {
-            setSelectedFolder(Object.keys(filesData)[0]);
-            console.log('selectedFolder: ',selectedFolder)
-        } else {
-            console.log('No hay archivos');
-        }
-    }, [filesData, setSelectedFolder]);
     
 
     // Navegar a home cuando sea necesario
 useEffect(() => {
     if (shouldNavigateHome) {  
-        navigate('/FOLDER2'); // Cambia la URL cuando selectedFolder está disponible
+        navigate('/Home'); // Cambia la URL cuando selectedFolder está disponible
     }else if(!selectedFolder){
         console.log('Esperando que se seleccione una carpeta')
     }
@@ -131,7 +106,7 @@ useEffect(() => {
             <div className="body">
                 <section className="authenticationContainer">
                     <h1 className="authenticationTitle">Autenticación de 2 pasos</h1>
-                    <h3 style={{color: "white"}}>Debe ingresar el código que se le envió al correo electrónico para poder entrar al sistema</h3>
+                    <h3 style={{color: "white"}}>Debe ingresar el código que se le envió en la aplicación  authenticator</h3>
                     <form onSubmit={handleSubmit(onSubmit)} name="form">
                         <input className="authenticationInput"
                             type="text"

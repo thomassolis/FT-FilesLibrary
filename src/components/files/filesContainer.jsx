@@ -8,8 +8,7 @@ import SkeletonFolder from "../skeleton/skeletonFolder";
 import Routes from "../Rutas/routes";
 
 function FilesContainer({ fileData, album, arregloArchivos }) {
-    const [selectedSubFolder, setSelectedSubFolder] = useState(null);
-    const [showRoute , setShowRoute] = useState(false);
+    const [selectedSubFolder, setSelectedSubFolder] = useState(null);    
     const navigate = useNavigate();
     // Obtenemos las claves del objeto album que no son 'files' (las carpetas)
     const folders = Object.keys(album).filter(key => key !== 'files');

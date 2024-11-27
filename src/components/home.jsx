@@ -10,9 +10,12 @@ import NewFileForm from './Modal/newFileForm';
 import { useParams } from "react-router-dom";
 import { FadeLoader } from 'react-spinners';
 import NoFilesMessage from './Modal/NoFilesMessage';
+import { useNavigate } from 'react-router-dom'; 
+
 function Home() {
+    const navigate = useNavigate();
     const { userRole } = useContext(AuthContext);
-    const [foalderData, setFoalderData] = useState([]);
+    const [FolderData, setFolderData] = useState([]);
     const { filesData, setFilesData, selectedFolder, setSelectedFolder } = useContext(FoldersFilesContext);
     const { setRequestSeeFile } = useContext(PermissionsContext);
     const [adminForm, setAdminForm] = useState(false);
@@ -24,11 +27,14 @@ function Home() {
             try {
                 const response = await getFilesData();
                 setFilesData(response.data);
-                const foalders = Object.keys(response.data);
-                setFoalderData(foalders);
+                const Folders = Object.keys(response.data);
+                setFolderData(Folders);
+                //setSelectedFolder(Folders[0])
+                navigate(`/${Folders[0]}`); // Cambia la URL cuando selectedFolder está disponible
+
             } catch (error) {
                 setFilesData({});
-                setFoalderData([]);
+                setFolderData([]);
             } finally {
                 setLoading(false);
             }
@@ -91,7 +97,7 @@ function Home() {
 
     return (
         <section id='soyyo' className='bg-customBlue flex min-h-screen'>
-            <SidebarContainer foalderData={foalderData} filesData={filesData} onSelect={setSelectedFolder} />
+            <SidebarContainer FolderData={FolderData} filesData={filesData} onSelect={setSelectedFolder} />
     
             <div className='flex w-full'>
                 {loading ? (

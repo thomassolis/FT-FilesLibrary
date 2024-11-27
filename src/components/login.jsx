@@ -16,8 +16,7 @@ function Login() {
     const [userData, setUserData] = useState(null);
 
     //Verificación si el usuario está logeado para enviar al contexto
-    const {setIsAuthenticated, isAuthenticated, isDisabled, setIsDisabled} = useContext(AuthContext);
-
+    const {setIsAuthenticated, isAuthenticated, isDisabled, setIsDisabled} = useContext(AuthContext);    
     const [timeBan, setTimeBan] = useState()
 
 
@@ -158,8 +157,8 @@ function Login() {
             
                     
 
-                    <div className="login">
-                            <img src={logo} alt="logo" />
+                    <div className="login">                        
+                            <img src={logo} alt="logo"/>
                     </div>
                 </div>
             </div>

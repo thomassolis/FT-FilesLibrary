@@ -4,10 +4,12 @@ import { getFilesData } from "../../api/files";
 import PrevisualizeFile from "../Modal/PrevisualizeFile";
 import { AuthContext } from "../../context/authProvider";
 import { useContext } from "react";
+import FoldersFilesContext from "../../context/Folders-Files/Folders_Files";
 import SeeFileWaterBrand from "../Modal/seeFileWaterBrand";
 import SeeFile from "../Modal/seeFile";
 import { ModalContext } from "../../context/closeModals";
 import logo from "../../images/MLC logo.png";
+import { useNavigate } from "react-router-dom";
 import _ from "lodash"; // Para debounce
 
 const HeaderFiles = () => {
@@ -18,6 +20,7 @@ const HeaderFiles = () => {
   const [selectedFile, setSelectedFile] = useState(null); // Archivo seleccionado
   const [isLoading, setIsLoading] = useState(true); // Estado de carga
   const { userRole } = useContext(AuthContext);
+  const {selectedFolder, setSelectedFolder} = useContext(FoldersFilesContext)
   const {
     modalSeeFile,
     setModalSeeFile,
@@ -26,6 +29,7 @@ const HeaderFiles = () => {
     previsualizeFile,
     setPrevisualizeFile,
   } = useContext(ModalContext);
+  const Navigate = useNavigate()
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -36,7 +40,7 @@ const HeaderFiles = () => {
     };
     fetchFiles();
   }, []);
-
+  console.log('selectedFolder desde Header:',selectedFolder)
   const searchFilesInStructure = (structure, searchTerm, currentPath = "") => {
     const results = [];
     for (const folderName in structure) {
@@ -134,6 +138,11 @@ const HeaderFiles = () => {
     }
     return null; // Si no hay condiciones que cumplir, no mostrar nada.
   };
+
+  function handleClick(){
+    Navigate(`/${selectedFolder}`);
+    console.log('desde handleClick')
+  }
   
 
   return (
@@ -149,7 +158,7 @@ const HeaderFiles = () => {
                     type="text"
                     placeholder="Cargando..."
                 />
-                <img src={logo} alt="Logo" style={{ position: "fixed", right: "20px" }} />
+                <img src={logo} alt="Logo" style={{ position: "fixed", right: "20px", cursor:"pointer" }} onClick={handleClick}/>
             </>          
         ) : (
           <>
@@ -160,7 +169,7 @@ const HeaderFiles = () => {
               value={searchTerm}
               onChange={onSearchInputChange}
             />
-            <img src={logo} alt="Logo" style={{ position: "fixed", right: "20px" }} />
+            <img src={logo} alt="Logo" style={{ position: "fixed", right: "20px", cursor:"pointer" }} onClick={handleClick}/>
           </>
         )}
         {filteredResults.length > 0 && (

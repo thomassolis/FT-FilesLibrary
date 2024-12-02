@@ -67,11 +67,19 @@ function SeeFile({ closeModal, fileId, fileName }) {
                     value={textAreaValue}
                     required
                 />
-
                 <div style={{ display: 'flex', gap: '30px' }}>
 
+
+                </div>
+                <div style={{ display: 'flex', gap: '30px' }}>
                     <button
-                         className={`rounded px-4 py-2 text-white flex items-center justify-center 
+                        style={{ backgroundColor: 'red' }}
+                        onClick={closeModal}
+                    >
+                        CANCELAR
+                    </button>
+                    <button
+                        className={`rounded px-4 py-2 text-white flex items-center justify-center 
                             ${isProcessing ? "bg-gray-500 cursor-not-allowed" : "bg-green-900 hover:bg-green-700"}`}
                         type="submit"
                         disabled={isProcessing}  // Deshabilita el botón si está en proceso

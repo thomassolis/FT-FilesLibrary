@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { AuthContext } from '../context/authProvider';
 import { getFilesData } from '../api/files';
 import FilesContainer from './files/filesContainer';
@@ -21,7 +21,7 @@ function Home() {
     const [adminForm, setAdminForm] = useState(false);
     const { folder, subfolder, subsubfolder } = useParams();
     const [loading, setLoading] = useState(true);
-
+    const isFirstRender = useRef(true); // Para rastrear el primer renderizado
     useEffect(() => {
         const fetchFiles = async () => {
             try {
@@ -29,8 +29,13 @@ function Home() {
                 setFilesData(response.data);
                 const Folders = Object.keys(response.data);
                 setFolderData(Folders);
-                //setSelectedFolder(Folders[0])
-                navigate(`/${Folders[0]}`); // Cambia la URL cuando selectedFolder está disponible
+                
+                // Si es el primer renderizado, realizar la navegación
+                if (isFirstRender.current && Folders.length > 0) {
+                    navigate(`/${Folders[0]}`);
+                    isFirstRender.current = false; // Cambiamos la referencia para futuras ejecuciones
+                }
+                
 
             } catch (error) {
                 setFilesData({});

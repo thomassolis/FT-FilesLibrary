@@ -40,7 +40,7 @@ const HeaderFiles = () => {
     };
     fetchFiles();
   }, []);
-  console.log('selectedFolder desde Header:',selectedFolder)
+
   const searchFilesInStructure = (structure, searchTerm, currentPath = "") => {
     const results = [];
     for (const folderName in structure) {
@@ -146,6 +146,7 @@ const HeaderFiles = () => {
   
 
   return (
+
     <div className="bg-customBlue h-24 w-full flex items-center">
       <div className="bg-customBlue fixed w-full h-16 top-0">
         {isLoading ? (

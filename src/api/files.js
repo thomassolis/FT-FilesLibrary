@@ -57,7 +57,6 @@ export const sendFilesData = async(data) =>{
 }
 
 //3. HOME PARA PEDIR INFORMACIÓN DE ARHIVOS DEPENDIENDO DEL ROL
-
 export const getFilesData = async () => {
     try{
         const response = await axios.get(`/files/get/archivos/byuser`);

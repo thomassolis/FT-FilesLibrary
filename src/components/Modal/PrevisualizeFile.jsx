@@ -10,11 +10,19 @@ function PrevisualizeFile({fileName, fileId }) {
   const [pdfUrl, setPdfUrl] = useState(null);
   const { setPrevisualizeFile} = useContext(ModalContext);
   const {userRole} = useContext(AuthContext);
+  console.log('Nombre de archivo desde previsualizar: ', fileId);
 
   function closeModal(){
         setPrevisualizeFile(false)        
   }
+  const [isReady, setIsReady] = useState(false);
+
   useEffect(() => {
+    setIsReady(true); // Marca que el componente está listo después del montaje
+}, []);
+  useEffect(() => {
+    if (!isReady || !fileId) return;
+    // alert(fileId)
     const pedirArchivos = async () => {
       try {
         const pdfBlob = await previsualizarArchivos({ fileId });
@@ -24,7 +32,7 @@ function PrevisualizeFile({fileName, fileId }) {
         console.log(error);
       }
     };
-    pedirArchivos();
+    pedirArchivos();    
 
     // Limpieza de la URL del blob cuando el componente se desmonte
     return () => {
@@ -32,7 +40,9 @@ function PrevisualizeFile({fileName, fileId }) {
         URL.revokeObjectURL(pdfUrl);
       }
     };
-  }, [fileId]);
+
+
+  }, [isReady, fileId]);
 
   return (
     <div id="ADMIN"

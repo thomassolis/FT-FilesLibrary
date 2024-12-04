@@ -13,34 +13,14 @@ export const comprobarDrive = async (data) => {
 export const previsualizarArchivos = async ({ fileId }) => {    
     try {
         const response = await axios.get(
-            `files/get/archivos/copia/byuser/${fileId}`,
-            {
-                responseType: 'blob', // Asegura que la respuesta sea un Blob
-                timeout: 15000, // Tiempo límite de 15 segundos
-            }
+            `files/get/archivos/copia/byuser/${fileId}`
         );
-        return response.data; // Debe ser un Blob si el backend responde correctamente
+        return response.data;
     } catch (error) {
-        console.error('Error al solicitar archivo:', error);
-
-        // Manejo adicional de errores basado en el código de estado HTTP
-        if (error.response) {
-            // Error del servidor (5xx) o cliente (4xx)
-            console.error(
-                `Error del servidor (${error.response.status}):`,
-                error.response.data
-            );
-        } else if (error.request) {
-            // El servidor no respondió
-            console.error('No se recibió respuesta del servidor:', error.request);
-        } else {
-            // Error en la configuración de la solicitud
-            console.error('Error al configurar la solicitud:', error.message);
-        }
+        console.error("Error al solicitar archivo:", error);
         throw error;
     }
 };
-
 
 
 // 5. ENVIAR los ARCHIVOS que sube el administrador HACIA EL BACKEND
@@ -83,5 +63,4 @@ export const getFilesData = async () => {
     }catch(error){
         console.log("error buscando los datos");
     }
-
 }

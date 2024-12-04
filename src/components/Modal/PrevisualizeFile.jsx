@@ -22,7 +22,6 @@ function PrevisualizeFile({fileName, fileId }) {
 }, []);
   useEffect(() => {
     if (!isReady || !fileId) return;
-    // alert(fileId)
     const pedirArchivos = async () => {
       try {
         const pdfBlob = await previsualizarArchivos({ fileId });

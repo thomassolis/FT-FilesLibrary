@@ -18,9 +18,7 @@ function SidebarContainer({FolderData, filesData}){
 
         setSelectedFolder(Folder);  
         navigate(`/${Folder}`)
-    }
-
-    console.log('FolderData desde el sidebar: ',FolderData)
+    }    
 
     return (
         <div className="w-[22%] bg-customSidebarColor flex flex-col gap-12 flex-shrink-0">

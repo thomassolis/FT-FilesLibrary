@@ -18,7 +18,6 @@ function FilesContainer({ fileData, album, arregloArchivos }) {
 
     // Verificar si hay más subcarpetas dentro de cada subcarpeta
     folders.forEach(folderName => {
-        console.log(subsubfolder)
         const subAlbum = album[folderName];
     });
 

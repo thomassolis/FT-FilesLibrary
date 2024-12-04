@@ -5,17 +5,16 @@ import { getHistoryDataGerente } from '../../api/historial';
 import AprobacionGerencia from '../Modal/aprobacionGerencia';
 import { getHistoryDataAdmin } from '../../api/historial';
 
-const socket = io("/");
+const socket = io("https://localhost:3000", { secure: true });
 
 function SmallHistory() {
     const { userRole } = useContext(AuthContext);
-    const [requestDataOPE, setRequestDataOPE] = useState([]); // Para solicitudes en tiempo real
     const [historial, setHistorial] = useState([]); // Para historial desde la API
     const [historialAdmin, setHistorialAdmin] = useState([]); // Para historial desde la API
     const [showModal, setShowModal] = useState({
         visible: false,
         approvedGER: false,
-        Nombre_del_archivo: '',  // Valor inicial vacío
+        Nombre_del_archivo: '',
         OPEUserName: '',
         OPEComment: '',
         fileId: null
@@ -23,7 +22,6 @@ function SmallHistory() {
 
     const [newHistorial, setNewHistorial] = useState([]); 
     const [newHistorialAdmin, setNewHistorialAdmin] = useState([]); 
-    const [realTimeData, setRealTimeData] = useState([]);
 
     // Función para eliminar una solicitud aceptada o denegada
     function handleDeleteFromHistorial(ID_Solicitudes) {
@@ -32,7 +30,6 @@ function SmallHistory() {
             return updatedHistorial;
         });
     }
-    
     
 
     function handleDeleteFromHistorialAdmin(ID_Solicitudes) {
@@ -120,8 +117,7 @@ function SmallHistory() {
         if (userRole === 'ADM') {
             const getHistoryAdmin = async () => {
                 try {
-                    const response = await getHistoryDataAdmin(); 
-                    console.log('Datos obtenidos para Admin:', response.data); // Debug
+                    const response = await getHistoryDataAdmin();                     
                     setHistorialAdmin(response.data); // Asegúrate de que los datos sean válidos
                 } catch (e) {
                     console.error(e);
@@ -145,35 +141,26 @@ function SmallHistory() {
     }, []);
     
 
-    // Escuchar eventos en tiempo real usando WebSocket
-    useEffect(() => {
-        const handleSocketMessage = (data) => {
-            console.log('Datos recibidos en tiempo real:', data);
-            setNewHistorial((prevHistorial) => [...prevHistorial, data]);                     
-        };
-
-        socket.on('message', handleSocketMessage);
-   
-
-        return () => {
-            socket.off('message', handleSocketMessage);
-        };
-    }, []);
 
     useEffect(() => {
-        const handleSocketMessageGerencia = (data) => {
-            console.log('Datos recibidos en tiempo real para ADMIN:', data);
+        const handleNuevaSolicitudOpr = (data) => {
+            setNewHistorial((prevHistorial) => [...prevHistorial, data]);
+        };
+    
+        const handleNuevaSolicitudGerente = (data) => {
             setNewHistorialAdmin((prevHistorial) => [...prevHistorial, data]);
         };
-
-        socket.on('messageGerencia', handleSocketMessageGerencia);
-
+    
+        socket.on("Nueva_Solicitud_Opr", handleNuevaSolicitudOpr);
+        socket.on("Nueva_Solicitud_Gerente", handleNuevaSolicitudGerente);
+    
         return () => {
-            socket.off('messageGerencia', handleSocketMessageGerencia);
+            socket.off("Nueva_Solicitud_Opr", handleNuevaSolicitudOpr);
+            socket.off("Nueva_Solicitud_Gerente", handleNuevaSolicitudGerente);
         };
     }, []);
+    
 
-    // Efecto para actualizar newHistorial cuando cambia el historial original desde la API
     useEffect(() => {
         setNewHistorial((prevHistorial) => {
             const historialSinDuplicados = historial.filter(item => 
@@ -183,7 +170,6 @@ function SmallHistory() {
         });
     }, [historial]);
 
-    // Efecto para actualizar newHistorial cuando cambia el historial original desde la API
     useEffect(() => {
         setNewHistorialAdmin((prevHistorial) => {
             const historialSinDuplicados = historialAdmin.filter(

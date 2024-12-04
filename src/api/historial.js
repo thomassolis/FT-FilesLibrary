@@ -27,6 +27,6 @@ export const getOficialHistory = async() =>{
         const response = await axios.get('solicitud/ver/historial/solicitudes/administrador')
         return response.data;
     }catch(e){
-        console.log(e);
+        console.log('Error en getOficialHistory', e);
     }
 }

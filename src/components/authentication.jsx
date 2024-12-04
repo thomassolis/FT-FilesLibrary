@@ -35,8 +35,7 @@ function Authentication() {
 useEffect(() => {
     if (shouldNavigateHome) {  
         navigate('/Home'); // Cambia la URL cuando selectedFolder está disponible
-    }else if(!selectedFolder){
-        console.log('Esperando que se seleccione una carpeta')
+    }else if(!selectedFolder){        
     }
 }, [shouldNavigateHome, selectedFolder, navigate]);
 

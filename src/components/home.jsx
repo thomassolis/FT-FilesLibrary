@@ -22,6 +22,8 @@ function Home() {
     const { folder, subfolder, subsubfolder } = useParams();
     const [loading, setLoading] = useState(true);
     const isFirstRender = useRef(true); // Para rastrear el primer renderizado
+    
+    
     useEffect(() => {
         const fetchFiles = async () => {
             try {

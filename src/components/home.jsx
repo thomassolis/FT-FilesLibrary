@@ -70,8 +70,7 @@ function Home() {
         return [];
     };
 
-    const hasSubfolders = () => {
-        console.log('filesData desde HOME: ',filesData)
+    const hasSubfolders = () => {        
         if (folder && filesData[folder]) {
             if (subsubfolder) {
                 return Object.keys(filesData[folder][subfolder]?.[subsubfolder] || {}).filter(

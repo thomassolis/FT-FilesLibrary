@@ -141,7 +141,6 @@ const HeaderFiles = () => {
 
   function handleClick(){
     Navigate(`/${selectedFolder}`);
-    console.log('desde handleClick')
   }
   
 

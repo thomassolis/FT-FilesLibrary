@@ -25,7 +25,8 @@ export const APIaprobacionAdministrador = async(dataAdmin) =>{
         });        
         return response.data;
     }catch(e){
-        console.log(e);
+        console.log('Error en APIaprobacionAdministrador', e);
+        return {success: false}
     }
   }
 
@@ -37,7 +38,9 @@ export const APIaprobacionGerencia = async (data) =>{
             approvedGER: data.approvedGER,
             ID_Solicitudes: data.ID_Solicitudes
         })
+        return {success: true}
     }catch(e){
-        console.log('error:',e);
+        console.log('Error en APIaprobacionGerencia', e);
+        return {success: false}
     }
   }

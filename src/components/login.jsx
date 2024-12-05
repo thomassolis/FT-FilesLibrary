@@ -37,27 +37,19 @@ function Login() {
 
     // Este useEffect se ejecuta cada vez que userData cambia
     useEffect(() => {
-        if (userData) {
-            console.log('userData actualizada:', userData);
+        if (userData) {            
             navigate('/authentication');
         }
     }, [userData]); // Se ejecuta cuando `userData` cambia
 
 
     const isBan = () =>{    
-        setIsDisabled(true);
-
-        //Mostrando el tiempo de baneo en pantalla
-        console.log('Tiempo de baneo desde función: ',timeBan)
-
-        // <CountDown seconds={timeBan}/>
-
+        setIsDisabled(true);        
         setShowCountDown(true);
        
     }
 
-    const onSubmit = async (data) => {
-        console.log('data', data);
+    const onSubmit = async (data) => {        
         
         try {
             const response = await enviarLogin(data); // Pasamos 'data' a enviarLogin
@@ -69,23 +61,16 @@ function Login() {
                 setUserData(response.Data);  // Aquí actualizas el estado
                 setIsAuthenticated(true);          
             }
-        } catch (error) {
-            //conexion se interrumpio front <-> back(error 400 a 500)
-            console.log(error.response);
+        } catch (error) {                        
             const errorCode = error.response.status;
             switch(errorCode){
                 case 429:
-                    toast.error(error.response.data.message)
-                    //  alert(error.response.data.message);  
-                    console.log('time: ', error.response.data.segundosBan.seconds);
+                    toast.error(error.response.data.message)                    
                     setTimeBan(error.response.data.segundosBan.seconds);
-                    console.log('tiempo de baneo ',timeBan);
-                   
                     isBan();        
                     break;
                 case 401:
-                    toast.error(error.response.data.message)
-                    // alert(error.response.data.message);
+                    toast.error(error.response.data.message)                    
                     break;
                 case 500:
                     toast.error(error.response.data.message)                    

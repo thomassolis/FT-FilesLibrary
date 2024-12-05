@@ -117,8 +117,7 @@ function SmallHistory() {
         if (userRole === 'ADM') {
             const getHistoryAdmin = async () => {
                 try {
-                    const response = await getHistoryDataAdmin(); 
-                    console.log('Datos obtenidos para Admin:', response.data); // Debug
+                    const response = await getHistoryDataAdmin();                     
                     setHistorialAdmin(response.data); // Asegúrate de que los datos sean válidos
                 } catch (e) {
                     console.error(e);

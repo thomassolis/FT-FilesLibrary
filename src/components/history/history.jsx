@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import SmallHistory from "./smallHistory";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authProvider";

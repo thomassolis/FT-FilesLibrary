@@ -1,13 +1,8 @@
 import { AuthContext } from "../../context/authProvider";
 import { useContext, useState } from "react";
-import { CrearNuevaPeticion, APIaprobacionGerencia } from "../../api/solicitudes";
-import { io } from "socket.io-client";
+import {APIaprobacionGerencia } from "../../api/solicitudes";
 import { APIaprobacionAdministrador } from "../../api/solicitudes";
-import { Toaster, toast } from "react-hot-toast";
-import { FadeLoader } from 'react-spinners';
-
-
-const socket = io("/");
+import { toast } from "react-hot-toast";
 
 function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserName, OPEComment, onDecision, fileId, approvedADM, ID_Solicitudes }) 
 {  
@@ -25,43 +20,34 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
 
     const aprobacionGerencia = async (event) => {
         event.preventDefault();
-
+        setIsProcessing(true); // Bloquea el botón
+    
         const data = {
-            comentarioGerente: textAreaValue,  
+            comentarioGerente: textAreaValue,
             approvedGER: approvedGER,
             ID_Solicitudes: ID_Solicitudes,
-
-            //DATOS PARA EL SOCKET
-            userName: userName,            
-            fileId: fileId,          
-            Nombre_del_archivo: Nombre_del_archivo,
-            OPEUserName: OPEUserName,
-            OPEComment: OPEComment,            
-            approvedADM: approvedADM ,
-            comentarioAdministracion:  textAreaValueAdmin,            
         };
-
-
-        try {                                    
-            await APIaprobacionGerencia(data);            
-        
-            if(approvedGER === true){
-                //Solo emitir a admin en caso que el gerente lo haya aprobado
-                socket.emit('messageGerencia', data);
-            }            
-            // Llamamos a la función para eliminar el registro del historial
+    
+        try {
+            const response = await APIaprobacionGerencia(data);
             onDecision(ID_Solicitudes);
             onClose(); // Cerrar el modal
-            if(approvedGER === true){
-                toast.success('¡Solicitud aprobada correctamente!')
-            }else{
-                toast.success('Solicitud denegada correctamente')
+            if (response.success) {
+                if (approvedGER === true) {
+                    toast.success('¡Solicitud aprobada correctamente!');
+                } else {
+                    toast.success('Solicitud denegada correctamente');
+                }
+            } else {
+                toast.error('Hay un error en la aprobación');
             }
         } catch (error) {
-            console.log(error)
-            toast.error('Hay un error en la aprobación');            
+            toast.error('Hay un error en la aprobación');
+        } finally {
+            setIsProcessing(false); // Habilita el botón nuevamente
         }
     };
+    
 
     const aprobacionAdmin =async(e)=>{     
         e.preventDefault();
@@ -77,14 +63,18 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
             await APIaprobacionAdministrador(dataAdmin);
             onDecision(ID_Solicitudes);
             onClose(); // Cerrar el modal
-            if(approvedADM === true){
-                toast.success('¡Solicitud aprobada correctamente!')
-            }else{
-                toast.success('Solicitud denegada correctamente')
+
+            if(response.success == false){
+                toast.error('Hay un error en la aprobación')  
+            }else{            
+                if(approvedADM === true){
+                    toast.success('¡Solicitud aprobada correctamente!')
+                }else{
+                    toast.success('Solicitud denegada correctamente')
+                }
             }
         }catch(e){
             toast.error('Hay un error en la aprobación')  
-            console.log(e)
         }
     }
 
@@ -106,14 +96,41 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
                             required
                         />
                         <div className="flex gap-5">
-                            <button className={`w-24 rounded
-                                        ${isProcessing ? "bg-gray-500 cursor-not-allowed" : "bg-green-900 hover:bg-green-700"}`}
-
-                                    type="submit"
-                                    disabled={isProcessing} // Bloquea el botón
+                        <button
+                            className={`rounded px-4 py-2 text-white flex items-center pr-12 pl-12 justify-center 
+                                ${isProcessing ? "bg-gray-500 cursor-not-allowed" : "bg-green-900 hover:bg-green-700"}`}
+                            type="submit"
+                            disabled={isProcessing}
+                            >
+                            {isProcessing ? (
+                                <>
+                                <svg
+                                    className="animate-spin h-5 w-5 mr-2"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
                                 >
-                                Enviar
-                            </button>
+                                    <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                    ></circle>
+                                    <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8v8H4z"
+                                    ></path>
+                                </svg>
+                                Procesando...
+                                </>
+                            ) : (
+                                "Enviar"
+                            )}
+                        </button>         
+
                         </div>
                     </form>
                 </div>

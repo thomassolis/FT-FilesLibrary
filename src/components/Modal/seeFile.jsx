@@ -1,7 +1,5 @@
 import { sendFilesData } from "../../api/files";
 import { useContext, useState, useEffect } from "react";
-import { io } from "socket.io-client";
-const socket = io("/")
 import { AuthContext } from "../../context/authProvider";
 import { Toaster, toast } from "react-hot-toast";
 import FoldersFilesContext from "../../context/Folders-Files/Folders_Files";
@@ -30,19 +28,12 @@ function SeeFile({ closeModal, fileId, fileName }) {
             };                              
             const response = await CrearNuevaPeticion(data);           
 
-            if (response.data) {
-                if (userRole === 'OPE') {
-                    socket.emit('message', data);            
-                } else {
-                    socket.emit('messageGerencia', data);
-                }
-                console.log('data emitida en el socket: ', data);
+            if (response.data) {              
                 toast.success("Su solicitud se ha enviado con éxito, en caso de que se apruebe podrá ver el archivo en su correo electrónico.");
             }
             
             closeModal();  // Cerrar el modal
-        } catch (error) {
-            console.log(error);
+        } catch (error) {            
             toast.error('Hay un error al enviar los datos.');
         } finally {
             setIsProcessing(false);  // Habilita el botón una vez finalizado el proceso

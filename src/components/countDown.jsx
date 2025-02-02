@@ -31,7 +31,7 @@ export default function CountDown({seconds}){
 
     return(
         <div className="flex justify-center items-center gap-2">
-            {userRole === 'ADM' && (
+            {(userRole === 'ADM' || userRole === 'CEO') &&(
                 
                 <h4
                     style={{                                                
@@ -44,7 +44,7 @@ export default function CountDown({seconds}){
                 
             )}
 
-            {userRole != 'ADM' && (
+            {(userRole != 'ADM' || userRole === 'CEO') && (
                 <h4
                     style={{
                         marginLeft: '70px',

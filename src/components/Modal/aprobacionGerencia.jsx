@@ -159,7 +159,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
                 </div>
             )}
 
-            {userRole === 'ADM' && approvedADM === true && (
+            {(userRole === 'ADM' || userRole === 'CEO') && approvedADM === true && (
                 <div className="flex flex-col justify-center items-center">
                     <h1>¿Estás seguro que deseas brindarle permiso de descarga?</h1>
                     <form className="w-full flex flex-col items-center" onSubmit={aprobacionAdmin}>
@@ -212,7 +212,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
                 </div>
             )}
 
-            {userRole === 'ADM' && approvedADM === false && (
+            {(userRole === 'ADM' || userRole === 'CEO') && approvedADM === false && (
                 <div >
                     <h1>¿Estás seguro que NO deseas brindar permiso para descargar el archivo?</h1>
                     <form className="w-full flex flex-col items-center" onSubmit={aprobacionAdmin}>

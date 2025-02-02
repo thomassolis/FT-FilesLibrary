@@ -29,7 +29,7 @@ function App() {
                         <Route path="/authentication" element={<Authentication />} />
                       </Route>
 
-                      <Route element={<ProtectedRoute allowedRoles={['ADM', 'GER', 'OPE']} redirectTo="/" />}>
+                      <Route element={<ProtectedRoute allowedRoles={['ADM', 'GER', 'OPE', 'CEO']} redirectTo="/" />}>
                         <Route path="/:folder" element={<Home />} />        
                         <Route path="/:folder/:subfolder" element={<Home />} />  
                         <Route path="/:folder/:subfolder/:subsubfolder" element={<Home />} /> 

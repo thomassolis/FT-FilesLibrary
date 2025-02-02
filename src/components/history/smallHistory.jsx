@@ -114,7 +114,7 @@ function SmallHistory() {
 
     // Cargar historial desde la API para Admin
     useEffect(() => {
-        if (userRole === 'ADM') {
+        if (userRole === 'ADM' || userRole === 'CEO') {
             const getHistoryAdmin = async () => {
                 try {
                     const response = await getHistoryDataAdmin();                     
@@ -184,7 +184,7 @@ function SmallHistory() {
 
     return (
         <section style={{ overflowX: 'auto' }}>
-            {userRole === 'ADM' && (
+            {(userRole === 'ADM' || userRole === 'CEO') && (
                 <table style={{ width: '97.5vw', padding:'0', margin:'0'}} >
                     <thead>
                         <tr>
@@ -202,6 +202,7 @@ function SmallHistory() {
                     </tbody>
                 </table>
             )}
+
 
             {userRole === 'GER' && (
                 <table style={{ width: '100vw', padding:'0', margin:'0'}}>

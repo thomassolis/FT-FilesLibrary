@@ -127,7 +127,7 @@ function Home() {
     
             {adminForm && <NewFileForm onClose={closeAdminForm} />}
     
-            {(userRole === "ADM" || userRole === "GER") && <History />}
+            {(userRole === "ADM" || userRole === "GER" || userRole === "CEO") && <History />}
         </section>
     );
 }

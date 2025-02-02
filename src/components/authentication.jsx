@@ -17,7 +17,7 @@ function Authentication() {
     const [isDisabled, setIsDisabled] = useState(false); //Valida si se deshabilita o no el input
     
     //Datos que vienen del backend y se guardarán
-    const { userRole, setUserRole, userName, setUserName, banTime, setBanTime } = useContext(AuthContext);
+    const { userRole, setUserRole, userName, setUserName, banTime, setBanTime, userEmail } = useContext(AuthContext);
     const { filesData, setFilesData, selectedFolder, setSelectedFolder } = useContext(FoldersFilesContext);
     const [FolderData, setFolderData] = useState([]);
     // Leer el userRole desde sessionStorage cuando se cargue el componente
@@ -49,8 +49,8 @@ useEffect(() => {
         // Función al enviar el formulario
         const onSubmit = async (data) => {
             try {
-                const response = await enviarVerificacion2pasos(data);                
-                if (response && response.data.success && response.status === 200) {                            
+                const response = await enviarVerificacion2pasos(data, userEmail);                
+                if (response && response.data.success) {                            
                     setShouldNavigateHome(true);
                     
 

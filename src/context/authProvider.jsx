@@ -45,6 +45,7 @@ export const AuthProvider = ({ children }) => {
   const [userName, setUserName] = useState(null);
   const [banTime, setBanTime] = useState(null);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [userEmail, setUserEmail] = useState(false);
 
   // Efecto para guardar en sessionStorage cuando los valores cambien
   useEffect(() => {
@@ -104,6 +105,8 @@ export const AuthProvider = ({ children }) => {
         setIsAuthenticated,
         isDisabled,
         setIsDisabled,
+        userEmail,
+        setUserEmail
       }}
     >
       {children}

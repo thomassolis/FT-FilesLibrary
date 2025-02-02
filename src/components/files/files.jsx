@@ -34,7 +34,7 @@ function Files({fileId, fileName}){
             setModalSeeFileWaterBrand(true);
           
         }
-        if(userRole === 'ADM'){
+        if(userRole === 'ADM' || userRole === 'CEO'){
             setPrevisualizeFile(true);          
         }
     }

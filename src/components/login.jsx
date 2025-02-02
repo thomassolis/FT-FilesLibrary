@@ -16,7 +16,7 @@ function Login() {
     const [userData, setUserData] = useState(null);
 
     //Verificación si el usuario está logeado para enviar al contexto
-    const {setIsAuthenticated, isAuthenticated, isDisabled, setIsDisabled} = useContext(AuthContext);    
+    const {setIsAuthenticated, isAuthenticated, isDisabled, setIsDisabled, setUserEmail} = useContext(AuthContext);    
     const [timeBan, setTimeBan] = useState()
 
 
@@ -59,6 +59,7 @@ function Login() {
     
             if (response.success) {
                 setUserData(response.Data);  // Aquí actualizas el estado
+                setUserEmail(response.Data.email);
                 setIsAuthenticated(true);          
             }
         } catch (error) {                        

@@ -91,7 +91,7 @@ const HeaderFiles = () => {
 
   const handleFileClick = (file) => {
     setSelectedFile(file);
-    if(userRole === 'ADM'){
+    if(userRole === 'ADM' || userRole === 'CEO'){
         setPrevisualizeFile(true);
     } else if(userRole === 'GER'){
         setModalSeeFileWaterBrand(true);
@@ -102,14 +102,14 @@ const HeaderFiles = () => {
   };
 
   const closeModal = () => {
-    if (userRole === "ADM") setPrevisualizeFile(false);
+    if (userRole === "ADM" || userRole === 'CEO') setPrevisualizeFile(false);
     else if (userRole === "GER") setModalSeeFileWaterBrand(false);
     else if (userRole === "OPE") setModalSeeFile(false);
   };
 
 
   const renderModal = () => {
-    if (userRole === "ADM" && previsualizeFile) {
+    if ((userRole === "ADM" || userRole === 'CEO') && previsualizeFile) {
       return (
         <PrevisualizeFile
           fileId={selectedFile.id}

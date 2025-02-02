@@ -40,7 +40,7 @@ function History(){
                 </div>
                 {/* onClick={expandHistory} */}
 
-                {userRole === 'ADM' &&
+                {(userRole === 'ADM' || userRole === 'CEO') &&
                     <div>
                         <iconify-icon   iconify-icon style={{cursor:'pointer',  paddingRight:'10px',transform: changeSize ? 'translateY(0px)' : 'translateY(0)',        transition: 'transform 0.5s ease', color:'black'}} onClick={expandHistory} icon="lucide:expand"></iconify-icon>
                     </div>     

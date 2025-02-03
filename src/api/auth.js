@@ -148,3 +148,19 @@ export const sendFilesFromAdmin = async (data) => {
         console.log(e);
     }
   }
+// Ruta para solicitar previsualizar un archivo
+  export const previsualizarArchivos = async(data) =>{
+    try{
+        const response = await axios.post('files/post/solicitarArchivo',{
+            fileId: data.fileId
+            
+        }, {
+            responseType: 'blob' // Especifica que la respuesta es un blob
+        });
+        
+        return response.data;
+    }catch(error){
+        console.log(error);
+    }
+
+  }

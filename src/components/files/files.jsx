@@ -5,7 +5,7 @@ import PermissionsContext from "../../context/permissions/permissionsProvider";
 import { useContext, useState } from "react";
 import SeeFile from "../Modal/seeFile";
 import SeeFileWaterBrand from "../Modal/seeFileWaterBrand";
-
+import PrevisualizeFile from "../Modal/PrevisualizeFile";
 function Files({fileId, fileName}){
 
     const {requestSeeFile, setRequestSeeFile} = useContext(PermissionsContext)
@@ -13,6 +13,7 @@ function Files({fileId, fileName}){
 
     const [modalSeeFile, setModalSeeFile] = useState(false);
     const [modalSeeFileWaterBrand, setModalSeeFileWaterBrand] = useState(false);
+    const [previsualizeFile, setPrevisualizeFile] = useState(false);
 
 
     const handleOpenFile = () =>{
@@ -24,6 +25,9 @@ function Files({fileId, fileName}){
             setModalSeeFileWaterBrand(true);
           
         }
+        if(userRole === 'ADM'){
+            setPrevisualizeFile(true);          
+        }
     }
 
     const close =() =>{
@@ -31,6 +35,8 @@ function Files({fileId, fileName}){
             setModalSeeFile(false);
         }else if(modalSeeFileWaterBrand){
             setModalSeeFileWaterBrand(false);        
+        }else if(previsualizeFile){
+            setPrevisualizeFile(false);
         }
         
     }
@@ -43,13 +49,12 @@ function Files({fileId, fileName}){
             {/* <Icon icon="fluent:document-pdf-32-regular" className="w-24 h-16 cursor-pointer" onClick={handleOpenFile}/>              */}
             <p className="w-full break-words whitespace-pre-wrap overflow-hidden text-center">{fileName}</p>
 
-            {modalSeeFile && <SeeFile closeModal={close} fileId={fileId} fileName={fileName}/>
+            {modalSeeFile && <SeeFile closeModal={close} fileId={fileId} fileName={fileName}/>}
 
-            }
+            {modalSeeFileWaterBrand && <SeeFileWaterBrand closeModal={close} fileName={fileName} userRole={userRole}/>}
 
-            {modalSeeFileWaterBrand && <SeeFileWaterBrand closeModal={close} fileName={fileName}/>
-
-            }
+            {previsualizeFile && <PrevisualizeFile closeModal={close} fileName={fileName} userRole={userRole} fileId={fileId}/>}
+            
         </div>
     )
 }

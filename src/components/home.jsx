@@ -10,7 +10,7 @@ import NewFileForm from './Modal/newFileForm';
 import { useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import Files from './files/files';
-
+import { BeatLoader } from 'react-spinners';
 function Home() {
     const { userRole } = useContext(AuthContext);
     const [foalderData, setFoalderData] = useState([]);
@@ -33,10 +33,6 @@ function Home() {
                 
                 const response = await getFilesData();
                 setFilesData(response);
-                console.log('response desde HOME: ',response)
-                console.log('filesData desde HOME: ', filesData);
-                console.log('filesData[selectedFolder][subfolder]: ', filesData[selectedFolder]?.[subfolder]);
-
                 const foalders = Object.keys(response);
                 setFoalderData(foalders);
             } catch (error) {

@@ -1,14 +1,12 @@
 import SeeFile from "./seeFile";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 
-function SeeFileWaterBrand({closeModal, fileName}){
+
+function SeeFileWaterBrand({closeModal, fileName, userRole}){
     const [sendRequest, setSendRequest] = useState(false);
-
-
-
-    function request(){
-       
+    
+    function request(){       
         setSendRequest(true);        
     }
 
@@ -19,8 +17,9 @@ function SeeFileWaterBrand({closeModal, fileName}){
 
             </div>
 
+            
             <div>
-                <p>¿Deseas solicitar este archivo para descargar sin marca de agua?</p>
+                <p>¿Deseas solicitar {fileName} para descargar sin marca de agua?</p>
                 <button style={{backgroundColor:'green'}} onClick={request}>Solicitar</button>
             </div>
 

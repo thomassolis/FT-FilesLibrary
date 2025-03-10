@@ -1,21 +1,20 @@
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../context/authProvider';
 import { io } from "socket.io-client";
-import { getHistoryData } from '../../api/auth';
+import { getHistoryDataGerente } from '../../api/historial';
 import AprobacionGerencia from '../Modal/aprobacionGerencia';
-import { getHistoryDataAdmin } from '../../api/auth';
+import { getHistoryDataAdmin } from '../../api/historial';
 
-const socket = io("/");
+const socket = io("https://localhost:3000", { secure: true });
 
 function SmallHistory() {
     const { userRole } = useContext(AuthContext);
-    const [requestDataOPE, setRequestDataOPE] = useState([]); // Para solicitudes en tiempo real
     const [historial, setHistorial] = useState([]); // Para historial desde la API
     const [historialAdmin, setHistorialAdmin] = useState([]); // Para historial desde la API
     const [showModal, setShowModal] = useState({
         visible: false,
         approvedGER: false,
-        Nombre_del_archivo: '',  // Valor inicial vacío
+        Nombre_del_archivo: '',
         OPEUserName: '',
         OPEComment: '',
         fileId: null
@@ -23,35 +22,28 @@ function SmallHistory() {
 
     const [newHistorial, setNewHistorial] = useState([]); 
     const [newHistorialAdmin, setNewHistorialAdmin] = useState([]); 
-    const [realTimeData, setRealTimeData] = useState([]);
 
     // Función para eliminar una solicitud aceptada o denegada
-    function handleDeleteFromHistorial(Nombre_del_archivo, OPEUserName) {
-        console.log("Antes de eliminar:", newHistorial); // Log para verificar el estado antes de eliminar
+    function handleDeleteFromHistorial(ID_Solicitudes) {
         setNewHistorial((prevHistorial) => {
-            const updatedHistorial = prevHistorial.filter(
-                (item) => !(item.Nombre_del_archivo === Nombre_del_archivo && item.userName === OPEUserName)
-            );
-            console.log("Después de eliminar:", updatedHistorial); // Verificar después de eliminar
+            const updatedHistorial = prevHistorial.filter((item) => item.ID_Solicitudes !== ID_Solicitudes);            
             return updatedHistorial;
         });
     }
+    
 
-    function handleDeleteFromHistorialAdmin(Nombre_del_archivo, OPEUserName) {
-        console.log("Antes de eliminar:", newHistorialAdmin); // Log para verificar el estado antes de eliminar
+    function handleDeleteFromHistorialAdmin(ID_Solicitudes) {
         setNewHistorialAdmin((prevHistorial) => {
-            const updatedHistorialAdmin = prevHistorial.filter(
-                (item) => !(item.Nombre_del_archivo === Nombre_del_archivo && item.userName === OPEUserName)
-            );
-            console.log("Después de eliminar:", updatedHistorialAdmin); // Verificar después de eliminar
-            return updatedHistorialAdmin;
+            const updatedHistorial = prevHistorial.filter((item) => item.ID_Solicitudes !== ID_Solicitudes);         
+            return updatedHistorial
         });
     }
+    
 
     // Función para renderizar filas de solicitudes en tiempo real
     function renderRows() {
         const rows = [];
-        console.log('newHistorial desde renderRows: ', newHistorial);
+        
         for (let i = 0; i < newHistorial.length; i++) {
             const data = newHistorial[i];
             rows.push(
@@ -66,7 +58,8 @@ function SmallHistory() {
                                 visible: true, 
                                 approvedGER: false, 
                                 Nombre_del_archivo: data.Nombre_del_archivo, 
-                                OPEUserName: data.userName 
+                                OPEUserName: data.userName,
+                                ID_Solicitudes: data.ID_Solicitudes
                             })}
                         >Denegar</button>
 
@@ -79,7 +72,8 @@ function SmallHistory() {
                                 Nombre_del_archivo: data.Nombre_del_archivo, 
                                 OPEUserName: data.userName, 
                                 OPEComment: data.textAreaValue,
-                                fileId: data.fileId
+                                fileId: data.fileId,
+                                ID_Solicitudes: data.ID_Solicitudes
                             })}
                         >Aceptar</button>
                     </td>
@@ -91,11 +85,9 @@ function SmallHistory() {
 
     function renderRowsAdmin(){
         const rows = [];
-        // console.log('newHistorialAdmin', newHistorialAdmin);
         
         for(let i=0; i<newHistorialAdmin.length; i++){
-            const data = newHistorialAdmin[i];
-            // console.log('data desde rowsADM', data);
+            const data = newHistorialAdmin[i];            
             rows.push(
                 <tr key={i}>
                     <td className='break-words'>{data.Nombre_del_archivo}</td>
@@ -107,11 +99,11 @@ function SmallHistory() {
                     <td>
                         <button 
                             className='inline-block m-0 bg-red-700 w-24 mr-3' 
-                            onClick={() => setShowModal({ visibleAdmin: true, approvedADM: false, Nombre_del_archivo: data.Nombre_del_archivo, OPEUserName: data.userName })}>Denegar</button>
+                            onClick={() => setShowModal({ visibleAdmin: true, approvedADM: false, Nombre_del_archivo: data.Nombre_del_archivo, OPEUserName: data.userName, fileId: data.fileId, ID_Solicitudes: data.ID_Solicitudes })}>Denegar</button>
 
                         <button 
                             className='inline-block m-0 bg-green-900 w-24' 
-                            onClick={() => setShowModal({ visibleAdmin: true, approvedADM: true, Nombre_del_archivo: data.Nombre_del_archivo, OPEUserName: data.userName })}>Aceptar</button>
+                            onClick={() => setShowModal({ visibleAdmin: true, approvedADM: true, Nombre_del_archivo: data.Nombre_del_archivo, OPEUserName: data.userName, fileId: data.fileId, ID_Solicitudes: data.ID_Solicitudes })}>Aceptar</button>
                     </td>
                 </tr>
             );
@@ -119,64 +111,56 @@ function SmallHistory() {
         return rows;
     }
 
-    // Cargar historial desde la API
-    useEffect(() => {
-        const getHistory = async () => {
-            try {
-                const response = await getHistoryData();
-                // console.log('response desde historial: ', response);
-                setHistorial(response);  // Actualizar el estado con los datos recibidos
-                
-            } catch (e) {
-                console.error(e);
-            }
-        };
-        getHistory();
-    }, []);
 
     // Cargar historial desde la API para Admin
     useEffect(() => {
-        const getHistory = async () => {
-            try {
-                const response = await getHistoryDataAdmin();
-                // console.log('response desde historialAdmin: ', response);
-                setHistorialAdmin(response);  // Actualizar el estado con los datos recibidos
-            } catch (e) {
-                console.error(e);
-            }
-        };
-        getHistory();
+        if (userRole === 'ADM' || userRole === 'CEO') {
+            const getHistoryAdmin = async () => {
+                try {
+                    const response = await getHistoryDataAdmin();                     
+                    setHistorialAdmin(response.data); // Asegúrate de que los datos sean válidos
+                } catch (e) {
+                    console.error(e);
+                }
+            };
+            getHistoryAdmin();
+        }
+
+        else if (userRole==='GER'){
+            const getHistoryGerente = async () => {
+                try {
+                    const response = await getHistoryDataGerente(); 
+                    
+                    setHistorial(response.data); // Asegúrate de que los datos sean válidos
+                } catch (e) {
+                    console.error(e);
+                }
+            };
+            getHistoryGerente();
+        }
     }, []);
+    
 
-    // Escuchar eventos en tiempo real usando WebSocket
-    useEffect(() => {
-        const handleSocketMessage = (data) => {
-            console.log('Datos recibidos en tiempo real:', data);
-            setNewHistorial((prevHistorial) => [...prevHistorial, data]);                     
-        };
-
-        socket.on('message', handleSocketMessage);
-   
-
-        return () => {
-            socket.off('message', handleSocketMessage);
-        };
-    }, []);
 
     useEffect(() => {
-        const handleSocketMessageGerencia = (data) => {
-            console.log('Datos recibidos en tiempo real para ADMIN:', data);
+        const handleNuevaSolicitudOpr = (data) => {
+            setNewHistorial((prevHistorial) => [...prevHistorial, data]);
+        };
+    
+        const handleNuevaSolicitudGerente = (data) => {
             setNewHistorialAdmin((prevHistorial) => [...prevHistorial, data]);
         };
-
-        socket.on('messageGerencia', handleSocketMessageGerencia);
-
+    
+        socket.on("Nueva_Solicitud_Opr", handleNuevaSolicitudOpr);
+        socket.on("Nueva_Solicitud_Gerente", handleNuevaSolicitudGerente);
+    
         return () => {
-            socket.off('messageGerencia', handleSocketMessageGerencia);
+            socket.off("Nueva_Solicitud_Opr", handleNuevaSolicitudOpr);
+            socket.off("Nueva_Solicitud_Gerente", handleNuevaSolicitudGerente);
         };
     }, []);
+    
 
-    // Efecto para actualizar newHistorial cuando cambia el historial original desde la API
     useEffect(() => {
         setNewHistorial((prevHistorial) => {
             const historialSinDuplicados = historial.filter(item => 
@@ -186,19 +170,21 @@ function SmallHistory() {
         });
     }, [historial]);
 
-    // Efecto para actualizar newHistorial cuando cambia el historial original desde la API
     useEffect(() => {
         setNewHistorialAdmin((prevHistorial) => {
-            const historialSinDuplicados = historial.filter(item => 
-                !prevHistorial.some(prevItem => prevItem.Nombre_del_archivo === item.Nombre_del_archivo && prevItem.userName === item.userName)
+            const historialSinDuplicados = historialAdmin.filter(
+                (item) => !prevHistorial.some(
+                    (prevItem) => prevItem.ID_Solicitudes === item.ID_Solicitudes
+                )
             );
             return [...prevHistorial, ...historialSinDuplicados];
         });
-    }, [historialAdmin]); 
+    }, [historialAdmin]);
+    
 
     return (
         <section style={{ overflowX: 'auto' }}>
-            {userRole === 'ADM' && (
+            {(userRole === 'ADM' || userRole === 'CEO') && (
                 <table style={{ width: '97.5vw', padding:'0', margin:'0'}} >
                     <thead>
                         <tr>
@@ -216,6 +202,7 @@ function SmallHistory() {
                     </tbody>
                 </table>
             )}
+
 
             {userRole === 'GER' && (
                 <table style={{ width: '100vw', padding:'0', margin:'0'}}>
@@ -238,10 +225,12 @@ function SmallHistory() {
                     approvedGER={showModal.approvedGER}
                     onClose={() => setShowModal(false)}
                     fileId={showModal.fileId}
+                    ID_Solicitudes = {showModal.ID_Solicitudes}
                     Nombre_del_archivo={showModal.Nombre_del_archivo}
                     OPEUserName={showModal.OPEUserName}
                     OPEComment={showModal.OPEComment}
-                    onDecision={(Nombre_del_archivo, userName) => handleDeleteFromHistorial(Nombre_del_archivo, userName)}
+                    onDecision={(Nombre_del_archivo, userName, ID_Solicitudes) => handleDeleteFromHistorial(Nombre_del_archivo, userName)}
+
                 />
             )}
             {showModal.visibleAdmin && (
@@ -249,10 +238,11 @@ function SmallHistory() {
                     approvedADM={showModal.approvedADM}
                     onClose={() => setShowModal(false)}
                     fileId={showModal.fileId}
+                    ID_Solicitudes = {showModal.ID_Solicitudes}
                     Nombre_del_archivo={showModal.Nombre_del_archivo}
                     OPEUserName={showModal.OPEUserName}
                     OPEComment={showModal.OPEComment}
-                    onDecision={(Nombre_del_archivo, userName) => handleDeleteFromHistorialAdmin(Nombre_del_archivo, userName)}
+                    onDecision={(Nombre_del_archivo, userName, ID_Solicitudes) => handleDeleteFromHistorialAdmin(Nombre_del_archivo, userName)}
                 />
             )}
         </section>

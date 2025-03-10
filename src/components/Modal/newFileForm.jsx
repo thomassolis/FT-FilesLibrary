@@ -1,4 +1,4 @@
-import DragAndDrop from "../dragDrop";
+
 import NewFileConfirmation from "./newFileConfirmation";
 import { useState, useCallback } from "react";
 import React from "react";

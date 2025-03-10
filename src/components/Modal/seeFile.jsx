@@ -1,85 +1,112 @@
-import { sendFilesData } from "../../api/auth";
+import { sendFilesData } from "../../api/files";
 import { useContext, useState, useEffect } from "react";
-import { io } from "socket.io-client";
-const socket = io("/")
 import { AuthContext } from "../../context/authProvider";
-import { postAprobacionGerencia } from "../../api/auth";
-import { Toaster,toast } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import FoldersFilesContext from "../../context/Folders-Files/Folders_Files";
+import { CrearNuevaPeticion } from "../../api/solicitudes";
 
 
-
-function SeeFile({closeModal, fileId, fileName}){
+function SeeFile({ closeModal, fileId, fileName }) {
     
-    const [textAreaValue, setTextAreaValue] = useState()
-    const {userName, userRole}=useContext(AuthContext);
-    const {selectedFolder} = useContext(FoldersFilesContext);
-
- 
+    const [textAreaValue, setTextAreaValue] = useState('');
+    const [isProcessing, setIsProcessing] = useState(false);  // Agregar estado de procesamiento
+    const { userName, userRole } = useContext(AuthContext);
+    const { selectedFolder } = useContext(FoldersFilesContext);
     
-
-    function handleChange(e){
+    function handleChange(e) {
         setTextAreaValue(e.target.value);
     }
     
-
-    const sendRequest = async(e)=>{
+    const sendRequest = async (e) => {        
         e.preventDefault();
+        setIsProcessing(true); // Bloquea el botón al comenzar el proceso
         
-        const data = {
-            Nombre_de_solicitante: userName,
-            motivo_solicitud: textAreaValue,
-            fileId: fileId,
-            Nombre_del_archivo: fileName,
-            folder: selectedFolder
-        };
-        try{            
-            // console.log('data desde seefileee:', data)
-            const response = await postAprobacionGerencia(data);
-            // console.log('data desde seefileee:', data)
+        try {
+            const data = {            
+                motivo_solicitud: textAreaValue,
+                fileId: fileId                     
+            };                              
+            const response = await CrearNuevaPeticion(data);           
 
-            if(userRole=='OPE'){
-                socket.emit('message', data);            
+            if (response.data) {              
+                toast.success("Su solicitud se ha enviado con éxito, en caso de que se apruebe podrá ver el archivo en su correo electrónico.");
             }
-            else{
-                socket.emit('messageGerencia', data);
-            }
-
-            console.log('data emitida en el socket: ', data);
-            toast.success("Su solicitud se ha enviado con éxito, en caso de que se apruebe podrá ver el archivo en su correo electrónico.")            
-            closeModal();
-
-
-        }catch(error){
-            toast.error('hay un error');
+            
+            closeModal();  // Cerrar el modal
+        } catch (error) {            
+            toast.error('Hay un error al enviar los datos.');
+        } finally {
+            setIsProcessing(false);  // Habilita el botón una vez finalizado el proceso
         }
     }
 
+    return (
+        <div id='PRUEBA' style={{
+            position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+            width: '964px', height: '350px', backgroundColor: 'white', display: 'flex',
+            alignItems: 'center', justifyContent: 'center', flexDirection: 'column',
+            boxShadow: '0px 0px 10px rgba(0,0,0,0.9)', borderRadius: '15px'
+        }}>
+            <h1>Justifica por qué quieres enviar una petición para poder descargar el archivo "{fileName}"</h1>
 
-    return(
-            <div style={{position:'fixed', top:'50%', left:'50%',transform: 'translate(-50%, -50%)',width:'964px', height:'350px', backgroundColor:'white', display:'flex',alignItems:'center', justifyContent:'center', flexDirection:'column', boxShadow: '0px 0px 10px rgba(0,0,0,0.9)', borderRadius:'15px'}}>
-                <h1>¿Estás seguro que deseas enviar una solicitud para ver el archivo "{fileName}"?</h1>
+            <form onSubmit={sendRequest}>
+                <textarea
+                    style={{ width: '600px' }}
+                    className="h-40 border-black border"
+                    placeholder="Explica por qué deseas ver el archivo"
+                    onChange={handleChange}
+                    value={textAreaValue}
+                    required
+                />
+                <div style={{ display: 'flex', gap: '30px' }}>
 
-                <form action="" onSubmit={sendRequest}>
-                    <textarea 
-                        style={{width:'600px'}} 
-                        className="h-40 border-black border"
-                        placeholder="Explica por que deseas ver el archivo" 
-                        onChange={handleChange}
-                        value={textAreaValue}
-                        required>
 
-                    </textarea>
-
-                    <div style={{display:'flex', gap:'30px'}}>
-                        <button style={{backgroundColor:'green'}} type="submit">ACEPTAR</button>
-                        <button style={{backgroundColor:'red'}} onClick={closeModal}>CANCELAR</button>
-                    </div>
-                </form>                
-                
-            </div>
-        
-    )
+                </div>
+                <div style={{ display: 'flex', gap: '30px' }}>
+                    <button
+                        style={{ backgroundColor: 'red' }}
+                        onClick={closeModal}
+                    >
+                        CANCELAR
+                    </button>
+                    <button
+                        className={`rounded px-4 py-2 text-white flex items-center justify-center 
+                            ${isProcessing ? "bg-gray-500 cursor-not-allowed" : "bg-green-900 hover:bg-green-700"}`}
+                        type="submit"
+                        disabled={isProcessing}  // Deshabilita el botón si está en proceso
+                    >
+                        {isProcessing ? (
+                                <>
+                                <svg
+                                    className="animate-spin h-5 w-5 mr-2"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                    ></circle>
+                                    <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8v8H4z"
+                                    ></path>
+                                </svg>
+                                Procesando...
+                                </>
+                            ) : (
+                                "ACEPTAR"
+                            )}
+                    </button>
+                </div>
+            </form>
+        </div>
+    );
 }
 
-export default SeeFile
+export default SeeFile;

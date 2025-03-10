@@ -1,12 +1,12 @@
 import Title from "../title";
-import FoalderSidebar from "./foalderSidebar";
+import FolderSidebar from "./FolderSidebar";
 import { useContext, useState } from "react";
 import FilesContainer from "../files/filesContainer";
 import Files from "../files/files";
 import {FoldersFilesContext} from "../../context/Folders-Files/Folders_Files";
 import { useNavigate } from "react-router-dom";
 
-function SidebarContainer({foalderData, filesData}){  
+function SidebarContainer({FolderData, filesData}){  
     // const [selectedFolder, setSelectedFolder] = useState(null);
     // const [selectedFiles, setSelectedFiles] = useState([])
 
@@ -14,33 +14,37 @@ function SidebarContainer({foalderData, filesData}){
 
     const {selectedFolder, setSelectedFolder} = useContext(FoldersFilesContext);
 
-    const handleFolderClick = (foalder) =>{
-        console.log('folder seleccionado: ', foalder);
+    const handleFolderClick = (Folder) =>{
 
-        setSelectedFolder(foalder);  
-        navigate(`/${foalder}`)
-    }
+        setSelectedFolder(Folder);  
+        navigate(`/${Folder}`)
+    }    
 
-    // console.log('desde sidebar: ',foalderData);
-
-    return(
+    return (
         <div className="w-[22%] bg-customSidebarColor flex flex-col gap-12 flex-shrink-0">
-
+            {/* Parte no scrolleable */}
             <div>
-                <Title/>
+                <Title />
             </div>
-
-
-            <div className="flex flex-col gap-6 pb-9">
+    
+            {/* Parte scrolleable */}
+            <div className="flex flex-col gap-6 pb-9 overflow-y-auto max-h-[70vh] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent">
                 {/* Renderizar la lista de carpetas */}
-                {foalderData.map((foalder, index) => (
-                    <div key={index} onClick={() => handleFolderClick(foalder)} className="flex items-center justify-center">
-                        <FoalderSidebar foalderName={foalder} isSelected={foalder===selectedFolder}/>
+                {FolderData.map((Folder, index) => (
+                    <div
+                        key={index}
+                        onClick={() => handleFolderClick(Folder)}
+                        className="flex items-center justify-center"
+                    >
+                        <FolderSidebar FolderName={Folder} isSelected={Folder === selectedFolder} />
                     </div>
                 ))}
-            </div>            
+            </div>
+
         </div>
-    )
+    );
+
+    
 }
 
 export default SidebarContainer;

@@ -1,55 +1,73 @@
 import { useEffect, useState } from "react";
-import { previsualizarArchivos } from "../../api/auth";
+import { previsualizarArchivos } from "../../api/files"; // Asegúrate de que esta función solicite el link
+import { FadeLoader } from "react-spinners";
+import { useContext } from "react";
+import CountDown from "../countDown";
+import { ModalContext } from "../../context/closeModals";
 
-function PrevisualizeFile({ closeModal, fileName, fileId }) {
-    const [pdfUrl, setPdfUrl] = useState(null);
+function PrevisualizeFile({ fileName, fileId }) {
+  const [pdfUrl, setPdfUrl] = useState(null); // Ahora se espera un enlace
+  const { setPrevisualizeFile } = useContext(ModalContext);
 
-    useEffect(() => {
-        const pedirArchivos = async () => {
-            try {                
-                const pdfBlob = await previsualizarArchivos({ fileId });
-                const pdfUrl = URL.createObjectURL(pdfBlob); // Crea una URL para el blob
-                setPdfUrl(pdfUrl);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        pedirArchivos();
+  function closeModal() {
+    setPrevisualizeFile(false);
+  }
 
-        // Limpieza de la URL del blob cuando el componente se desmonte
-        return () => {
-            if (pdfUrl) {
-                URL.revokeObjectURL(pdfUrl);
-            }
-        };
-    }, [fileId]);    
+  useEffect(() => {
+    const pedirArchivos = async () => {
+      try {
+        const response = await previsualizarArchivos({ fileId }); // Asegúrate de que esta función devuelva { success: true, link: "url" }
+        if (response.success && response.link) {
+          setPdfUrl(response.link); // Guarda el enlace embebible en el estado
+        } else {
+          throw new Error("No se pudo obtener el enlace del archivo");
+        }
+      } catch (error) {
+        console.error("Error al solicitar archivo:", error);
+      }
+    };
 
-    return (
-        <div style={{
-            position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-            width: '750px', height: '600px', backgroundColor: 'white', display: 'flex',
-            alignItems: 'center', justifyContent: 'center', flexDirection: 'column',
-            boxShadow: '0px 0px 10px rgba(0,0,0,0.9)', borderRadius: '15px', zIndex: '100'
-        }}>
-            <iconify-icon
-                style={{ position: 'absolute', top: '-8px', right: '-12px', color: 'black', fontSize: '30px', cursor: 'pointer' }}
-                onClick={closeModal}
-                icon="carbon:close-filled">
-            </iconify-icon>
-            <div>
-                <h1>{fileName}</h1>
-                {pdfUrl ? (
-                    <iframe
-                        src={pdfUrl}
-                        style={{ width: '100%', height: '500px' }}
-                        title="PDF Preview"
-                    ></iframe>
-                ) : (
-                    <p>Cargando archivo...</p>
-                )}
-            </div>
-        </div>
-    );
+    pedirArchivos();
+  }, [fileId]);
+
+  return (
+    <div
+      id="ADMIN"
+      className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+    >
+      <div className="bg-white w-3/4 max-w-4xl rounded-lg shadow-lg flex flex-col items-center justify-center p-6 relative h-full">
+        <iconify-icon
+          style={{
+            position: "absolute",
+            top: "20px",
+            right: "20px",
+            color: "black",
+            fontSize: "30px",
+            cursor: "pointer",
+          }}
+          onClick={closeModal}
+          icon="carbon:close-filled"
+        ></iconify-icon>
+
+        <h1 className="font-serif text-xl text-center mb-4">{fileName}</h1>
+        {pdfUrl ? (
+          <iframe
+            src={pdfUrl} // Usa el enlace proporcionado por el backend
+            className="w-full rounded-lg"
+            style={{
+              height: "500px",
+              border: "none",
+              paddingBottom: "20px",
+            }}
+            title="PDF Preview"
+          ></iframe>
+        ) : (
+          <FadeLoader size={15} />
+        )}
+        <CountDown seconds={300} className="" />
+      </div>
+    </div>
+  );
 }
 
 export default PrevisualizeFile;

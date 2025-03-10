@@ -7,6 +7,7 @@ import { AuthContext } from "../context/authProvider";
 import Home from "./home";
 import FoldersFilesContext from "../context/Folders-Files/Folders_Files";
 import { Toaster, toast } from 'react-hot-toast';
+import { getFilesData } from "../api/files";
 
 function Authentication() {
     const { register, handleSubmit, getValues, formState: { errors } } = useForm();
@@ -16,9 +17,9 @@ function Authentication() {
     const [isDisabled, setIsDisabled] = useState(false); //Valida si se deshabilita o no el input
     
     //Datos que vienen del backend y se guardarán
-    const { userRole, setUserRole, userName, setUserName, banTime, setBanTime } = useContext(AuthContext);
-    const { selectedFolder } = useContext(FoldersFilesContext);
-
+    const { userRole, setUserRole, userName, setUserName, banTime, setBanTime, userEmail } = useContext(AuthContext);
+    const { filesData, setFilesData, selectedFolder, setSelectedFolder } = useContext(FoldersFilesContext);
+    const [FolderData, setFolderData] = useState([]);
     // Leer el userRole desde sessionStorage cuando se cargue el componente
     useEffect(() => {
         const storedUserRole = sessionStorage.getItem("userRole");
@@ -28,49 +29,46 @@ function Authentication() {
         }
     }, [setUserRole]);
 
+    
+
     // Navegar a home cuando sea necesario
-    useEffect(() => {
-        if (shouldNavigateHome) {
-            const folder = 'avisos'            
-            navigate(`/${folder}`); // Corregir el error de comillas faltantes en la ruta
-        }
-    }, [shouldNavigateHome, navigate]);
+useEffect(() => {
+    if (shouldNavigateHome) {  
+        navigate('/Home'); // Cambia la URL cuando selectedFolder está disponible
+    }else if(!selectedFolder){        
+    }
+}, [shouldNavigateHome, selectedFolder, navigate]);
 
     //Función que manejará el input en caso de un error 219
     const userBan = () => {
         setIsDisabled(true);
         const fieldName = "authentication";
         const value = getValues(fieldName); // Obtener el valor del input por su nombre
-        console.log('fieldName: ', fieldName);
-        console.log('value: ', value);
     };
 
         // Función al enviar el formulario
         const onSubmit = async (data) => {
             try {
-                const response = await enviarVerificacion2pasos(data);
-    
-                if (response && response.success && response.status === 200) {                    
-                    console.log(response);
+                const response = await enviarVerificacion2pasos(data, userEmail);                
+                if (response && response.data.success) {                            
                     setShouldNavigateHome(true);
                     
-                    const role = response.Data.userRol;
-                    const name = response.Data.userName;
-                    const banTime = response.Data.banTime;
-    
+
+                    const role = response.data.data.nombre_rol;
+                    const name = response.data.data.nombre;
+                    const banTime = response.data.data.banTime;
+                    sessionStorage.setItem('userName', name);
                     // Guardar userRole en el state de React y en sessionStorage
                     setUserRole(role);
                     setUserName(name);
                     setBanTime(banTime);
                     
-                    sessionStorage.setItem("userRole", role); // Guardar en sessionStorage
+                    sessionStorage.setItem("userRole", role);                    
                 }
     
-            } catch (error) {
-                console.log(error.response);
+            } catch (error) {                
                 if (error.response) {
                     const statusCode = error.response.status;
-    
                     switch (statusCode) {
                         case 429:
                             toast.error(error.response.data.message);
@@ -84,9 +82,11 @@ function Authentication() {
                         case 500:
                             toast.error(error.response.data.message);
                             break;
+                        case 403:
+                            toast.error(error.response.data.message);
                         case 200:
                             alert("Todo bien");
-                            break;
+                            break;                            
                         case 404:
                             alert("Error 404");
                             break;
@@ -105,7 +105,7 @@ function Authentication() {
             <div className="body">
                 <section className="authenticationContainer">
                     <h1 className="authenticationTitle">Autenticación de 2 pasos</h1>
-                    <h3 style={{color: "white"}}>Debe ingresar el código que se le envió al correo electrónico para poder entrar al sistema</h3>
+                    <h3 style={{color: "white"}}>Debe ingresar el código que se le envió en la aplicación  authenticator</h3>
                     <form onSubmit={handleSubmit(onSubmit)} name="form">
                         <input className="authenticationInput"
                             type="text"

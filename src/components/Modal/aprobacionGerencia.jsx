@@ -1,30 +1,16 @@
 import { AuthContext } from "../../context/authProvider";
 import { useContext, useState } from "react";
-import { postAprobacionGerencia } from "../../api/auth";
-import { io } from "socket.io-client";
+import {APIaprobacionGerencia } from "../../api/solicitudes";
+import { APIaprobacionAdministrador } from "../../api/solicitudes";
+import { toast } from "react-hot-toast";
 
-import { Toaster, toast } from "react-hot-toast";
-
-
-
-const socket = io("/");
-
-function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserName, OPEComment, onDecision, fileId, approvedADM }) 
-{
+function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserName, OPEComment, onDecision, fileId, approvedADM, ID_Solicitudes }) 
+{  
     const [textAreaValue, setTextAreaValue] = useState('');
     const [textAreaValueAdmin, setTextAreaValueAdmin] = useState('');
-    const { userName, userRole } = useContext(AuthContext);
-
-    console.log('Nombre_del_archivo: ',Nombre_del_archivo)
-    console.log('approvedGER: ',approvedGER)
-    console.log('OPEUserName: ',OPEUserName)
-    console.log('v: ',OPEComment)
-    console.log('v: ',fileId)
-    console.log('v: ',approvedADM)
+    const { userName, userRole } = useContext(AuthContext); 
+    const [isProcessing, setIsProcessing] = useState(false); //Bloquea el botón
     
-    
-
-
     function handleChange(e) {
         setTextAreaValue(e.target.value);
     }
@@ -32,40 +18,65 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
         setTextAreaValueAdmin(e.target.value);
     }
 
-    const aprobacion = async (e) => {
-        e.preventDefault();
-
+    const aprobacionGerencia = async (event) => {
+        event.preventDefault();
+        setIsProcessing(true); // Bloquea el botón
+    
         const data = {
-            userName: userName,
-            comentarioGerente: textAreaValue,  
-            fileId: fileId,          
-            Nombre_del_archivo: Nombre_del_archivo,
-            OPEUserName: OPEUserName,
-            OPEComment: OPEComment,
+            comentarioGerente: textAreaValue,
             approvedGER: approvedGER,
-            approvedADM: approvedADM ,
-            comentarioAdministracion:  textAreaValueAdmin
-
-            
+            ID_Solicitudes: ID_Solicitudes,
         };
-
-
-        try {                                    
-
-            await postAprobacionGerencia(data);
-
-            if(approvedGER === true){
-                //Solo emitir a admin en caso que el gerente lo haya aprobado
-                socket.emit('messageGerencia', data);
-            }            
-
-            // Llamamos a la función para eliminar el registro del historial
-            onDecision(Nombre_del_archivo, OPEUserName);
+    
+        try {
+            const response = await APIaprobacionGerencia(data);
+            onDecision(ID_Solicitudes);
             onClose(); // Cerrar el modal
+            if (response.success) {
+                if (approvedGER === true) {
+                    toast.success('¡Solicitud aprobada correctamente!');
+                } else {
+                    toast.success('Solicitud denegada correctamente');
+                }
+            } else {
+                toast.error('Hay un error en la aprobación');
+            }
         } catch (error) {
-            toast.error('Hay un error en la aprobación')            
+            toast.error('Hay un error en la aprobación');
+        } finally {
+            setIsProcessing(false); // Habilita el botón nuevamente
         }
     };
+    
+
+    const aprobacionAdmin =async(e)=>{     
+        e.preventDefault();
+        setIsProcessing(true); //Bloquea el botón
+        const dataAdmin = {                
+            fileId: fileId,                                                      
+            approvedADM: approvedADM ,
+            comentarioAdministracion:  textAreaValueAdmin,
+            ID_Solicitudes: ID_Solicitudes               
+        };
+
+        try{
+            await APIaprobacionAdministrador(dataAdmin);
+            onDecision(ID_Solicitudes);
+            onClose(); // Cerrar el modal
+
+            if(response.success == false){
+                toast.error('Hay un error en la aprobación')  
+            }else{            
+                if(approvedADM === true){
+                    toast.success('¡Solicitud aprobada correctamente!')
+                }else{
+                    toast.success('Solicitud denegada correctamente')
+                }
+            }
+        }catch(e){
+            toast.error('Hay un error en la aprobación')  
+        }
+    }
 
     return (
         <div style={{position:'fixed', top:'50%', left:'50%',transform: 'translate(-50%, -50%)',width:'964px', height:'350px', backgroundColor:'white', display:'flex',alignItems:'center', justifyContent:'center', flexDirection:'column', boxShadow: '0px 0px 10px rgba(0,0,0,0.9)', borderRadius:'15px'}}>
@@ -76,7 +87,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
             {userRole==='GER' && approvedGER === true ? (
                 <div>
                     <h1>¿Estás seguro que deseas brindarle permiso de descarga?</h1>
-                    <form className="w-full flex flex-col items-center" onSubmit={aprobacion}>
+                    <form className="w-full flex flex-col items-center" onSubmit={aprobacionGerencia}>
                         <textarea 
                             className="w-[90%] border h-28 border-black " 
                             placeholder="Escribe una justificación"
@@ -85,59 +96,142 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
                             required
                         />
                         <div className="flex gap-5">
-                            <button className="bg-green-900 w-24" type="submit">Enviar</button>
+                        <button
+                            className={`rounded px-4 py-2 text-white flex items-center pr-12 pl-12 justify-center 
+                                ${isProcessing ? "bg-gray-500 cursor-not-allowed" : "bg-green-900 hover:bg-green-700"}`}
+                            type="submit"
+                            disabled={isProcessing}
+                            >
+                            {isProcessing ? (
+                                <>
+                                <svg
+                                    className="animate-spin h-5 w-5 mr-2"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                    ></circle>
+                                    <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8v8H4z"
+                                    ></path>
+                                </svg>
+                                Procesando...
+                                </>
+                            ) : (
+                                "Enviar"
+                            )}
+                        </button>         
+
                         </div>
                     </form>
                 </div>
-            ) : approvedGER === false && (
+            ) : userRole==='GER' && approvedGER === false && (
                 <div>
-                    <h1>¿Estás seguro que NO deseas brindar permiso?</h1>
-                    <form className="w-full flex flex-col items-center" onSubmit={aprobacion}>
+                    <h1>¿Estás seguro que NO deseas brindar permiso para descargar el archivo?</h1>
+                    <form className="w-full flex flex-col items-center" onSubmit={aprobacionGerencia}>
                         <textarea 
                             className="w-[90%] border h-28 border-black" 
                             placeholder="Escribe una justificación"
                             onChange={handleChange}
-                            value={textAreaValueAdmin}
-                            required
-                        />
-                        <div className="flex gap-5">
-                            <button className="bg-green-900 w-24" type="submit">Enviar</button>
-                        </div>
-                    </form>
-                </div>
-            )}
-
-            {userRole === 'ADM' && approvedADM === true && (
-                <div>
-                    <h1>¿Estás seguro que deseas brindarle permiso de descarga desde Admin?</h1>
-                    <form className="w-full flex flex-col items-center" onSubmit={aprobacion}>
-                        <textarea 
-                            className="w-[90%] border h-28 border-black " 
-                            placeholder="Escribe una justificación"
-                            onChange={handleChangeAdmin}
-                            value={textAreaValueAdmin}
-                            required
-                        />
-                        <div className="flex gap-5">
-                            <button className="bg-green-900 w-24" type="submit">Enviar</button>
-                        </div>
-                    </form>
-                </div>
-            )}
-
-            {userRole === 'ADM' && approvedADM === false && (
-                <div>
-                    <h1>¿Estás seguro que NO deseas brindar permiso desde Admin?</h1>
-                    <form className="w-full flex flex-col items-center" onSubmit={aprobacion}>
-                        <textarea 
-                            className="w-[90%] border h-28 border-black" 
-                            placeholder="Escribe una justificación"
-                            onChange={handleChangeAdmin}
                             value={textAreaValue}
                             required
                         />
                         <div className="flex gap-5">
-                            <button className="bg-green-900 w-24" type="submit">Enviar</button>
+                            <button className={`w-24 rounded
+                                        ${isProcessing ? "bg-gray-500 cursor-not-allowed" : "bg-green-900 hover:bg-green-700"}`}
+
+                                    type="submit"
+                                    disabled={isProcessing} // Bloquea el botón
+                                >
+                                Enviar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            )}
+
+            {(userRole === 'ADM' || userRole === 'CEO') && approvedADM === true && (
+                <div className="flex flex-col justify-center items-center">
+                    <h1>¿Estás seguro que deseas brindarle permiso de descarga?</h1>
+                    <form className="w-full flex flex-col items-center" onSubmit={aprobacionAdmin}>
+                        <textarea 
+                            className="w-[90%] border h-28 border-black max-w-screen-md" 
+                            placeholder="Escribe una justificación"
+                            onChange={handleChangeAdmin}
+                            value={textAreaValueAdmin}
+                            required
+                        />                        
+                        <div className="flex gap-5 flex-col items-center justify-center w-full">
+                        <button
+                            className={`rounded px-4 py-2 text-white flex items-center justify-center 
+                                ${isProcessing ? "bg-gray-500 cursor-not-allowed" : "bg-green-900 hover:bg-green-700"}`}
+                            type="submit"
+                            disabled={isProcessing}
+                            >
+                            {isProcessing ? (
+                                <>
+                                <svg
+                                    className="animate-spin h-5 w-5 mr-2"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                    ></circle>
+                                    <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8v8H4z"
+                                    ></path>
+                                </svg>
+                                Procesando...
+                                </>
+                            ) : (
+                                "Enviar"
+                            )}
+                        </button>                              
+                            
+                        </div>
+                    </form>
+                    
+                </div>
+            )}
+
+            {(userRole === 'ADM' || userRole === 'CEO') && approvedADM === false && (
+                <div >
+                    <h1>¿Estás seguro que NO deseas brindar permiso para descargar el archivo?</h1>
+                    <form className="w-full flex flex-col items-center" onSubmit={aprobacionAdmin}>
+                        <textarea 
+                            className="w-[90%] border h-28 border-black" 
+                            placeholder="Escribe una justificación"
+                            onChange={handleChangeAdmin}
+                            value={textAreaValueAdmin}
+                            required
+                        />
+                        <div className="flex gap-5">
+                            <button className={`w-24 rounded
+                                ${isProcessing ? "bg-gray-500 cursor-not-allowed" : "bg-green-900 hover:bg-green-700"}`}
+
+                                type="submit"
+                                disabled={isProcessing} // Bloquea el botón
+                                >
+                                Enviar
+                            </button>
                         </div>
                     </form>
                 </div>

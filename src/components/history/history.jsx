@@ -24,7 +24,7 @@ function History(){
             navigate('/completeHistory')
         }
     }
-
+    
     return(
         <section 
             className={`w-full fixed bg-[rgba(255,237,0,1)] bottom-0 flex flex-col transition-all duration-500 
@@ -40,7 +40,7 @@ function History(){
                 </div>
                 {/* onClick={expandHistory} */}
 
-                {userRole === 'ADM' &&
+                {(userRole === 'ADM' || userRole === 'CEO') &&
                     <div>
                         <iconify-icon   iconify-icon style={{cursor:'pointer',  paddingRight:'10px',transform: changeSize ? 'translateY(0px)' : 'translateY(0)',        transition: 'transform 0.5s ease', color:'black'}} onClick={expandHistory} icon="lucide:expand"></iconify-icon>
                     </div>     

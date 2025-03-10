@@ -48,7 +48,7 @@ function SeeFileWaterBrand({fileName, fileId}){
     return(
         
         <div
-        className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+        className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 "
         >            
             <div id="GERENTE" className="bg-white w-3/4 max-w-4xl rounded-lg shadow-lg flex flex-col items-center justify-center p-6 relative h-full">
                 <iconify-icon

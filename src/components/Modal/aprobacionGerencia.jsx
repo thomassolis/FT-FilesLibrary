@@ -30,17 +30,9 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
     
         try {
             const response = await APIaprobacionGerencia(data);
+            console.log('response desde APIaprobacionGerencia')
             onDecision(ID_Solicitudes);
-            onClose(); // Cerrar el modal
-            if (response.success) {
-                if (approvedGER === true) {
-                    toast.success('¡Solicitud aprobada correctamente!');
-                } else {
-                    toast.success('Solicitud denegada correctamente');
-                }
-            } else {
-                toast.error('Hay un error en la aprobación');
-            }
+            onClose(); // Cerrar el modal           
         } catch (error) {
             toast.error('Hay un error en la aprobación');
         } finally {
@@ -64,17 +56,13 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
             onDecision(ID_Solicitudes);
             onClose(); // Cerrar el modal
 
-            if(adminResponse.success == false){
-                toast.error('Hay un error en la aprobación1')  
-            }else{            
-                if(approvedADM === true){
-                    toast.success('¡Solicitud aprobada correctamente!')
-                }else{
-                    toast.success('Solicitud denegada correctamente')
-                }
+            if(adminResponse.success){
+                toast.success(adminResponse.message);
+            }else{
+                toast.error(adminResponse.message);
             }
         }catch(e){
-            toast.error('Hay un error en la aprobación1')  
+            console.error('Hay un error en la aprobación', e)  
         }
     }
 

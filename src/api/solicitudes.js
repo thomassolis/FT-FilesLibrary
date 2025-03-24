@@ -1,4 +1,5 @@
 import axios from './axios'; // Importa tu instancia de axios
+import { toast } from "react-hot-toast";
 
 //ENVIAR PETICIÓN PARA VER ARCHIVO DESDE OPERADOR 
 export const CrearNuevaPeticion = async (data) =>{    
@@ -7,7 +8,7 @@ export const CrearNuevaPeticion = async (data) =>{
         const response = await axios.post('/solicitud/agregar/nueva',{            
             fileId: data.fileId,   
             motivo_solicitud: data.motivo_solicitud  ,
-        });        
+        });                
         return response.data;
     }catch(error){
         console.log("Error en CrearNuevaPeticion:", error);
@@ -22,11 +23,11 @@ export const APIaprobacionAdministrador = async(dataAdmin) =>{
             fileId: dataAdmin.fileId,                        
             approvedADM: dataAdmin.approvedADM,                 
             ID_Solicitudes: dataAdmin.ID_Solicitudes   
-        });        
+        });           
         return response.data;
     }catch(e){
-        console.log('Error en APIaprobacionAdministrador', e);
-        return {success: false}
+        console.log('Error en APIaprobacionAdministrador', e);  
+        toast.error(e.message || 'Hay un error en la aprobación');  
     }
   }
 
@@ -38,9 +39,14 @@ export const APIaprobacionGerencia = async (data) =>{
             approvedGER: data.approvedGER,
             ID_Solicitudes: data.ID_Solicitudes
         })
-        return {success: true}
-    }catch(e){
+        if(response.data.success){
+            return toast.success(response.data.message)
+        }else {
+            return toast.error(response.data.message)
+        }        
+        
+    }catch(error){
         console.log('Error en APIaprobacionGerencia', e);
-        return {success: false}
+        toast.error(error.response.data.message || 'Hubo un error en la aprobación');
     }
   }

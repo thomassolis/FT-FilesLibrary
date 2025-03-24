@@ -78,8 +78,7 @@ function Login() {
                     isBan();        
                     break;
                 case 401:
-                    toast.error(error.response.data.message) 
-                    console.log('ENTRE A ESTE ERROR EN EL SWITXH')                   
+                    toast.error(error.response.data.message)                          
                     break;
                 case 500:
                     toast.error(error.response.data.message)                    

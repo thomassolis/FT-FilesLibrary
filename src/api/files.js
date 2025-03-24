@@ -11,7 +11,9 @@ export const comprobarDrive = async (data) => {
 export const previsualizarArchivos = async ({ fileId }) => {    
     try {
         const response = await axios.get(
-            `files/get/archivos/copia/byuser/${fileId}`
+            `files/get/archivos/copia/byuser/${fileId}`,{
+                responseType: 'blob'
+            }
         );
         return response.data;
     } catch (error) {

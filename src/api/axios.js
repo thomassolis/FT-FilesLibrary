@@ -5,16 +5,16 @@ const instance = axios.create({
     withCredentials: true
 });
 
-// Interceptor de respuesta para manejar errores 401 (token vencido)
-// instance.interceptors.response.use(
-//     (response) => response, // Si la respuesta es correcta, devuélvela tal cual
-//     (error) => {
-//         if (error.response && error.response.status === 401) {
-//             toast.error('El token ha expirado. Redirigiendo al login...');
-//             window.location.href = '/'; 
-//         }
-//         return Promise.reject(error); // Propaga el error para manejo local
-//     }
-// );
+//Interceptor de respuesta para manejar errores 401 (token vencido)
+instance.interceptors.response.use(
+    (response) => response, // Si la respuesta es correcta, devuélvela tal cual
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            toast.error('El token ha expirado. Redirigiendo al login...');
+            window.location.href = '/'; 
+        }
+        return Promise.reject(error); // Propaga el error para manejo local
+    }
+);
 
 export default instance;

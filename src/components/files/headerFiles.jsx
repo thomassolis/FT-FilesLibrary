@@ -139,9 +139,9 @@ const HeaderFiles = () => {
     return null; // Si no hay condiciones que cumplir, no mostrar nada.
   };
 
-  function handleClick(){
-    Navigate(`/${selectedFolder}`);
-  }
+  // function handleClick(){
+  //   Navigate(`/${selectedFolder}`);
+  // }
   
 
   return (
@@ -158,7 +158,7 @@ const HeaderFiles = () => {
                     type="text"
                     placeholder="Cargando..."
                 />
-                <img src={logo} alt="Logo" style={{ position: "fixed", right: "20px", cursor:"pointer" }} onClick={handleClick}/>
+                <img src={logo} alt="Logo" style={{ position: "fixed", right: "20px", cursor:"pointer" }}/>
             </>          
         ) : (
           <>
@@ -169,7 +169,7 @@ const HeaderFiles = () => {
               value={searchTerm}
               onChange={onSearchInputChange}
             />
-            <img src={logo} alt="Logo" style={{ position: "fixed", right: "20px", cursor:"pointer" }} onClick={handleClick}/>
+            <img src={logo} alt="Logo" style={{ position: "fixed", right: "20px", cursor:"pointer" }} />
           </>
         )}
         {filteredResults.length > 0 && (

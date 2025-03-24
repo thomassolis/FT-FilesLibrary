@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useContext} from "react";
 import { useForm } from "react-hook-form" 
-
+import { FadeLoader } from "react-spinners";
 import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import '../../src/images/MLC logo.png'
 import 'react-toastify/dist/ReactToastify.css';
@@ -18,6 +18,7 @@ function Login() {
     //Verificación si el usuario está logeado para enviar al contexto
     const {setIsAuthenticated, isAuthenticated, isDisabled, setIsDisabled, setUserEmail} = useContext(AuthContext);    
     const [timeBan, setTimeBan] = useState()
+    const [loading, setLoading] = useState(false);
 
 
     const [showCountDown, setShowCountDown] = useState(false);
@@ -52,6 +53,7 @@ function Login() {
     const onSubmit = async (data) => {        
         
         try {
+            setLoading(true);
             const response = await enviarLogin(data); // Pasamos 'data' a enviarLogin
             if (!response) {
                 throw new Error('Response is undefined or null');
@@ -61,6 +63,9 @@ function Login() {
                 setUserData(response.Data);  // Aquí actualizas el estado
                 setUserEmail(response.Data.email);
                 setIsAuthenticated(true);          
+            }
+            else{
+                toast.error(response.message)
             }
         } catch (error) {                        
             const errorCode = error.response.status;
@@ -80,8 +85,8 @@ function Login() {
                     toast.error('Ha ocurrido un error')
                     
             }
-
-
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -134,11 +139,23 @@ function Login() {
 
                         {/* {timeBan && <h1>Tiempo de baneo restante: {timeBan} segundos</h1> } */}
 
-                        <button type="submit">Login</button>
+                        <button
+                        className="flex items-center justify-center"
+                        type="submit"
+                        disabled={loading || isDisabled}
+                        >
+                        {loading ? (
+                            <>
+                            Cargando...
+                            </>
+                        ) : (
+                            'Login'
+                        )}
+                        </button>
                     </form>
 
                     {   //Mostrar la cuenta regresiva si es true
-                        showCountDown && <CountDown seconds={timeBan}/>
+                        showCountDown && <CountDown seconds={timeBan} message={'Vuelve a intentar luego de: '}/>
                     }
             
                     

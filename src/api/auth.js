@@ -1,11 +1,17 @@
 import axios from './axios';
 import { Toaster,toast } from 'react-hot-toast';
 export const enviarLogin = async (data) => {
-    const response = await axios.post('auth/login', {
-        Email: data.email,
-        Password: data.password
-    });
-    return response.data;
+    try{
+        const response = await axios.post('auth/login', {
+            Email: data.email,
+            Password: data.password
+        });
+        return response.data;
+    }catch(e){
+        console.error('Error en enviarLogin', e)
+        alert.error('Error en enviarLogin');
+    }
+    
 }
 
 //2. VERIFICACION DE 2 PASOS

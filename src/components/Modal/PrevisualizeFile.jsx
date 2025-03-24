@@ -64,7 +64,7 @@ function PrevisualizeFile({ fileName, fileId }) {
         ) : (
           <FadeLoader size={15} />
         )}
-        <CountDown seconds={300} className="" />
+        <CountDown seconds={300} message="El archivo será eliminado en: " />
       </div>
     </div>
   );

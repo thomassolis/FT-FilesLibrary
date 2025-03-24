@@ -23,6 +23,7 @@ function Login() {
 
     const [showCountDown, setShowCountDown] = useState(false);
 
+
     // Leer si está autenticado desde sessionStorage cuando se cargue el componente
     useEffect(()=>{
         const storedIsAuthenticated = sessionStorage.getItem("isAuthenticated");
@@ -55,6 +56,7 @@ function Login() {
         try {
             setLoading(true);
             const response = await enviarLogin(data); // Pasamos 'data' a enviarLogin
+            console.log('enviarLoginenviarLogin',response);
             if (!response) {
                 throw new Error('Response is undefined or null');
             }
@@ -76,7 +78,8 @@ function Login() {
                     isBan();        
                     break;
                 case 401:
-                    toast.error(error.response.data.message)                    
+                    toast.error(error.response.data.message) 
+                    console.log('ENTRE A ESTE ERROR EN EL SWITXH')                   
                     break;
                 case 500:
                     toast.error(error.response.data.message)                    
@@ -100,9 +103,6 @@ function Login() {
                         <label aria-hidden="true" className="title">MLC Library</label>
                         <input 
                             type="email"
-                            // disabled = {isBan}
-
-                           
                             {...register("email", {
                                 required: {
                                     value: true,
@@ -146,6 +146,26 @@ function Login() {
                         >
                         {loading ? (
                             <>
+                            <svg
+                                className="animate-spin h-5 w-5 mr-2"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                            >
+                                <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                                ></circle>
+                                <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v8H4z"
+                                ></path>
+                            </svg>
                             Cargando...
                             </>
                         ) : (

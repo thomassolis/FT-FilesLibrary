@@ -9,7 +9,8 @@ export const enviarLogin = async (data) => {
         return response.data;
     }catch(e){
         console.error('Error en enviarLogin', e)
-        alert.error('Error en enviarLogin');
+        toast.error(e?.response?.data?.message || 'Ocurrió un error inesperado');
+        console.error(e.response.data.message);
     }
     
 }

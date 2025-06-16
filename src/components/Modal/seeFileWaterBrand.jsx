@@ -4,11 +4,13 @@ import { previsualizarArchivos } from "../../api/files";
 import { FadeLoader } from 'react-spinners';
 import { AuthContext } from "../../context/authProvider";
 import { ModalContext } from "../../context/closeModals";
+
+
 function SeeFileWaterBrand({fileName, fileId}){
     const [sendRequest, setSendRequest] = useState(false);
     const [pdfUrl, setPdfUrl] = useState(null);
     const {modalSeeFileWaterBrand, setModalSeeFileWaterBrand} = useContext(ModalContext);
-    
+    const {userRole} = useContext(AuthContext);
     function closeModal(){
         setModalSeeFileWaterBrand(false);
     }
@@ -16,7 +18,7 @@ function SeeFileWaterBrand({fileName, fileId}){
     useEffect(() => {
         const pedirArchivos = async () => {
             try {
-                const pdfBlob = await previsualizarArchivos({ fileId });
+                const pdfBlob = await previsualizarArchivos({ fileId, userRole });
     
                 if (!(pdfBlob instanceof Blob)) {
                     throw new Error('La respuesta no es un Blob válido.');

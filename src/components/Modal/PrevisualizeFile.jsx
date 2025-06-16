@@ -4,11 +4,14 @@ import { FadeLoader } from "react-spinners";
 import { useContext } from "react";
 import CountDown from "../countDown";
 import { ModalContext } from "../../context/closeModals";
+import { AuthContext } from "../../context/authProvider";
+
+
 
 function PrevisualizeFile({ fileName, fileId }) {
   const [pdfUrl, setPdfUrl] = useState(null); // Ahora se espera un enlace
   const { setPrevisualizeFile } = useContext(ModalContext);
-
+  const {userRole} = useContext(AuthContext);
   function closeModal() {
     setPrevisualizeFile(false);
   }
@@ -16,7 +19,8 @@ function PrevisualizeFile({ fileName, fileId }) {
   useEffect(() => {
     const pedirArchivos = async () => {
       try {
-        const response = await previsualizarArchivos({ fileId }); // Asegúrate de que esta función devuelva { success: true, link: "url" }
+        const response = await previsualizarArchivos({ fileId, userRole }); // Asegúrate de que esta función devuelva { 
+        // success: true, link: "url" }    
         if (response.success && response.link) {
           setPdfUrl(response.link); // Guarda el enlace embebible en el estado
         } else {

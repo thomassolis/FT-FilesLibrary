@@ -4,6 +4,7 @@ import { useState, useEffect, useContext } from 'react';
 import { getOficialHistory } from '../../api/historial';
 import { useNavigate } from 'react-router-dom';
 import FoldersFilesContext from '../../context/Folders-Files/Folders_Files';
+import { Icon } from '@iconify/react/dist/iconify.js';
 
 function CompleteHistory() {
     const [oficialHistory, setOficialHistory] = useState([]);
@@ -15,7 +16,7 @@ function CompleteHistory() {
                 const response = await getOficialHistory();
                 setOficialHistory(response.Data);  // Acceder a los datos dentro de "response.data"                
             } catch (e) {
-                console.log('Error en CompleteHistory',e);
+                console.error('Error en CompleteHistory',e);
             }
         };
 
@@ -73,9 +74,22 @@ function CompleteHistory() {
     return (
         <section className="flex flex-col">
             {/* Encabezado fijo */}
-            <div className="w-full h-[5vw] fixed items-center flex justify-center bg-white z-10 shadow">
-                <h1 className="font-sans text-2xl">Historial de solicitudes</h1>
-                <img src={logo} alt="" className='absolute right-6 w-20 cursor-pointer' onClick={navigateHome}/>
+            <div className="w-full h-[5vw] fixed flex justify-between items-center bg-red-200 z-10 shadow">
+                <div className='w-[5%]'>
+                    <Icon 
+                        icon="streamline-plump:return-3-solid" 
+                        width="28" height="28" 
+                        className='cursor-pointer'
+                        onClick={navigateHome}
+                    />
+                </div>                
+                <div>
+                    <h1 className="font-sans text-2xl">Historial de solicitudes</h1>
+                </div>                
+
+                <div>
+                    <img src={logo} alt="" className='w-20 cursor-pointer' onClick={navigateHome}/>
+                </div>                
             </div>
 
             {/* Contenedor de la tabla con margen superior */}

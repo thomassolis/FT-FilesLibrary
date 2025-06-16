@@ -11,7 +11,7 @@ export const CrearNuevaPeticion = async (data) =>{
         });                
         return response.data;
     }catch(error){
-        console.log("Error en CrearNuevaPeticion:", error);
+        console.error("Error en CrearNuevaPeticion:", error);
         throw error;
     }
   }
@@ -26,7 +26,7 @@ export const APIaprobacionAdministrador = async(dataAdmin) =>{
         });           
         return response.data;
     }catch(e){
-        console.log('Error en APIaprobacionAdministrador', e);  
+        console.error('Error en APIaprobacionAdministrador', e);  
         toast.error(e.message || 'Hay un error en la aprobación');  
     }
   }
@@ -46,7 +46,7 @@ export const APIaprobacionGerencia = async (data) =>{
         }        
         
     }catch(error){
-        console.log('Error en APIaprobacionGerencia', e);
+        console.error('Error en APIaprobacionGerencia', e);
         toast.error(error.response.data.message || 'Hubo un error en la aprobación');
     }
   }

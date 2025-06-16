@@ -7,7 +7,6 @@ import { AuthContext } from "../context/authProvider";
 import Home from "./home";
 import FoldersFilesContext from "../context/Folders-Files/Folders_Files";
 import { Toaster, toast } from 'react-hot-toast';
-import { getFilesData } from "../api/files";
 
 function Authentication() {
     const { register, handleSubmit, getValues, formState: { errors } } = useForm();

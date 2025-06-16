@@ -1,19 +1,20 @@
 // usuarios.js
 import axios from './axios'; // Importa tu instancia de axios
 
-
 export const comprobarDrive = async (data) => {
     const response = await axios.get('/files/get/archivos/byuser');
     return response.data;
 
 }
 
-export const previsualizarArchivos = async ({ fileId }) => {    
-    try {
+export const previsualizarArchivos = async ({ fileId, userRole }) => {           
+    const config = {
+        ...(userRole === 'OPE' || userRole === 'GER' ? { responseType: 'blob' } : {})
+    };
+
+    try {        
         const response = await axios.get(
-            `files/get/archivos/copia/byuser/${fileId}`,{
-                responseType: 'blob'
-            }
+        `files/get/archivos/copia/byuser/${fileId}`, config
         );
         return response.data;
     } catch (error) {
@@ -61,6 +62,6 @@ export const getFilesData = async () => {
         const response = await axios.get(`/files/get/archivos/byuser`);
         return response.data
     }catch(error){
-        console.log("error buscando los datos");
+        console.error("error buscando los datos");
     }
 }

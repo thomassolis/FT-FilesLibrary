@@ -27,7 +27,7 @@ function Home() {
     useEffect(() => {
         const fetchFiles = async () => {
             try {
-                const response = await getFilesData();
+                const response = await getFilesData();                
                 setFilesData(response.data);
                 const Folders = Object.keys(response.data);
                 setFolderData(Folders);

@@ -29,8 +29,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
         };
     
         try {
-            const response = await APIaprobacionGerencia(data);
-            console.log('response desde APIaprobacionGerencia')
+            const response = await APIaprobacionGerencia(data);            
             onDecision(ID_Solicitudes);
             onClose(); // Cerrar el modal           
         } catch (error) {

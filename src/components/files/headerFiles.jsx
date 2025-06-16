@@ -34,7 +34,7 @@ const HeaderFiles = () => {
   useEffect(() => {
     const fetchFiles = async () => {
       setIsLoading(true);
-      const response = await getFilesData();
+      const response = await getFilesData();      
       setFileData(response.data);
       setIsLoading(false); // Archivos cargados
     };

@@ -55,8 +55,7 @@ function Login() {
         
         try {
             setLoading(true);
-            const response = await enviarLogin(data); // Pasamos 'data' a enviarLogin
-            console.log('enviarLoginenviarLogin',response);
+            const response = await enviarLogin(data); // Pasamos 'data' a enviarLogin            
             if (!response) {
                 throw new Error('Response is undefined or null');
             }

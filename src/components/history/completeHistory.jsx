@@ -74,7 +74,7 @@ function CompleteHistory() {
     return (
         <section className="flex flex-col">
             {/* Encabezado fijo */}
-            <div className="w-full h-[5vw] fixed flex justify-between items-center bg-red-200 z-10 shadow">
+            <div className="w-full h-[5vw] fixed flex justify-between items-center bg-white z-10 shadow">
                 <div className='w-[5%]'>
                     <Icon 
                         icon="streamline-plump:return-3-solid" 

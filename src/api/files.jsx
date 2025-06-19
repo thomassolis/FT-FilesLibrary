@@ -14,8 +14,9 @@ export const previsualizarArchivos = async ({ fileId, userRole }) => {
 
     try {        
         const response = await axios.get(
-        `files/get/archivos/copia/byuser/${fileId}`, config
+        `files/get/archivos/copia/byuser/${encodeURIComponent(fileId)}`, config
         );
+        console.log('Response: ', response);
         return response.data;
     } catch (error) {
         console.error("Error al solicitar archivo:", error);

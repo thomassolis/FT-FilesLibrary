@@ -19,12 +19,13 @@ function SeeFileWaterBrand({fileName, fileId}){
         const pedirArchivos = async () => {
             try {
                 const pdfBlob = await previsualizarArchivos({ fileId, userRole });
-    
+                console.log('PDF',pdfBlob);
                 if (!(pdfBlob instanceof Blob)) {
                     throw new Error('La respuesta no es un Blob válido.');
                 }
     
                 const pdfUrl = URL.createObjectURL(pdfBlob); // Crea una URL para el Blob
+                console.log('pdfUrl: ', pdfUrl)
                 setPdfUrl(pdfUrl);
             } catch (error) {
                 console.error('Error al cargar el archivo:', error);
@@ -67,15 +68,15 @@ function SeeFileWaterBrand({fileName, fileId}){
                 ></iconify-icon>
                 <h1 className="font-serif text-xl text-center mb-4">{fileName}</h1>
                 {pdfUrl ? (
-                <iframe
+                    <embed
                     src={pdfUrl}
+                    type="application/pdf"
                     className="w-full rounded-lg"
                     style={{
-                    height: '500px',
-                    border: 'none',
+                        height: '500px',
+                        border: 'none',
                     }}
-                    title="PDF Preview"
-                ></iframe>
+                    />
                 ) : (
                     <FadeLoader size={15} />
                 )}

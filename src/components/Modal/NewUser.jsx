@@ -40,7 +40,7 @@ export const NewUser = ({ setCreateUser }) => {
                         <input
                             type="text"
                             {...register("nombre", { required: "El nombre es obligatorio" })}
-                            className="w-full border m-0 border-gray-300 rounded px-3 py-4 m-0 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full border m-0 border-gray-300 rounded px-3 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             disabled={loading} // Deshabilitar el input cuando se está cargando
                         />
                         {errors.nombre && <p className="text-red-500 text-xs">{errors.nombre.message}</p>}

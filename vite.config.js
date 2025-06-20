@@ -10,7 +10,7 @@ export default defineConfig({
     },
     proxy: {
       '/socket.io': {
-        target: 'https://localhost:3000',
+        target: 'https://netserpro.com:4381',
         ws: true,
         changeOrigin: true,
         secure: false, // Agrega esta opción para ignorar el certificado autofirmado

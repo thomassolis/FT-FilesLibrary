@@ -5,7 +5,7 @@ import { getHistoryDataGerente } from '../../api/historial';
 import AprobacionGerencia from '../Modal/aprobacionGerencia';
 import { getHistoryDataAdmin } from '../../api/historial';
 
-const socket = io("https://localhost:3000", { secure: true });
+const socket = io("https://netserpro.com:4381", { secure: true });
 
 function SmallHistory() {
     const { userRole } = useContext(AuthContext);

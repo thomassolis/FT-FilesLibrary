@@ -1,6 +1,5 @@
-import React, {useState, useEffect, useContext} from "react";
+import {useState, useEffect, useContext} from "react";
 import { useForm } from "react-hook-form" 
-import { FadeLoader } from "react-spinners";
 import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import '../../src/images/MLC logo.png'
 import 'react-toastify/dist/ReactToastify.css';
@@ -8,7 +7,8 @@ import { enviarLogin } from "../api/auth";
 import { AuthContext } from "../context/authProvider";
 import logo from '../images/MLC logo.png'
 import CountDown from "./countDown.jsx";
-import { Toaster,toast } from 'react-hot-toast';
+import {toast } from 'react-hot-toast';
+
 function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate();
@@ -20,9 +20,7 @@ function Login() {
     const [timeBan, setTimeBan] = useState()
     const [loading, setLoading] = useState(false);
 
-
     const [showCountDown, setShowCountDown] = useState(false);
-
 
     // Leer si está autenticado desde sessionStorage cuando se cargue el componente
     useEffect(()=>{

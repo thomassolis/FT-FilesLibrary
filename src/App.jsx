@@ -9,7 +9,7 @@ import NotFound from "./components/notFound";
 import CompleteHistory from "./components/history/completeHistory";
 import { PermissionsProvider } from "./context/permissions/permissionsProvider";
 import { FoldersFilesProvider } from "./context/Folders-Files/Folders_Files";
-import { Toaster,toast } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import ModalProvider from "./context/closeModals";
 
 function App() {

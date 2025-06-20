@@ -63,15 +63,16 @@ export const NewUser = ({ setCreateUser }) => {
                         <select
                             {...register("departamento", { required: "Selecciona un departamento" })}
                             className="w-full border border-gray-300 rounded px-3 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            disabled={loading} // Deshabilitar el select cuando se está cargando
-                        >
+                            disabled={loading}  >
                             <option value="">Seleccione...</option>
                             <option value="TI">IT</option>
                             <option value="Recursos Humanos">Recursos Humanos</option>
                             <option value="Contabilidad">Finanzas</option>
                             <option value="Pricing">Pricing</option>
+                            <option value="Ventas">Ventas</option>
                             <option value="Customer Service">Customer Service</option>
-                            <option value="Inside Sales">Inside Sales</option>
+                            <option value="wcp">World Connecta</option>
+                            <option value="Bodega">Bodega</option>
                         </select>
                         {errors.departamento && <p className="text-red-500 text-xs">{errors.departamento.message}</p>}
                     </div>

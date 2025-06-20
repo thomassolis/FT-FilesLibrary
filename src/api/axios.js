@@ -1,7 +1,7 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
 const instance = axios.create({
-    baseURL: 'https://localhost:3000/api/',
+    baseURL: 'https://netserpro.com:4381/api/',
     withCredentials: true
 });
 

@@ -12,7 +12,6 @@ const formatTime = (time) => {
 }
 
 export default function CountDown({seconds, message}){
-    const {userRole} = useContext(AuthContext);
     const [countDown, setCountDown] = useState(seconds);
     const timerId = useRef()
 
@@ -42,22 +41,6 @@ export default function CountDown({seconds, message}){
                     {message} 
                     {formatTime(countDown)} minutos 
                 </h4>
-                
-            {/* )} */}
-
-            {/* {(userRole != 'ADM' || userRole === 'CEO') && (
-                <h4
-                    style={{
-                        marginLeft: '70px',
-                        marginTop: '25px',
-                        padding: '0',
-                        position: 'absolute',
-                        color: '#de1212',
-                    }}
-                >
-                    El archivo se eliminará en: {formatTime(countDown)} minutes
-                </h4>                
-            )} */}
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="#c10b0b" d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,20a9,9,0,1,1,9-9A9,9,0,0,1,12,21Z"/><rect width="2" height="7" x="11" y="6" fill="#c10b0b" rx="1"><animateTransform attributeName="transform" dur="27s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></rect><rect width="2" height="9" x="11" y="11" fill="#c10b0b" rx="1"><animateTransform attributeName="transform" dur="2.25s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></rect></svg>
             
 

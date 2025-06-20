@@ -29,8 +29,12 @@ export const enviarLogin = async (data) => {
             }else{
                 toast.error(response.data.message);
             }
-        }catch(e){
-            console.error('Error en enviarVerificacion2pasos', e)
-            toast.error('Código Incorrecto');
-        }              
+        }catch (e) {
+        if (e.response && e.response.data && e.response.data.message) {
+            toast.error(e.response.data.message);
+        } else {
+            toast.error('Error desconocido al verificar código 2FA');
+        }
+        console.error('Error en enviarVerificacion2pasos', e);
+    }          
     }

@@ -94,7 +94,6 @@ useEffect(() => {
                             setShouldNavigateHome(true);
                     }
                 } else {
-                    console.error('Error en la conexión o sin respuesta del servidor:', error);
                     alert('No se pudo conectar con el servidor. Inténtalo más tarde.');
                 }
             }

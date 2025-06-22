@@ -19,16 +19,14 @@ function SeeFileWaterBrand({fileName, fileId}){
         const pedirArchivos = async () => {
             try {
                 const pdfBlob = await previsualizarArchivos({ fileId, userRole });
-                console.log('PDF',pdfBlob);
                 if (!(pdfBlob instanceof Blob)) {
                     throw new Error('La respuesta no es un Blob válido.');
                 }
     
                 const pdfUrl = URL.createObjectURL(pdfBlob); // Crea una URL para el Blob
-                console.log('pdfUrl: ', pdfUrl)
                 setPdfUrl(pdfUrl);
             } catch (error) {
-                console.error('Error al cargar el archivo:', error);
+                return []
             }
         };
     

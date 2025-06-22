@@ -13,7 +13,6 @@ export const CreateNewUser = async(data) =>{
         }
 
     }catch(error){
-        console.error('Error en CreateNewUser');
         toast.error('Ha ocurrido un error a la hora de crear el usuario');
     }
     

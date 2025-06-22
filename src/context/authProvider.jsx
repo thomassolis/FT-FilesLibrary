@@ -7,7 +7,7 @@ const secretKey = import.meta.env.VITE_SECRET_KEY;
 
 // Si no está definida la clave, mostrar advertencia
 if (!secretKey) {
-  console.error("Error: La clave secreta (VITE_SECRET_KEY) no está definida en el archivo .env.");
+  console.error("Session No iniciada");
 }
 
 // Función para cifrar valores
@@ -22,7 +22,6 @@ const decrypt = (encryptedValue) => {
     const decrypted = bytes.toString(CryptoJS.enc.Utf8);
     return decrypted;
   } catch (error) {
-    console.error("Error al descifrar. Datos manipulados o clave incorrecta.", error);
     return null;
   }
 };

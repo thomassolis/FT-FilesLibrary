@@ -16,10 +16,8 @@ export const previsualizarArchivos = async ({ fileId, userRole }) => {
         const response = await axios.get(
         `files/get/archivos/copia/byuser/${encodeURIComponent(fileId)}`, config
         );
-        console.log('Response: ', response);
         return response.data;
     } catch (error) {
-        console.error("Error al solicitar archivo:", error);
         throw error;
     }
 };
@@ -36,7 +34,6 @@ export const sendFilesFromAdmin = async (data) => {
       alert('Archivos subidos correctamente');
       return response;
     } catch (e) {
-      console.error(e);
       alert('Error al subir los archivos');
     }
   };
@@ -52,8 +49,7 @@ export const sendFilesData = async(data) =>{
         return response.data;
     }
     catch(error){
-        console.error(error)
-
+        return null
     }
 }
 
@@ -63,6 +59,6 @@ export const getFilesData = async () => {
         const response = await axios.get(`/files/get/archivos/byuser`);
         return response.data
     }catch(error){
-        console.error("error buscando los datos");
+       return []
     }
 }

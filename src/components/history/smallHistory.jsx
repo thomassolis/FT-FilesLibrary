@@ -120,7 +120,7 @@ function SmallHistory() {
                     const response = await getHistoryDataAdmin();                     
                     setHistorialAdmin(response.data); // Asegúrate de que los datos sean válidos
                 } catch (e) {
-                    console.error(e);
+                    return []
                 }
             };
             getHistoryAdmin();
@@ -133,7 +133,7 @@ function SmallHistory() {
                     
                     setHistorial(response.data); // Asegúrate de que los datos sean válidos
                 } catch (e) {
-                    console.error(e);
+                    return []
                 }
             };
             getHistoryGerente();

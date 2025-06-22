@@ -8,9 +8,7 @@ export const enviarLogin = async (data) => {
         });
         return response.data;
     }catch(e){
-        console.error('Error en enviarLogin', e)
         toast.error(e?.response?.data?.message || 'Ocurrió un error inesperado');
-        console.error(e.response.data.message);
     }
     
 }
@@ -35,6 +33,5 @@ export const enviarLogin = async (data) => {
         } else {
             toast.error('Error desconocido al verificar código 2FA');
         }
-        console.error('Error en enviarVerificacion2pasos', e);
     }          
     }

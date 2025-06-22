@@ -27,7 +27,7 @@ function PrevisualizeFile({ fileName, fileId }) {
           throw new Error("No se pudo obtener el enlace del archivo");
         }
       } catch (error) {
-        console.error("Error al solicitar archivo:", error);
+        return []
       }
     };
 

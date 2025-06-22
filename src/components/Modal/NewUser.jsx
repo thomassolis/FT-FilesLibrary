@@ -14,7 +14,7 @@ export const NewUser = ({ setCreateUser }) => {
                 setCreateUser(false);
             }
         } catch (error) {
-            console.error('Error en onSubmit de NewUser');
+            return []
         } finally {
             setLoading(false); // Ocultar el spinner después de la respuesta
         }

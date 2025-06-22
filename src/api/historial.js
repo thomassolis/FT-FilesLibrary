@@ -6,7 +6,7 @@ export const getHistoryDataGerente = async (data) =>{
         const response = await axios.get('solicitud/ver/pendientes/gerencia');            
         return response.data
     }catch(e){
-        console.error(e)
+        return []
     }
 }
 
@@ -16,7 +16,7 @@ export const getHistoryDataAdmin = async () =>{
         const response = await axios.get('solicitud/ver/pendientes/administrador');
         return response.data
     }catch(e){
-        console.error(e)
+        return []
     }
 }
 
@@ -27,6 +27,6 @@ export const getOficialHistory = async() =>{
         const response = await axios.get('solicitud/ver/historial/solicitudes/administrador')
         return response.data;
     }catch(e){
-        console.error('Error en getOficialHistory', e);
+        return []
     }
 }

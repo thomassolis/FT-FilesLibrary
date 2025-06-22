@@ -16,7 +16,7 @@ function CompleteHistory() {
                 const response = await getOficialHistory();
                 setOficialHistory(response.Data);  // Acceder a los datos dentro de "response.data"                
             } catch (e) {
-                console.error('Error en CompleteHistory',e);
+                return []
             }
         };
 

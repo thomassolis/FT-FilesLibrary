@@ -61,7 +61,7 @@ function AprobacionGerencia({ approvedGER, onClose, Nombre_del_archivo, OPEUserN
                 toast.error(adminResponse.message);
             }
         }catch(e){
-            console.error('Hay un error en la aprobación', e)  
+            return []
         }
     }
 

@@ -6,6 +6,7 @@ export const enviarLogin = async (data) => {
             Email: data.email,
             Password: data.password
         });
+        console.log('response.data', response.data)
         return response.data;
     }catch(e){
         console.error('Error en enviarLogin', e)
@@ -18,6 +19,7 @@ export const enviarLogin = async (data) => {
 //2. VERIFICACION DE 2 PASOS
         // ENVIAR CÓDIGO A BACKEND
     export const enviarVerificacion2pasos = async (data, userEmail) => {
+
         try{
             const response = await axios.post('auth/authentication/2fa', {
                 authentication: data.authentication,

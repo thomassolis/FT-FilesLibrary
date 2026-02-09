@@ -23,7 +23,8 @@ export const APIaprobacionAdministrador = async(dataAdmin) =>{
             fileId: dataAdmin.fileId,                        
             approvedADM: dataAdmin.approvedADM,                 
             ID_Solicitudes: dataAdmin.ID_Solicitudes   
-        });           
+        });         
+        console.log('response de aprobacion', response.data)  
         return response.data;
     }catch(e){
         console.error('Error en APIaprobacionAdministrador', e);  

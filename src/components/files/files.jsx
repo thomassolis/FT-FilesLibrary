@@ -11,7 +11,7 @@ function Files({fileId, fileName}){
 
     const {requestSeeFile, setRequestSeeFile} = useContext(PermissionsContext)
     const {userRole, setUserRole} = useContext(AuthContext);
-
+    console.log('userRole', userRole)
     const {modalSeeFile, setModalSeeFile, modalSeeFileWaterBrand, setModalSeeFileWaterBrand, previsualizeFile, setPrevisualizeFile} = useContext(ModalContext)
     
     

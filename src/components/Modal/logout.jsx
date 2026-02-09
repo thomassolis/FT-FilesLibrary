@@ -15,18 +15,18 @@ function Logout({closeModal}){
     
     return(
         <div style={{
-                position:'absolute', 
-                width:'270px', 
-                height:'200px', 
-                backgroundColor:'skyblue',
-                top:'7px',
-                left:'20px',
-                borderRadius:'20px',
-                display:'flex',
-                flexDirection:'column',
-                alignItems:'center',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.7)',
-                zIndex:50
+                    position:'absolute', 
+                    width:'270px', 
+                    height:'200px', 
+                    backgroundColor:'skyblue',
+                    top:'7px',
+                    left:'20px',
+                    borderRadius:'20px',
+                    display:'flex',
+                    flexDirection:'column',
+                    alignItems:'center',
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.7)',
+                    zIndex:50
                 }}>
 
             <div style={{display:'flex', marginTop:'10px', gap:'170px'}}>

@@ -16,7 +16,7 @@ function Login() {
     const [userData, setUserData] = useState(null);
 
     //Verificación si el usuario está logeado para enviar al contexto
-    const {setIsAuthenticated, isAuthenticated, isDisabled, setIsDisabled, setUserEmail} = useContext(AuthContext);    
+    const {setIsAuthenticated, isAuthenticated, isDisabled, setIsDisabled, setUserEmail, setUserRole, setUserName, userName} = useContext(AuthContext);    
     const [timeBan, setTimeBan] = useState()
     const [loading, setLoading] = useState(false);
 
@@ -55,15 +55,19 @@ function Login() {
         
         try {
             setLoading(true);
-            const response = await enviarLogin(data); // Pasamos 'data' a enviarLogin            
+            const response = await enviarLogin(data);          
             if (!response) {
                 throw new Error('Response is undefined or null');
             }
     
             if (response.success) {
-                setUserData(response.Data);  // Aquí actualizas el estado
+                setUserRole(response.Data.nombre_rol)
+                setUserData(response.Data);  
                 setUserEmail(response.Data.email);
-                setIsAuthenticated(true);          
+                setUserName(response.Data.nombre);
+                setIsAuthenticated(true);  
+                
+                sessionStorage.setItem('userName', response.Data.nombre);
             }
             else{
                 toast.error(response.message)

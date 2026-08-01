@@ -1,7 +1,9 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
 const instance = axios.create({
-    baseURL: 'https://netserpro.com:4381/api/',
+    // baseURL: 'https://netserpro.com:4381/api/',
+    // baseURL: 'https://localhost:3000/api/',
+    baseURL: 'https://bk-fileslibrary.onrender.com',
     withCredentials: true
 });
 
@@ -11,7 +13,7 @@ instance.interceptors.response.use(
     (error) => {
         if (error.response && error.response.status === 401) {
             toast.error('El token ha expirado. Redirigiendo al login...');
-            window.location.href = '/'; 
+            window.location.href = '/';
         }
         return Promise.reject(error); // Propaga el error para manejo local
     }

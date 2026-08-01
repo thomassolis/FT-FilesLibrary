@@ -1,5 +1,5 @@
 import '../../Styles/completeHistoryStyle.css';
-import logo from '../../images/MLC logo.png';
+import logo from '../../images/filesLibraryIcon.png';
 import { useState, useEffect, useContext } from 'react';
 import { getOficialHistory } from '../../api/historial';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +9,7 @@ import { Icon } from '@iconify/react/dist/iconify.js';
 function CompleteHistory() {
     const [oficialHistory, setOficialHistory] = useState([]);
     const navigate = useNavigate();
-    const {selectedFolder} = useContext(FoldersFilesContext)
+    const { selectedFolder } = useContext(FoldersFilesContext)
     useEffect(() => {
         const fetchHistory = async () => {
             try {
@@ -21,7 +21,7 @@ function CompleteHistory() {
         };
 
         fetchHistory();
-        
+
     }, []);
 
 
@@ -30,7 +30,7 @@ function CompleteHistory() {
         if (!Array.isArray(oficialHistory) || oficialHistory.length === 0) {
             return <></>;
         }
-    
+
         // Si oficialHistory tiene datos, renderizar las filas
         return oficialHistory.map((data, i) => (
             <tr
@@ -49,7 +49,7 @@ function CompleteHistory() {
                 </td>
                 <td className="break-words border border-gray-300 px-4 py-2">{data.Gerente_que_aprobo_solicitud}</td>
                 <td className="break-words border border-gray-300 px-4 py-2">
-                    {data.aprobacion_gerencia ? <p className='text-lime-700 font-bold'>Aprobado</p>  : <p className='text-red-700 font-bold'>No Aprobado</p> }
+                    {data.aprobacion_gerencia ? <p className='text-lime-700 font-bold'>Aprobado</p> : <p className='text-red-700 font-bold'>No Aprobado</p>}
                 </td>
                 <td className="break-words border border-gray-300 px-4 py-2">{data.Comentario_gerente}</td>
                 <td className="break-words border border-gray-300 px-4 py-2">
@@ -58,38 +58,38 @@ function CompleteHistory() {
                         timeStyle: 'short',
                     })}
                 </td>
-                <td className="break-words border border-gray-300 px-4 py-2">{data.nombre_administrador}</td>                
+                <td className="break-words border border-gray-300 px-4 py-2">{data.nombre_administrador}</td>
                 <td className="break-words border border-gray-300 px-4 py-2">{data.Comentario_administracion}</td>
                 <td className="break-words border border-gray-300 px-4 py-2">
-                    {data.aprobacion_administracion ? <p className='text-lime-700 font-bold'>Aprobado</p>  : <p className='text-red-700 font-bold'>No Aprobado</p> }
+                    {data.aprobacion_administracion ? <p className='text-lime-700 font-bold'>Aprobado</p> : <p className='text-red-700 font-bold'>No Aprobado</p>}
                 </td>
             </tr>
         ));
     }
-    
-    function navigateHome(){
+
+    function navigateHome() {
         navigate(`${selectedFolder}`);
-    }    
-    
+    }
+
     return (
         <section className="flex flex-col">
             {/* Encabezado fijo */}
             <div className="w-full h-[5vw] fixed flex justify-between items-center bg-white z-10 shadow">
                 <div className='w-[5%]'>
-                    <Icon 
-                        icon="streamline-plump:return-3-solid" 
-                        width="28" height="28" 
+                    <Icon
+                        icon="streamline-plump:return-3-solid"
+                        width="28" height="28"
                         className='cursor-pointer'
                         onClick={navigateHome}
                     />
-                </div>                
+                </div>
                 <div>
                     <h1 className="font-sans text-2xl">Historial de solicitudes</h1>
-                </div>                
+                </div>
 
                 <div>
-                    <img src={logo} alt="" className='w-20 cursor-pointer' onClick={navigateHome}/>
-                </div>                
+                    <img src={logo} alt="" className='w-20 cursor-pointer' onClick={navigateHome} />
+                </div>
             </div>
 
             {/* Contenedor de la tabla con margen superior */}
@@ -106,7 +106,7 @@ function CompleteHistory() {
                             <th className="sticky top-0 border px-4 py-2 bg-blue-300">¿Fue aceptado por el gerente?</th>
                             <th className="sticky top-0 border px-4 py-2 bg-blue-300">Comentario del gerente</th>
                             <th className="sticky top-0 border px-4 py-2 bg-blue-300">Fecha de aceptación por gerencia</th>
-                            <th className="sticky top-0 border px-4 py-2 bg-blue-300">Nombre de administrador encargado</th>                            
+                            <th className="sticky top-0 border px-4 py-2 bg-blue-300">Nombre de administrador encargado</th>
                             <th className="sticky top-0 border px-4 py-2 bg-blue-300">Comentario de administración</th>
                             <th className="sticky top-0 border px-4 py-2 bg-blue-300">¿Fue aceptado por el administrador?</th>
                         </tr>

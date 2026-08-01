@@ -1,4 +1,4 @@
-.authenticationContainer{
+.authenticationContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13,21 +13,66 @@
     background: linear-gradient(to bottom, #000070, #194093, #24243e);
 }
 
-.authenticationInput{
+.authenticationInput {
     background-color: transparent;
     border-bottom: 1px solid white;
     width: 300px;
 }
 
-.authenticationTitle{
+.authenticationTitle {
     font-family: italiana;
     color: white;
     font-size: 25px;
     margin-bottom: 30px;
 }
 
-.authenticationSpan{
+.authenticationSpan {
     margin-top: -75px;
     margin-left: 18px;
     color: white;
+}
+
+/* Aviso flotante para Portafolio */
+.demo-floating-notice {
+    position: fixed;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(168, 85, 247, 0.45);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(139, 92, 246, 0.25);
+    color: #f8fafc;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    padding-right: 40px;
+    padding-left: 40px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+    max-width: 90%;
+    text-align: center;
+    animation: floatAnim 3s ease-in-out infinite;
+}
+
+.demo-floating-notice u {
+    color: #c084fc;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+@keyframes floatAnim {
+
+    0%,
+    100% {
+        transform: translate(-50%, 0);
+    }
+
+    50% {
+        transform: translate(-50%, -6px);
+    }
 }

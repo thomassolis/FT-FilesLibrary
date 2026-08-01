@@ -11,7 +11,7 @@ import { AuthContext } from "../../context/authProvider";
 function PrevisualizeFile({ fileName, fileId }) {
   const [pdfUrl, setPdfUrl] = useState(null); // Ahora se espera un enlace
   const { setPrevisualizeFile } = useContext(ModalContext);
-  const {userRole} = useContext(AuthContext);
+  const { userRole } = useContext(AuthContext);
   function closeModal() {
     setPrevisualizeFile(false);
   }
@@ -68,7 +68,7 @@ function PrevisualizeFile({ fileName, fileId }) {
         ) : (
           <FadeLoader size={15} />
         )}
-        <CountDown seconds={300} message="El archivo será eliminado en: " />
+        {/* <CountDown seconds={300} message="El archivo será eliminado en: " /> */}
       </div>
     </div>
   );

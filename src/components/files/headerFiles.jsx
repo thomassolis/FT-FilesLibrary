@@ -8,7 +8,7 @@ import FoldersFilesContext from "../../context/Folders-Files/Folders_Files";
 import SeeFileWaterBrand from "../Modal/seeFileWaterBrand";
 import SeeFile from "../Modal/seeFile";
 import { ModalContext } from "../../context/closeModals";
-import logo from "../../images/MLC logo.png";
+import logo from "../../images/filesLibraryIcon.png";
 import { useNavigate } from "react-router-dom";
 import _ from "lodash"; // Para debounce
 
@@ -20,7 +20,7 @@ const HeaderFiles = () => {
   const [selectedFile, setSelectedFile] = useState(null); // Archivo seleccionado
   const [isLoading, setIsLoading] = useState(true); // Estado de carga
   const { userRole } = useContext(AuthContext);
-  const {selectedFolder, setSelectedFolder} = useContext(FoldersFilesContext)
+  const { selectedFolder, setSelectedFolder } = useContext(FoldersFilesContext)
   const {
     modalSeeFile,
     setModalSeeFile,
@@ -34,7 +34,7 @@ const HeaderFiles = () => {
   useEffect(() => {
     const fetchFiles = async () => {
       setIsLoading(true);
-      const response = await getFilesData();      
+      const response = await getFilesData();
       setFileData(response.data);
       setIsLoading(false); // Archivos cargados
     };
@@ -91,14 +91,14 @@ const HeaderFiles = () => {
 
   const handleFileClick = (file) => {
     setSelectedFile(file);
-    if(userRole === 'ADM' || userRole === 'CEO'){
-        setPrevisualizeFile(true);
-    } else if(userRole === 'GER'){
-        setModalSeeFileWaterBrand(true);
-    }else{
-        setModalSeeFile(true)
+    if (userRole === 'ADM' || userRole === 'CEO') {
+      setPrevisualizeFile(true);
+    } else if (userRole === 'GER') {
+      setModalSeeFileWaterBrand(true);
+    } else {
+      setModalSeeFile(true)
     }
-    
+
   };
 
   const closeModal = () => {
@@ -142,24 +142,24 @@ const HeaderFiles = () => {
   // function handleClick(){
   //   Navigate(`/${selectedFolder}`);
   // }
-  
+
 
   return (
 
     <div className="bg-customBlue h-24 w-full flex items-center">
       <div className="bg-customBlue fixed w-full h-16 top-0">
         {isLoading ? (
-            <>
-                <input
-                    className="fixed w-1/3 pt-4 pb-4 ml-56 bg-gray-200 rounded-lg border border-black border-solid cursor-not-allowed max-[765px]:ml-28  max-[517px]:ml-16  max-[417px]:ml-2"
- 
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                    type="text"
-                    placeholder="Cargando..."
-                />
-                <img src={logo} alt="Logo" style={{ position: "fixed", right: "20px", cursor:"pointer" }}/>
-            </>          
+          <>
+            <input
+              className="fixed w-1/3 pt-4 pb-4 ml-56 bg-gray-200 rounded-lg border border-black border-solid cursor-not-allowed max-[765px]:ml-28  max-[517px]:ml-16  max-[417px]:ml-2"
+
+              value={searchTerm}
+              onChange={handleSearchChange}
+              type="text"
+              placeholder="Cargando..."
+            />
+            <img src={logo} alt="Logo" style={{ position: "fixed", right: "20px", cursor: "pointer" }} />
+          </>
         ) : (
           <>
             <input
@@ -169,22 +169,22 @@ const HeaderFiles = () => {
               value={searchTerm}
               onChange={onSearchInputChange}
             />
-            <img src={logo} alt="Logo" style={{ position: "fixed", right: "20px", cursor:"pointer" }} />
+            <img src={logo} alt="Logo" style={{ position: "fixed", right: "20px", cursor: "pointer" }} />
           </>
         )}
         {filteredResults.length > 0 && (
           <ul className="absolute top-14 bg-white rounded-lg shadow-md p-4 w-1/3 ml-56">
             {filteredResults.map((file, index) => (
-                <li
-                    key={file.id || index}
-                    className="relative cursor-pointer text-gray-700 hover:text-blue-500 hover:bg-gray-100 p-2 rounded"
-                    onClick={() => handleFileClick(file)}
-                    >
-                    {file.name}
-                    <span className="text-slate-500 absolute bottom-0 right-0 truncate">
-                        {file.path}
-                    </span>
-                </li>
+              <li
+                key={file.id || index}
+                className="relative cursor-pointer text-gray-700 hover:text-blue-500 hover:bg-gray-100 p-2 rounded"
+                onClick={() => handleFileClick(file)}
+              >
+                {file.name}
+                <span className="text-slate-500 absolute bottom-0 right-0 truncate">
+                  {file.path}
+                </span>
+              </li>
 
             ))}
           </ul>

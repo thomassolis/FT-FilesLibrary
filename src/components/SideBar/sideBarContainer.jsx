@@ -1,5 +1,5 @@
 import Title from "../title";
-import FolderSidebar from "./FolderSidebar";
+import FolderSidebar from "./folderSidebar";
 import { useContext, useState } from "react";
 import FilesContainer from "../files/filesContainer";
 import Files from "../files/files";

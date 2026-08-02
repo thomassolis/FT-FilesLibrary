@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { useForm } from "react-hook-form"
 import { useNavigate } from 'react-router-dom'; // Importa useNavigate
-import '../../src/images/filesLibraryIcon.png'
 import 'react-toastify/dist/ReactToastify.css';
 import { enviarLogin } from "../api/auth";
 import { AuthContext } from "../context/authProvider";

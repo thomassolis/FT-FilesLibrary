@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'// 
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
-import '../src/Styles/index.css';
+import './Styles/index.css';
 import './Styles/loginStyle.css'
 import './Styles/authenticationStyle.css'
 

@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 const instance = axios.create({
     // baseURL: 'https://netserpro.com:4381/api/',
     // baseURL: 'https://localhost:3000/api/',
-    baseURL: 'https://bk-fileslibrary.onrender.com',
+    baseURL: 'https://bk-fileslibrary.onrender.com/api/',
     withCredentials: true
 });
 
